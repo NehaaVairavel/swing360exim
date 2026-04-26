@@ -1,15 +1,10 @@
-<<<<<<< HEAD
-# --------------------
-# Environment files
-# --------------------
+# Environment
 .env
 *.env
 backend/.env
 frontend/.env
 
-# --------------------
-# Python / Flask
-# --------------------
+# Python
 __pycache__/
 *.pyc
 *.pyo
@@ -19,15 +14,11 @@ instance/
 .pytest_cache/
 .coverage
 htmlcov/
-
-# Virtual environment
 .venv/
 venv/
 env/
 
-# --------------------
-# Node / React / Vite
-# --------------------
+# Node
 node_modules/
 frontend/node_modules/
 
@@ -42,40 +33,20 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# --------------------
-# Build / cache
-# --------------------
+# Cache
 .cache/
 .tmp/
 temp/
 
-# --------------------
-# OS files
-# --------------------
-.DS_Store
-Thumbs.db
-
-# --------------------
-# IDE / Editor
-# --------------------
+# IDE
 .vscode/
 .idea/
 
-# --------------------
-# Logs
-# --------------------
-*.log
-build_log.txt
+# OS
+.DS_Store
+Thumbs.db
 
-# --------------------
-# Testing
-# --------------------
+# Logs
+*.log
 coverage/
 frontend/coverage/
-node_modules
-dist
-.env
-.vite
-=======
-node_modules
->>>>>>> 35af9847313de39e7fcfa2861bbf6b1a971eecaa
