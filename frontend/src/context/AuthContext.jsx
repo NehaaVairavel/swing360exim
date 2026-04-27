@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const data = await authService.login({ username, password });
+      const data = await authService.login({ identifier: username, password });
       setUser({ username: data.username });
       setIsAuthenticated(true);
       toast.success("Successfully logged in to Command Center");

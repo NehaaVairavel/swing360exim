@@ -2,7 +2,7 @@ import api from '../api/api';
 
 const authService = {
   login: async (credentials) => {
-    const response = await api.post('/login', credentials);
+    const response = await api.post('/admin/login', credentials);
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify({
