@@ -7,3 +7,4 @@ python-dotenv
 certifi
 boto3
 gunicorn
+dnspython

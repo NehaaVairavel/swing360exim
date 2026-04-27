@@ -52,7 +52,7 @@ jwt = JWTManager(app)
 MONGO_URI    = os.getenv("MONGO_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "swing360")
 
-client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
+client = MongoClient(MONGO_URI, tls=True, tlsCAFile=certifi.where())
 db     = client[MONGO_DB_NAME]
 
 products_col  = db["products"]
