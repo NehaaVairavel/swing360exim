@@ -80,23 +80,21 @@ def sync_admin_from_env():
     if not username or not email or not password:
         print("[!] Admin credentials missing in .env. Skipping sync.")
         return
-        
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
     
     # 1. Clear all existing admin accounts to ensure .env overrides everything
     deleted_count = admins_col.delete_many({}).deleted_count
     if deleted_count > 0:
         print(f"[!] Removed {deleted_count} previous admin records")
     
-    # 2. Insert fresh admin account
+    # 2. Insert fresh admin account with PLAIN-TEXT password as requested
     admins_col.insert_one({
         "username": username,
         "email": email,
-        "password": hashed_password,
+        "password": password,
         "role": "superadmin",
         "created_at": datetime.utcnow().isoformat()
     })
-    print("[✓] Admin synced with env variables")
+    print("[✓] Admin synced with env variables (Plain-text storage)")
 
 # ── Execute Sync on Module Load (for WSGI / Production) ─────────
 try:
@@ -129,7 +127,7 @@ def login():
         print(f"[✗] Admin not found: {login_id}")
         return jsonify({"message": "Admin account not found"}), 404
         
-    if not bcrypt.check_password_hash(user["password"], password):
+    if user["password"] != password:
         print(f"[✗] Wrong password for: {login_id}")
         return jsonify({"message": "Incorrect password"}), 401
         
