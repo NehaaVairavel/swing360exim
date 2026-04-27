@@ -1,16 +1,13 @@
-FROM node:20-alpine
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN npm run build
+EXPOSE 5000
 
-RUN npm install -g serve
-
-EXPOSE 3000
-
-CMD ["serve", "-s", "dist", "-l", "3000"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
