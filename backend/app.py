@@ -14,7 +14,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(override=True)
 
 app = Flask(__name__)
 
@@ -97,6 +97,13 @@ def sync_admin_from_env():
         "created_at": datetime.utcnow().isoformat()
     })
     print("[✓] Admin synced with env variables")
+
+# ── Execute Sync on Module Load (for WSGI / Production) ─────────
+try:
+    with app.app_context():
+        sync_admin_from_env()
+except Exception as e:
+    print(f"[!] Failed to auto-sync admin on startup: {e}")
 
 
 # ════════════════════════════════════════════════════════════════════
@@ -366,7 +373,6 @@ def home():
 # ════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    sync_admin_from_env()
     port = int(os.getenv("PORT", 5000))
     print(f"Swing360 Backend running on http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)
