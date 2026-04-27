@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown } from "lucide-react";
 import productService from "@/services/productService";
 import { socket } from "@/socket";
 import EnquiryModal from "@/components/EnquiryModal";
@@ -100,6 +100,8 @@ const Products = () => {
   const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
   const [activeStatus, setActiveStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
+  const [activeSort, setActiveSort] = useState("Newest");
+  const [priceRange, setPriceRange] = useState("Any Price");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -160,6 +162,16 @@ const Products = () => {
     return products.filter(p => p.category === cat).length;
   };
 
+  const handleReset = () => {
+    setSearchQuery("");
+    setActiveCategory("All");
+    setActiveStatus("All");
+    setActiveSort("Newest");
+    setPriceRange("Any Price");
+    const newParams = new URLSearchParams();
+    setSearchParams(newParams);
+  };
+
   const handleCategoryClick = (cat) => {
     setActiveCategory(cat);
     const newParams = new URLSearchParams(searchParams);
@@ -192,71 +204,66 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Top Functional Bar (Sticky) */}
-      <div className={`sticky top-[72px] z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200 transition-all duration-300 shadow-sm ${scrolled ? 'py-4' : 'py-6'}`}>
-        <div className="container-section">
+      {/* Top Functional Bar (Sticky Unified Toolbar) */}
+      <div className={`sticky top-[72px] z-40 transition-all duration-500 ${scrolled ? 'py-2 px-4' : 'py-6 px-0'}`}>
+        <div className="container-section max-w-7xl mx-auto">
           
-          {/* Desktop Layout */}
-          <div className="hidden lg:flex items-center justify-between gap-8">
-            <div className="relative flex-1 max-w-[760px]">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={22} />
+          <div className="bg-white/95 backdrop-blur-[14px] rounded-[22px] p-3.5 shadow-[0_12px_35px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col lg:flex-row items-stretch lg:items-center gap-3.5 transition-all duration-500">
+            
+            {/* Search Part */}
+            <div className="relative flex-1 group">
+              <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
               <input 
                 type="text" 
-                placeholder="Search excavator, dozer, loader..." 
+                placeholder="Search Excavator, Loader, CAT 320..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-16 pr-6 h-[58px] bg-white border border-slate-200 rounded-[18px] text-[18px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-[0_8px_30px_rgba(0,0,0,0.04)] placeholder-slate-400"
+                className="w-full pl-12 pr-6 h-[54px] bg-slate-50/50 border border-slate-200 rounded-[16px] text-[16px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400"
               />
             </div>
-            
-            <select className="w-[150px] h-[58px] px-4 rounded-[16px] border border-slate-300 bg-white text-[13px] font-extrabold uppercase tracking-widest text-slate-700 outline-none hover:border-slate-400 cursor-pointer appearance-none text-center shadow-[0_8px_20px_rgba(0,0,0,0.05)]">
-              <option>Sort ▼</option>
-              <option>Newest</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-            </select>
 
-            <select className="w-[150px] h-[58px] px-4 rounded-[16px] border border-slate-300 bg-white text-[13px] font-extrabold uppercase tracking-widest text-slate-700 outline-none hover:border-slate-400 cursor-pointer appearance-none text-center shadow-[0_8px_20px_rgba(0,0,0,0.05)]">
-              <option>Price ▼</option>
-              <option>Any Price</option>
-            </select>
-
-            <div className="shrink-0 h-[58px] flex items-center bg-white border border-slate-300 rounded-[16px] px-2 shadow-[0_8px_20px_rgba(0,0,0,0.05)] ml-auto">
-              <CurrencyToggle />
-            </div>
-          </div>
-
-          {/* Mobile Layout */}
-          <div className="flex flex-col gap-3 lg:hidden">
-            <div className="flex items-center gap-3">
-              <div className="relative w-full shrink-0 flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                <input 
-                  type="text" 
-                  placeholder="Search machinery..." 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 h-[42px] bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-semibold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
-                />
+            {/* Controls Part */}
+            <div className="flex flex-wrap items-center gap-3.5">
+              <div className="relative min-w-[140px] group flex-1 sm:flex-none">
+                <select 
+                  value={activeSort}
+                  onChange={(e) => setActiveSort(e.target.value)}
+                  className="w-full h-[54px] pl-5 pr-10 bg-white border border-slate-200 rounded-[16px] text-[13px] font-bold uppercase tracking-widest text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
+                >
+                  <option>Sort ▼</option>
+                  <option value="Newest">Newest</option>
+                  <option value="Price: Low to High">Price: Low to High</option>
+                  <option value="Price: High to Low">Price: High to Low</option>
+                </select>
+                <ChevronDown size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               </div>
+
+              <div className="relative min-w-[140px] group flex-1 sm:flex-none">
+                <select 
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  className="w-full h-[54px] pl-5 pr-10 bg-white border border-slate-200 rounded-[16px] text-[13px] font-bold uppercase tracking-widest text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
+                >
+                  <option>Price ▼</option>
+                  <option value="Any Price">Any Price</option>
+                  <option value="Under $50k">Under $50k</option>
+                  <option value="$50k - $100k">$50k - $100k</option>
+                  <option value="$100k+">$100k+</option>
+                </select>
+                <ChevronDown size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              </div>
+
+              <div className="h-[54px] flex items-center bg-slate-50 border border-slate-200 rounded-[16px] px-1 group-hover:bg-white transition-colors flex-1 sm:flex-none justify-center">
+                <CurrencyToggle variant="compact" />
+              </div>
+
               <button 
-                onClick={() => setIsMobileFiltersOpen(true)}
-                className="h-[42px] px-4 bg-slate-900 text-white rounded-xl font-bold text-[12px] uppercase tracking-widest flex items-center gap-2 shrink-0 shadow-lg"
+                onClick={handleReset}
+                className="h-[54px] px-5 bg-slate-900 hover:bg-slate-800 text-white rounded-[16px] font-bold text-[12px] uppercase tracking-widest transition-all hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 flex items-center gap-2"
               >
-                <Settings size={16} /> Categories
+                <RotateCcw size={16} />
+                <span className="hidden xl:inline">Reset</span>
               </button>
-            </div>
-            <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar">
-              <select className="h-[40px] px-3 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-widest text-slate-600 outline-none shrink-0">
-                <option>Sort ▼</option>
-                <option>Newest</option>
-              </select>
-              <select className="h-[40px] px-3 rounded-lg border border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-widest text-slate-600 outline-none shrink-0">
-                <option>Price ▼</option>
-              </select>
-              <div className="shrink-0 h-[40px] flex items-center border border-slate-200 rounded-lg bg-slate-50">
-                <CurrencyToggle />
-              </div>
             </div>
           </div>
 
