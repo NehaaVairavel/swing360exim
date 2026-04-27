@@ -71,22 +71,39 @@ def serialize(doc):
 def serialize_list(docs):
     return [serialize(d) for d in docs]
 
-# ── Auto-create default admin on startup ─────────────────────────────────
-def create_default_admin():
+# ── Auto-sync admin on startup ─────────────────────────────────────────
+def sync_admin_account():
     username = os.getenv("ADMIN_USERNAME", "admin")
     email    = os.getenv("ADMIN_EMAIL", "admin@swing360.com")
     password = os.getenv("ADMIN_PASSWORD", "admin123")
-    if admins_col.count_documents({"username": username}) == 0:
-        hashed = bcrypt.generate_password_hash(password).decode("utf-8")
+    
+    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    
+    # Check for existing admin (searching by role to keep it unique)
+    admin = admins_col.find_one({"role": "superadmin"})
+    
+    if admin:
+        # Update existing admin
+        admins_col.update_one(
+            {"_id": admin["_id"]},
+            {"$set": {
+                "username": username,
+                "email": email,
+                "password": hashed_password
+            }}
+        )
+        print("[✓] Admin account updated")
+    else:
+        # Create new admin
         admins_col.insert_one({
             "username": username,
             "email": email,
-            "password": hashed,
+            "password": hashed_password,
             "role": "superadmin"
         })
-        print(f"[*] Admin '{username}' created.")
-    else:
-        print(f"[*] Admin '{username}' confirmed.")
+        print("[✓] Admin account created")
+    
+    print("[✓] Admin synced with env variables")
 
 
 # ════════════════════════════════════════════════════════════════════
@@ -343,7 +360,7 @@ def home():
 # ════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    create_default_admin()
+    sync_admin_account()
     port = int(os.getenv("PORT", 5000))
     print(f"Swing360 Backend running on http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)
