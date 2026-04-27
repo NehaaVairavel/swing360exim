@@ -25,7 +25,6 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AddProduct from "./pages/admin/AddProduct";
 import AdminEnquiries from "./pages/admin/AdminEnquiries";
 import AdminGallery from "./pages/admin/AdminGallery";
-import AdminSettings from "./pages/admin/AdminSettings";
 import Login from "./pages/admin/Login";
 import PartsComingSoon from "./pages/admin/PartsComingSoon";
 
@@ -67,7 +66,6 @@ const App = () => (
                   <Route path="parts" element={<PartsComingSoon />} />
                   <Route path="enquiries" element={<AdminEnquiries />} />
                   <Route path="media" element={<AdminGallery />} />
-                  <Route path="settings" element={<AdminSettings />} />
                 </Route>
               </Route>
             </Routes>

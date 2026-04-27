@@ -77,7 +77,6 @@ const AdminLayout = () => {
     { icon: Wrench, label: "Parts", path: "/admin/parts" },
     { icon: Layers, label: "Gallery", path: "/admin/media" },
     { icon: Mail, label: "Enquiries", path: "/admin/enquiries" },
-    { icon: Settings, label: "Settings", path: "/admin/settings" },
   ];
 
   return (
@@ -206,12 +205,11 @@ const AdminLayout = () => {
                 <span className="text-[12px] font-extrabold text-slate-900 leading-none">{user?.username || "Admin User"}</span>
                 <span className="text-[10px] font-semibold text-slate-400 mt-0.5">Global Manager</span>
               </div>
-              <button onClick={() => navigate("/admin/settings")} className="flex items-center gap-2 p-1 rounded-xl hover:bg-slate-100 transition-colors group">
-                <div className="w-9 h-9 rounded-xl bg-[#030814] flex items-center justify-center text-amber-500 text-sm font-extrabold shadow-md group-hover:scale-105 transition-transform">
+              <div className="flex items-center gap-2 p-1 rounded-xl transition-colors group">
+                <div className="w-9 h-9 rounded-xl bg-[#030814] flex items-center justify-center text-amber-500 text-sm font-extrabold shadow-md">
                   {user?.username?.[0]?.toUpperCase() || "A"}
                 </div>
-                <ChevronDown size={14} className="text-slate-400 group-hover:text-slate-600 transition-colors" />
-              </button>
+              </div>
             </div>
           </div>
         </header>

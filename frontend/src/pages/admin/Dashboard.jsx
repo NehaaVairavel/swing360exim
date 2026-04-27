@@ -161,9 +161,9 @@ const Dashboard = () => {
         <KpiCard title="Total Leads" value={stats.enquiries_count} icon={Mail} trend="+15" trendUp={true} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {/* Recent Enquiries Table */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200/60 shadow-xl shadow-slate-200/40 overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-1000">
+        <div className="bg-white rounded-3xl border border-slate-200/60 shadow-xl shadow-slate-200/40 overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-1000">
           <div className="p-6 lg:p-7 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
                 <h2 className="text-xl font-display font-black text-[#030814] tracking-tight">Global Inquiries</h2>
@@ -221,39 +221,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Categories Distribution */}
-        <div className="bg-white rounded-3xl p-7 lg:p-8 border border-slate-200/60 shadow-xl shadow-slate-200/40 flex flex-col h-full animate-in fade-in slide-in-from-right-6 duration-1000">
-             <h2 className="text-xl font-display font-black text-[#030814] mb-1 tracking-tight">Market Demand</h2>
-             <p className="text-slate-400 text-[13px] font-semibold mb-6 italic">Hot categories globally</p>
-             <div className="space-y-6 flex-1">
-                {[
-                    { name: 'Excavators', count: 45, color: "from-amber-400 to-orange-500" },
-                    { name: 'Dozers', count: 25, color: "from-blue-400 to-indigo-600" },
-                    { name: 'Loaders', count: 18, color: "from-emerald-400 to-teal-600" },
-                    { name: 'Rollers', count: 12, color: "from-rose-400 to-pink-600" }
-                ].map((dest) => (
-                  <div key={dest.name} className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-black text-[#030814] uppercase tracking-widest text-[10px]">{dest.name}</span>
-                      <span className="text-amber-600 font-black text-xs">{dest.count}%</span>
-                    </div>
-                    <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden shadow-inner p-0.5">
-                      <div 
-                        className={`h-full bg-gradient-to-r ${dest.color} rounded-full transition-all duration-1000 ease-out shadow-lg shadow-amber-500/10`}
-                        style={{ width: `${dest.count}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-             </div>
-             
-             <div className="mt-8 pt-6 border-t border-slate-100">
-                <button className="w-full py-3 bg-slate-900 text-white rounded-xl font-extrabold text-[12px] uppercase tracking-[0.15em] hover:bg-slate-800 transition-all shadow-lg hover:shadow-slate-900/20 active:scale-95 flex items-center justify-center gap-2.5">
-                   <TrendingUp size={16} className="text-amber-500" />
-                   Generate Report
-                </button>
-             </div>
-        </div>
       </div>
     </div>
   );
