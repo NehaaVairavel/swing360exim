@@ -118,9 +118,13 @@ def login():
         return jsonify({"status": "ok"}), 200
     
     data     = request.get_json(force=True, silent=True) or {}
-    login_id = data.get("identifier", "") # Username or email
+    # Use 'identifier' as primary, but fallback to 'username' or 'email'
+    login_id = data.get("identifier") or data.get("username") or data.get("email") or ""
     password = data.get("password", "")
     
+    if not login_id or not password:
+        return jsonify({"message": "Identifier and password required"}), 400
+
     # Find user by username OR email
     user = admins_col.find_one({"$or": [
         {"username": login_id},
@@ -129,11 +133,11 @@ def login():
     
     if not user:
         print(f"[✗] Admin not found: {login_id}")
-        return jsonify({"message": "Admin account not found"}), 404
+        return jsonify({"message": "Invalid credentials"}), 401
         
     if user["password"] != password:
         print(f"[✗] Wrong password for: {login_id}")
-        return jsonify({"message": "Incorrect password"}), 401
+        return jsonify({"message": "Invalid credentials"}), 401
         
     print(f"[✓] Login success: {login_id}")
     token = create_access_token(identity=str(user["_id"]))
