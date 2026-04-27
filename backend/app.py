@@ -333,6 +333,9 @@ def update_settings():
 @app.route("/api/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok", "db": MONGO_DB_NAME}), 200
+@app.route("/")
+def home():
+    return {"status": "ok"}
 
 
 # ════════════════════════════════════════════════════════════════════
