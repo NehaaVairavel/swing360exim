@@ -72,46 +72,30 @@ def serialize_list(docs):
     return [serialize(d) for d in docs]
 
 # ── Auto-sync admin on startup ─────────────────────────────────────────
-def sync_admin_account():
-    username = os.getenv("ADMIN_USERNAME", "admin")
-    email    = os.getenv("ADMIN_EMAIL", "admin@swing360.com")
-    password = os.getenv("ADMIN_PASSWORD", "admin123")
+def sync_admin_from_env():
+    username = os.getenv("ADMIN_USERNAME")
+    email    = os.getenv("ADMIN_EMAIL")
+    password = os.getenv("ADMIN_PASSWORD")
     
+    if not username or not email or not password:
+        print("[!] Admin credentials missing in .env. Skipping sync.")
+        return
+        
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
     
-    # 1. Handle Duplicates: Ensure only one admin record exists
-    # We find all admins with role 'superadmin'
-    admins = list(admins_col.find({"role": "superadmin"}))
+    # 1. Clear all existing admin accounts to ensure .env overrides everything
+    deleted_count = admins_col.delete_many({}).deleted_count
+    if deleted_count > 0:
+        print(f"[!] Removed {deleted_count} previous admin records")
     
-    if len(admins) > 1:
-        # Keep the first one, delete the rest
-        keep_id = admins[0]["_id"]
-        admins_col.delete_many({"role": "superadmin", "_id": {"$ne": keep_id}})
-        print(f"[!] Removed {len(admins) - 1} duplicate admin records")
-    
-    # 2. Sync / Create
-    admin = admins_col.find_one({"role": "superadmin"})
-    
-    if admin:
-        print("[✓] Admin found")
-        admins_col.update_one(
-            {"_id": admin["_id"]},
-            {"$set": {
-                "username": username,
-                "email": email,
-                "password": hashed_password
-            }}
-        )
-        print("[✓] Admin updated from env")
-    else:
-        admins_col.insert_one({
-            "username": username,
-            "email": email,
-            "password": hashed_password,
-            "role": "superadmin"
-        })
-        print("[✓] Admin created")
-    
+    # 2. Insert fresh admin account
+    admins_col.insert_one({
+        "username": username,
+        "email": email,
+        "password": hashed_password,
+        "role": "superadmin",
+        "created_at": datetime.utcnow().isoformat()
+    })
     print("[✓] Admin synced with env variables")
 
 
@@ -119,13 +103,13 @@ def sync_admin_account():
 #  AUTH ENDPOINTS
 # ════════════════════════════════════════════════════════════════════
 
-@app.route("/api/login", methods=["POST", "OPTIONS"])
+@app.route("/api/admin/login", methods=["POST", "OPTIONS"])
 def login():
     if request.method == "OPTIONS":
         return jsonify({"status": "ok"}), 200
     
     data     = request.get_json(force=True, silent=True) or {}
-    login_id = data.get("username", "") # This could be username or email
+    login_id = data.get("identifier", "") # Username or email
     password = data.get("password", "")
     
     # Find user by username OR email
@@ -147,7 +131,8 @@ def login():
     return jsonify({
         "token": token,
         "username": user["username"],
-        "role": user.get("role", "admin")
+        "email": user.get("email", ""),
+        "role": user.get("role", "superadmin")
     }), 200
 
 
@@ -381,7 +366,7 @@ def home():
 # ════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
-    sync_admin_account()
+    sync_admin_from_env()
     port = int(os.getenv("PORT", 5000))
     print(f"Swing360 Backend running on http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)
