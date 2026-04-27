@@ -197,15 +197,15 @@ const Products = () => {
         <div className="container-section">
           
           {/* Desktop Layout */}
-          <div className="hidden lg:flex items-center gap-4 flex-wrap">
-            <div className="relative w-[520px] shrink-0">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <div className="hidden lg:flex items-center justify-between gap-8">
+            <div className="relative flex-1 max-w-[760px]">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={22} />
               <input 
                 type="text" 
-                placeholder="Search machinery..." 
+                placeholder="Search excavator, dozer, loader..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-14 pr-4 h-[58px] bg-white border border-slate-300 rounded-[18px] text-[15px] text-[#0f172a] font-semibold focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all shadow-[0_8px_20px_rgba(0,0,0,0.05)] placeholder-slate-500"
+                className="w-full pl-16 pr-6 h-[58px] bg-white border border-slate-200 rounded-[18px] text-[18px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-[0_8px_30px_rgba(0,0,0,0.04)] placeholder-slate-400"
               />
             </div>
             
