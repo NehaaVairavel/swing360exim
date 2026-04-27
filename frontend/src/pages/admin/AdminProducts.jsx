@@ -1,4 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { socket } from "@/socket";
 import { Link } from "react-router-dom";
 import productService from "@/services/productService";
 import { 
@@ -17,8 +19,12 @@ import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
 
 const AdminProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
+  const { data: products = [], isLoading: loading, refetch } = useQuery({
+    queryKey: ["products", "admin"],
+    queryFn: () => productService.getAll({ all: true }),
+  });
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeStatus, setActiveStatus] = useState("All");
@@ -26,18 +32,12 @@ const AdminProducts = () => {
   const { formatPrice } = useCurrency();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await productService.getAll({ all: true });
-        setProducts(data);
-      } catch (error) {
-        toast.error("Failed to load inventory");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
+    socket.on("products_updated", () => {
+      console.log("Real-time admin update received...");
+      refetch();
+    });
+    return () => socket.off("products_updated");
+  }, [refetch]);
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
@@ -55,7 +55,7 @@ const AdminProducts = () => {
     if (!window.confirm("Are you sure you want to delete this machine?")) return;
     try {
       await productService.delete(id);
-      setProducts(prev => prev.filter(p => p.id !== id));
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Machine deleted successfully");
     } catch (error) {
       toast.error("Failed to delete machine");
@@ -65,7 +65,7 @@ const AdminProducts = () => {
   const handleMarkSold = async (id) => {
     try {
       await productService.update(id, { availability: "sold" });
-      setProducts(prev => prev.map(p => p.id === id ? { ...p, availability: "sold" } : p));
+      queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Machine marked as sold");
     } catch (error) {
       toast.error("Update failed");

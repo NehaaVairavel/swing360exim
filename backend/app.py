@@ -13,6 +13,7 @@ from flask_jwt_extended import (
 from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
+from flask_socketio import SocketIO, emit
 
 load_dotenv(override=True)
 
@@ -47,6 +48,9 @@ bcrypt = Bcrypt(app)
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "swing360-secret-2026")
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
 jwt = JWTManager(app)
+
+# ── Real-Time Sync (Socket.IO) ───────────────────────────────────────────
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
 
 # ── MongoDB Connection ────────────────────────────────────────────────────
 MONGO_URI    = os.getenv("MONGO_URI")
@@ -231,6 +235,10 @@ def create_product():
     result = products_col.insert_one(data)
     data["id"] = str(result.inserted_id)
     data.pop("_id", None)
+    
+    # Broadcast real-time update
+    socketio.emit("products_updated", {"type": "create", "product": data})
+    
     return jsonify(data), 201
 
 
@@ -243,6 +251,10 @@ def update_product(product_id):
     result = products_col.update_one({"_id": ObjectId(product_id)}, {"$set": data})
     if result.matched_count == 0:
         return jsonify({"error": "Product not found"}), 404
+    
+    # Broadcast real-time update
+    socketio.emit("products_updated", {"type": "update", "id": product_id})
+    
     return jsonify({"message": "Product updated"}), 200
 
 
@@ -252,6 +264,10 @@ def delete_product(product_id):
     result = products_col.delete_one({"_id": ObjectId(product_id)})
     if result.deleted_count == 0:
         return jsonify({"error": "Product not found"}), 404
+    
+    # Broadcast real-time update
+    socketio.emit("products_updated", {"type": "delete", "id": product_id})
+    
     return jsonify({"message": "Product deleted"}), 200
 
 
@@ -383,5 +399,5 @@ def home():
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
-    print(f"Swing360 Backend running on http://0.0.0.0:{port}")
-    app.run(host="0.0.0.0", port=port, debug=False)
+    print(f"Swing360 Backend (Real-Time) running on http://0.0.0.0:{port}")
+    socketio.run(app, host="0.0.0.0", port=port, debug=False)

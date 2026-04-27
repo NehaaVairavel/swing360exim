@@ -8,6 +8,7 @@ import SectionReveal from "@/components/SectionReveal";
 import BrandCarousel from "@/components/BrandCarousel";
 import productService from "@/services/productService";
 import settingsService from "@/services/settingsService";
+import { socket } from "@/socket";
 import heroBg from "@/assets/hero-bg.jpg";
 import excavatorImg from "@/assets/category/excavator.jpg";
 import backhoeImg from "@/assets/category/backhoe.jpg";
@@ -130,17 +131,24 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { data: allProducts = [] } = useQuery({
+  const { data: allProducts = [], refetch: refetchAll } = useQuery({
     queryKey: ["products"],
     queryFn: productService.getAll,
-    refetchInterval: 5000,
   });
 
-  const { data: featuredProducts = [] } = useQuery({
+  const { data: featuredProducts = [], refetch: refetchFeatured } = useQuery({
     queryKey: ["featuredProducts"],
     queryFn: () => productService.getAll({ featured: true }).then(data => data.slice(0, 4)),
-    refetchInterval: 5000,
   });
+
+  useEffect(() => {
+    socket.on("products_updated", () => {
+      console.log("Real-time home update received...");
+      refetchAll();
+      refetchFeatured();
+    });
+    return () => socket.off("products_updated");
+  }, [refetchAll, refetchFeatured]);
 
   const [siteSettings, setSiteSettings] = useState(null);
 

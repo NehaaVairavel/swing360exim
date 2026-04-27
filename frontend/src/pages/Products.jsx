@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users } from "lucide-react";
 import productService from "@/services/productService";
+import { socket } from "@/socket";
 import EnquiryModal from "@/components/EnquiryModal";
 import AnimatedGear from "@/components/AnimatedGear";
 import { useCurrency } from "@/context/CurrencyContext";
@@ -104,11 +105,18 @@ const Products = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  const { data: products = [], isLoading: loading } = useQuery({
+  const { data: products = [], isLoading: loading, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: productService.getAll,
-    refetchInterval: 5000, // Poll every 5 seconds for real-time updates
   });
+
+  useEffect(() => {
+    socket.on("products_updated", () => {
+      console.log("Real-time update received: Refreshing products...");
+      refetch();
+    });
+    return () => socket.off("products_updated");
+  }, [refetch]);
 
   useEffect(() => {
     const handleScroll = () => {

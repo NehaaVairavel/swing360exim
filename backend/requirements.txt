@@ -8,3 +8,5 @@ certifi
 boto3
 gunicorn
 dnspython
+flask-socketio
+eventlet
