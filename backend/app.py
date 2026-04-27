@@ -113,6 +113,9 @@ except Exception as e:
 # ════════════════════════════════════════════════════════════════════
 
 @app.route("/api/admin/login", methods=["POST", "OPTIONS"])
+@app.route("/api/login", methods=["POST", "OPTIONS"])
+@app.route("/admin/login", methods=["POST", "OPTIONS"])
+@app.route("/login", methods=["POST", "OPTIONS"])
 def login():
     if request.method == "OPTIONS":
         return jsonify({"status": "ok"}), 200
