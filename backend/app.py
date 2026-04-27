@@ -79,11 +79,21 @@ def sync_admin_account():
     
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
     
-    # Check for existing admin (searching by role to keep it unique)
+    # 1. Handle Duplicates: Ensure only one admin record exists
+    # We find all admins with role 'superadmin'
+    admins = list(admins_col.find({"role": "superadmin"}))
+    
+    if len(admins) > 1:
+        # Keep the first one, delete the rest
+        keep_id = admins[0]["_id"]
+        admins_col.delete_many({"role": "superadmin", "_id": {"$ne": keep_id}})
+        print(f"[!] Removed {len(admins) - 1} duplicate admin records")
+    
+    # 2. Sync / Create
     admin = admins_col.find_one({"role": "superadmin"})
     
     if admin:
-        # Update existing admin
+        print("[✓] Admin found")
         admins_col.update_one(
             {"_id": admin["_id"]},
             {"$set": {
@@ -92,16 +102,15 @@ def sync_admin_account():
                 "password": hashed_password
             }}
         )
-        print("[✓] Admin account updated")
+        print("[✓] Admin updated from env")
     else:
-        # Create new admin
         admins_col.insert_one({
             "username": username,
             "email": email,
             "password": hashed_password,
             "role": "superadmin"
         })
-        print("[✓] Admin account created")
+        print("[✓] Admin created")
     
     print("[✓] Admin synced with env variables")
 
@@ -114,20 +123,32 @@ def sync_admin_account():
 def login():
     if request.method == "OPTIONS":
         return jsonify({"status": "ok"}), 200
+    
     data     = request.get_json(force=True, silent=True) or {}
-    login_id = data.get("username", "")
+    login_id = data.get("username", "") # This could be username or email
     password = data.get("password", "")
-    print(f"[*] Login attempt: {login_id}")
-    user = admins_col.find_one({"$or": [{"username": login_id}, {"email": login_id}]})
+    
+    # Find user by username OR email
+    user = admins_col.find_one({"$or": [
+        {"username": login_id},
+        {"email": login_id}
+    ]})
+    
     if not user:
-        print(f"[!] Not found: {login_id}")
+        print(f"[✗] Admin not found: {login_id}")
         return jsonify({"message": "Admin account not found"}), 404
+        
     if not bcrypt.check_password_hash(user["password"], password):
-        print(f"[!] Wrong password: {login_id}")
+        print(f"[✗] Wrong password for: {login_id}")
         return jsonify({"message": "Incorrect password"}), 401
-    print(f"[+] Login OK: {login_id}")
+        
+    print(f"[✓] Login success: {login_id}")
     token = create_access_token(identity=str(user["_id"]))
-    return jsonify({"token": token, "username": user["username"], "role": user.get("role", "admin")}), 200
+    return jsonify({
+        "token": token,
+        "username": user["username"],
+        "role": user.get("role", "admin")
+    }), 200
 
 
 @app.route("/api/me", methods=["GET"])
