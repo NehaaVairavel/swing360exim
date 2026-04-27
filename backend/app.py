@@ -71,37 +71,41 @@ def serialize(doc):
 def serialize_list(docs):
     return [serialize(d) for d in docs]
 
-# ── Auto-sync admin on startup ─────────────────────────────────────────
-def sync_admin_from_env():
+# ── Auto-sync admin from Easypanel Runtime Environment ─────────────────
+def sync_admin_from_runtime_env():
+    # Read values directly from runtime environment variables
     username = os.getenv("ADMIN_USERNAME")
     email    = os.getenv("ADMIN_EMAIL")
     password = os.getenv("ADMIN_PASSWORD")
     
     if not username or not email or not password:
-        print("[!] Admin credentials missing in .env. Skipping sync.")
+        print("[!] Critical: Admin credentials missing in Easypanel/Runtime Env. Skipping sync.", flush=True)
         return
     
-    # 1. Clear all existing admin accounts to ensure .env overrides everything
-    deleted_count = admins_col.delete_many({}).deleted_count
-    if deleted_count > 0:
-        print(f"[!] Removed {deleted_count} previous admin records")
-    
-    # 2. Insert fresh admin account with PLAIN-TEXT password as requested
-    admins_col.insert_one({
-        "username": username,
-        "email": email,
-        "password": password,
-        "role": "superadmin",
-        "created_at": datetime.utcnow().isoformat()
-    })
-    print("[✓] Admin synced with env variables (Plain-text storage)")
+    try:
+        # 1. Force remove all existing admin accounts
+        admins_col.delete_many({})
+        print("[✓] Removed old admins", flush=True)
+        
+        # 2. Insert fresh admin account from runtime variables
+        admins_col.insert_one({
+            "username": username,
+            "email": email,
+            "password": password, # Exact plain-text value
+            "role": "superadmin",
+            "created_at": datetime.utcnow().isoformat()
+        })
+        print("[✓] Loaded latest Easypanel env variables", flush=True)
+        print("[✓] New admin inserted successfully", flush=True)
+    except Exception as e:
+        print(f"[✗] Failed to sync admin: {e}", flush=True)
 
 # ── Execute Sync on Module Load (for WSGI / Production) ─────────
 try:
     with app.app_context():
-        sync_admin_from_env()
+        sync_admin_from_runtime_env()
 except Exception as e:
-    print(f"[!] Failed to auto-sync admin on startup: {e}")
+    print(f"[!] Failed to auto-sync admin on startup: {e}", flush=True)
 
 
 # ════════════════════════════════════════════════════════════════════
