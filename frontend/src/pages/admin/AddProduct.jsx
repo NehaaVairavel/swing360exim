@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import productService from "@/services/productService";
 import { 
@@ -57,6 +58,7 @@ const Select = ({ label, required, options, ...props }) => (
 
 const AddProduct = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const fileInputRef = useRef(null);
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
@@ -134,6 +136,10 @@ const AddProduct = () => {
 
     try {
       await productService.create(payload);
+      // Invalidate queries to refresh data instantly
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["featuredProducts"] });
+      
       toast.success("Equipment published to global market!");
       navigate("/admin/products");
     } catch (error) {

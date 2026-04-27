@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users } from "lucide-react";
@@ -100,10 +101,14 @@ const Products = () => {
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [scrolled, setScrolled] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+
+  const { data: products = [], isLoading: loading } = useQuery({
+    queryKey: ["products"],
+    queryFn: productService.getAll,
+    refetchInterval: 5000, // Poll every 5 seconds for real-time updates
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -113,19 +118,7 @@ const Products = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const productsData = await productService.getAll();
-        setProducts(Array.isArray(productsData) ? productsData : []);
-      } catch (error) {
-        console.error("Error fetching products", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+
 
   useEffect(() => {
     const search = searchParams.get("search");

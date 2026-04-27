@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, useMotionValue, useTransform, useInView, useScroll } from "framer-motion";
 import { Truck, Wrench, Banknote, Headphones, Globe, ArrowRight, Shield, Award, Search } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import AnimatedGear from "@/components/AnimatedGear";
 import SectionReveal from "@/components/SectionReveal";
 import BrandCarousel from "@/components/BrandCarousel";
@@ -128,26 +129,31 @@ const staggerItem = {
 const Index = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [featuredProducts, setFeaturedProducts] = useState([]);
+
+  const { data: allProducts = [] } = useQuery({
+    queryKey: ["products"],
+    queryFn: productService.getAll,
+    refetchInterval: 5000,
+  });
+
+  const { data: featuredProducts = [] } = useQuery({
+    queryKey: ["featuredProducts"],
+    queryFn: () => productService.getAll({ featured: true }).then(data => data.slice(0, 4)),
+    refetchInterval: 5000,
+  });
+
   const [siteSettings, setSiteSettings] = useState(null);
-  const [allProducts, setAllProducts] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSettings = async () => {
       try {
-        const [products, featured, settings] = await Promise.all([
-          productService.getAll(),
-          productService.getAll({ featured: true }),
-          settingsService.get()
-        ]);
-        setAllProducts(products);
-        setFeaturedProducts(featured.slice(0, 4));
+        const settings = await settingsService.get();
         setSiteSettings(settings);
       } catch (error) {
-        console.error("Error fetching home data", error);
+        console.error("Error fetching settings", error);
       }
     };
-    fetchData();
+    fetchSettings();
   }, []);
 
   const handleSearch = (e) => {
