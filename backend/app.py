@@ -1,7 +1,7 @@
 import os
 import certifi
 from datetime import timedelta, datetime
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import (
@@ -404,6 +404,15 @@ def health():
 def home():
     return {"status": "ok"}
 
+
+# ════════════════════════════════════════════════════════════════════
+#  STATIC FILES (UPLOADS)
+# ════════════════════════════════════════════════════════════════════
+
+@app.route("/uploads/<path:filename>")
+def serve_uploads(filename):
+    uploads_dir = os.path.join(app.root_path, "uploads")
+    return send_from_directory(uploads_dir, filename)
 
 # ════════════════════════════════════════════════════════════════════
 #  ENTRY POINT

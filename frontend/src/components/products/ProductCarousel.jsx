@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../../utils/imageUrl';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -35,7 +36,7 @@ const ImageWithLoader = ({ src, alt, isSold }) => {
 
 const ProductCarousel = ({ images, isSold, name, id }) => {
   const defaultImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
-  const displayImages = images?.length > 0 ? images : [defaultImage];
+  const displayImages = images?.length > 0 ? images.map(img => getImageUrl(img)) : [defaultImage];
 
   return (
     <div className="relative h-full w-full group/carousel">
