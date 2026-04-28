@@ -84,7 +84,8 @@ def serialize(doc):
     doc["id"] = str(doc.pop("_id"))
     
     # Format image URLs correctly as per Exact Fix Requirement
-    R2_PUBLIC_URL = os.getenv("R2_PUBLIC_URL", "https://pub-bacc7aff08774085bc1991eba26158b8.r2.dev")
+    R2_PUBLIC_URL = os.getenv("R2_PUBLIC_URL", "https://pub-bacc7aff08774085bc1991eba26158b8.r2.dev").rstrip("/")
+    FALLBACK_IMAGE = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800"
     
     # Get updatedAt for versioning
     updated_at = doc.get("updated_at") or doc.get("updatedAt")
@@ -103,7 +104,7 @@ def serialize(doc):
         API_BASE = ""
 
     def process_url(img):
-        if not img: return img
+        if not img or not isinstance(img, str): return None
         if img.startswith("blob:"):
             return img
             
@@ -115,24 +116,37 @@ def serialize(doc):
                 final_url = f"{API_BASE}{img}"
             else:
                 # Assume R2 object key
-                final_url = f"{R2_PUBLIC_URL}/{img}"
+                final_url = f"{R2_PUBLIC_URL}/{img.lstrip('/')}"
         
         # Append version param if not already present
         if v_param and "?" not in final_url:
             final_url = f"{final_url}{v_param}"
         return final_url
 
+    # Step 1: Normalize all images in the list
     if "images" in doc and isinstance(doc["images"], list):
         doc["images"] = [process_url(img) for img in doc["images"] if img]
-        
-    if "image" in doc and isinstance(doc["image"], str):
-        doc["image"] = process_url(doc["image"])
+    else:
+        doc["images"] = []
+
+    # Step 2: Ensure singular 'image' field is set and normalized
+    # Prefer existing 'image' field, else use first item from 'images'
+    raw_image = doc.get("image")
+    if not raw_image and doc["images"]:
+        doc["image"] = doc["images"][0]
+    elif raw_image:
+        doc["image"] = process_url(raw_image)
+    
+    # Step 3: Global fallback if absolutely nothing found
+    if not doc.get("image"):
+        doc["image"] = FALLBACK_IMAGE
+    if not doc.get("images"):
+        doc["images"] = [doc["image"]]
     
     # Ensure updatedAt is in the response for frontend cache busting
     if updated_at:
         doc["updatedAt"] = str(updated_at)
     else:
-        # Fallback to a fixed version if missing to at least provide something
         doc["updatedAt"] = "1.0"
         
     return doc

@@ -44,16 +44,20 @@ const ImageWithRetry = ({ src, alt, isSold }) => {
 };
 
 const ProductCarousel = ({ images, isSold, name, id, updatedAt }) => {
-  // Check if images is an array, or if it's a single string, or fallback to an empty array
+  // Priority: 1. images array, 2. singular image field, 3. fallback machinery image
+  const fallbackMachineImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
+  
   let displayImages = [];
+  
   if (Array.isArray(images) && images.length > 0) {
-    displayImages = images.map(img => getImageUrl(img, updatedAt)).filter(Boolean);
+    displayImages = images.filter(img => img && typeof img === 'string');
   } else if (typeof images === 'string' && images.trim() !== '') {
-    displayImages = [getImageUrl(images, updatedAt)];
+    displayImages = [images];
   }
   
+  // If still empty, use the fallback
   if (displayImages.length === 0) {
-    displayImages = ["https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800"];
+    displayImages = [fallbackMachineImage];
   }
 
   return (
