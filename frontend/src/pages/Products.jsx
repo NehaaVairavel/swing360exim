@@ -305,18 +305,20 @@ const Products = () => {
                       <button 
                         key={cat} 
                         onClick={() => { handleCategoryClick(cat); setIsMobileFiltersOpen(false); }}
-                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.2px", fontSize: "16px" }}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-[14px] transition-all duration-250 cursor-pointer ${
+                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.2px", fontSize: "16px", minHeight: "72px" }}
+                        className={`w-full flex items-center justify-between gap-[12px] px-4 py-3 rounded-[14px] transition-all duration-250 cursor-pointer ${
                           isActive 
                             ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-[0_10px_20px_rgba(245,158,11,0.22)] border border-transparent' 
                             : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-sm'
                         }`}
                       >
-                        <div className="flex items-center">
-                          <Icon style={{ width: '24px', height: '24px', flexShrink: 0, marginRight: '12px', fill: 'currentColor', stroke: 'none', color: isActive ? 'white' : '#111827' }} />
-                          {cat}
+                        <div className="flex items-center gap-[12px] min-w-0 flex-1">
+                          <Icon style={{ width: '24px', height: '24px', flexShrink: 0, fill: 'currentColor', stroke: 'none', color: isActive ? 'white' : '#111827' }} />
+                          <span className="whitespace-normal sm:whitespace-nowrap overflow-hidden text-ellipsis leading-[1.25] sm:leading-none text-left">
+                            {cat}
+                          </span>
                         </div>
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}>
+                        <span className={`ml-auto shrink-0 text-[10px] font-black px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}>
                           {count}
                         </span>
                       </button>
