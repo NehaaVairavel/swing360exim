@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, LayoutGrid, Pickaxe, Mountain, CircleDashed, Map, Database, Anchor, Package, Zap, Wrench, Boxes, MoreHorizontal, Eye, Send } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, Eye, Send } from "lucide-react";
+import { AllIcon, ExcavatorIcon, BackhoeIcon, DozerIcon, WheelLoaderIcon, GraderIcon, RollerIcon, SkidSteerIcon, BucketIcon, MaterialHandlerIcon, OtherIcon } from "@/components/products/MachineIcons";
 import productService from "@/services/productService";
 import { socket } from "@/socket";
 import EnquiryModal from "@/components/EnquiryModal";
@@ -135,17 +136,17 @@ const MASTER_CATEGORIES = [
 ];
 
 const CATEGORY_ICONS = {
-  "All": LayoutGrid,
-  "Excavators": Pickaxe,
-  "Backhoe Loaders": Truck,
-  "Dozers": Mountain,
-  "Wheel Loaders": CircleDashed,
-  "Graders": Map,
-  "Rollers": Database,
-  "Skid Steer": Package,
-  "Buckets": Wrench,
-  "Material Handlers": Boxes,
-  "Others": MoreHorizontal
+  "All": AllIcon,
+  "Excavators": ExcavatorIcon,
+  "Backhoe Loaders": BackhoeIcon,
+  "Dozers": DozerIcon,
+  "Wheel Loaders": WheelLoaderIcon,
+  "Graders": GraderIcon,
+  "Rollers": RollerIcon,
+  "Skid Steer": SkidSteerIcon,
+  "Buckets": BucketIcon,
+  "Material Handlers": MaterialHandlerIcon,
+  "Others": OtherIcon
 };
 
 const Products = () => {
@@ -396,7 +397,7 @@ const Products = () => {
                   {MASTER_CATEGORIES.map((cat) => {
                     const count = getCategoryCount(cat);
                     const isActive = activeCategory === cat;
-                    const Icon = CATEGORY_ICONS[cat] || LayoutGrid;
+                    const Icon = CATEGORY_ICONS[cat] || AllIcon;
                     return (
                       <button 
                         key={cat} 
@@ -409,7 +410,7 @@ const Products = () => {
                         }`}
                       >
                         <div className="flex items-center">
-                          <Icon size={18} strokeWidth={2} style={{ marginRight: '12px', color: isActive ? 'white' : '#0f172a' }} />
+                          <Icon style={{ width: '20px', height: '20px', strokeWidth: 2, flexShrink: 0, marginRight: '12px', color: isActive ? 'white' : '#0f172a' }} />
                           {cat}
                         </div>
                         <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}>
