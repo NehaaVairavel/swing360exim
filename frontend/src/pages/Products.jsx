@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, LayoutGrid, Pickaxe, Mountain, CircleDashed, Map, Database, Anchor, Package, Zap, Wrench, Boxes, MoreHorizontal } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, LayoutGrid, Pickaxe, Mountain, CircleDashed, Map, Database, Anchor, Package, Zap, Wrench, Boxes, MoreHorizontal, Eye, Send } from "lucide-react";
 import productService from "@/services/productService";
 import { socket } from "@/socket";
 import EnquiryModal from "@/components/EnquiryModal";
@@ -24,14 +24,16 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
   const { formatPrice } = useCurrency();
   const images = product.images || [];
   const isSold = product.availability === "sold";
+  const refNumber = product.reference || `#SG${product.id ? product.id.substring(product.id.length - 5).toUpperCase() : '36024'}`;
 
   return (
     <motion.div
       variants={itemVariant}
       layout
-      className={`card-marketplace flex flex-col group ${isSold ? "opacity-90" : ""}`}
+      className={`relative flex flex-col rounded-[28px] overflow-hidden bg-white shadow-[0_14px_30px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] group ${isSold ? "opacity-90" : ""}`}
     >
-      <div className="relative aspect-[4/3] overflow-hidden rounded-t-[24px] bg-slate-100 shrink-0">
+      {/* Top Image Section */}
+      <div className="relative h-[320px] w-full bg-[#111827] overflow-hidden shrink-0">
         <Link to={`/products/${product.id}`} className="block h-full w-full">
           <img
             src={images[0] || "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800"}
@@ -40,39 +42,76 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             loading="lazy"
           />
         </Link>
-        {isSold && (
-          <div className="absolute top-4 left-4 bg-rose-500 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">Sold</div>
+        {/* Dark overlay gradient at bottom of image for contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+
+        {/* Top Left Badge */}
+        {isSold ? (
+          <div className="absolute top-4 left-4 bg-rose-500 text-white px-3 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest shadow-lg">Sold</div>
+        ) : product.featured ? (
+          <div className="absolute top-4 left-4 bg-amber-500 text-white px-3 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest shadow-lg">Featured</div>
+        ) : null}
+
+        {/* Top Right Badge (Year) */}
+        {product.year && (
+          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-slate-900 px-3 py-1.5 rounded-full text-[13px] font-black shadow-lg">
+            {product.year}
+          </div>
+        )}
+
+        {/* Bottom Left Overlay Badge (Hours) */}
+        {product.hours && (
+          <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-[13px] font-semibold flex items-center gap-1.5 shadow-lg">
+            <Settings size={14} /> {product.hours} hrs
+          </div>
         )}
       </div>
       
-      <div className="p-[18px] flex flex-col flex-1">
-        <h3 className={`font-display font-black text-lg leading-tight mb-1.5 line-clamp-1 ${isSold ? "text-slate-400" : "text-slate-900 group-hover:text-primary transition-colors"}`}>
-          {product.name}
-        </h3>
-        <div className="text-[12px] font-bold text-slate-500 mb-1.5">
-          {product.year} | {product.location || 'UAE'}
-        </div>
-        <div className="text-[12px] font-bold text-slate-500 mb-4">
-          Excellent Condition
+      {/* Content Section */}
+      <div className="p-[24px] flex flex-col flex-1">
+        <Link to={`/products/${product.id}`}>
+          <h3 className={`font-display text-[28px] font-[800] leading-[1.1] mb-2 line-clamp-2 ${isSold ? "text-slate-400" : "text-slate-900 group-hover:text-amber-500 transition-colors"}`}>
+            {product.name}
+          </h3>
+        </Link>
+        <div className="text-[16px] text-[#6b7280] font-medium mb-6">
+          {product.brand} {product.model ? `• ${product.model}` : ''}
         </div>
         
         <div className="mt-auto">
-          <div className={`font-display font-black text-[22px] tracking-tight mb-4 ${isSold ? "text-slate-300 line-through" : "text-[#030814]"}`}>
-            {product.price}
+          {/* Price Section */}
+          <div className="flex items-end justify-between mb-6">
+            <div>
+              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Price</div>
+              <div className="flex items-center gap-3">
+                <div className={`font-display font-[800] text-[24px] tracking-tight ${isSold ? "text-slate-300 line-through" : "text-[#030814]"}`}>
+                  {product.price}
+                </div>
+                {product.old_price && !isSold && (
+                  <div className="text-slate-400 line-through text-[14px] font-semibold">
+                    {product.old_price}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="text-[13px] font-bold text-slate-400">
+              {refNumber}
+            </div>
           </div>
           
-          <div className="flex gap-2">
+          {/* Bottom Buttons */}
+          <div className="flex gap-3">
             <Link 
               to={`/products/${product.id}`}
-              className="flex-1 h-11 bg-slate-100 text-slate-900 rounded-xl font-bold text-[12px] uppercase tracking-widest flex items-center justify-center hover:bg-slate-200 transition-colors"
+              className="flex-1 h-[48px] bg-[#f8fafc] border border-[#e5e7eb] text-slate-700 rounded-xl font-bold text-[14px] flex items-center justify-center gap-2 hover:bg-slate-100 transition-colors"
             >
-              Details
+              <Eye size={18} /> Details
             </Link>
             <button 
               onClick={() => { setSelectedProduct(product); setEnquiryOpen(true); }}
-              className="w-11 h-11 shrink-0 rounded-xl bg-[#25D366] text-white flex items-center justify-center hover:scale-105 transition-transform shadow-lg shadow-emerald-500/20"
+              className="flex-1 h-[48px] shrink-0 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#ff8a00] text-white font-[700] text-[14px] flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-lg shadow-orange-500/25"
             >
-              <MessageCircle size={18} fill="currentColor" />
+              <Send size={18} /> Enquire
             </button>
           </div>
         </div>
