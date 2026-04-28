@@ -86,11 +86,10 @@ const Products = () => {
   const { data: products = [], isLoading: loading, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: productService.getAll,
-    staleTime: 0,
-    gcTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
+    // Override global defaults: keep product list fairly fresh, but still cached for fast navigation.
+    staleTime: 10_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
     // Socket.IO should handle real-time updates; if not connected, poll as a fallback
     // so new admin-added products appear without a manual refresh.
     refetchInterval: realtimeConnected ? false : 1000,

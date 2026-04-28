@@ -3,7 +3,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getImageUrl } from '../../utils/imageUrl';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -38,6 +37,7 @@ const ImageWithRetry = ({ src, alt, isSold }) => {
       alt={alt}
       className={`w-full h-full object-cover transition-transform duration-700 ${isSold ? "grayscale-[0.5]" : "group-hover:scale-105"}`}
       loading="lazy"
+      decoding="async"
       onError={handleError}
     />
   );

@@ -140,7 +140,11 @@ def serialize(doc):
     all_images = []
     for field in gallery_fields:
         if field in doc and isinstance(doc[field], list):
-            processed = [process_url(img) for img in doc[field] if process_url(img)]
+            processed = []
+            for img in doc[field]:
+                final = process_url(img)
+                if final:
+                    processed.append(final)
             doc[field] = processed
             all_images.extend(processed)
     
@@ -382,7 +386,11 @@ def get_products():
         ]
         
     products = serialize_list(products_col.find(query).sort("_id", -1))
-    return jsonify(products), 200
+    resp = jsonify(products)
+    # Safe caching: allow short-lived caching to speed up repeat navigations.
+    # Mutations broadcast realtime events + frontend refetch, so a brief cache is fine.
+    resp.headers["Cache-Control"] = "public, max-age=10, stale-while-revalidate=30"
+    return resp, 200
 
 
 @app.route("/api/products/<product_id>", methods=["GET"])
