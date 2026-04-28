@@ -88,7 +88,9 @@ const Products = () => {
     queryFn: productService.getAll,
     // Override global defaults: keep product list fairly fresh, but still cached for fast navigation.
     staleTime: 10_000,
-    refetchOnMount: false,
+    // Critical for instant admin->main sync:
+    // when admin invalidates ["products"], navigating to this page must refetch without manual refresh.
+    refetchOnMount: true,
     refetchOnWindowFocus: false,
     // Socket.IO should handle real-time updates; if not connected, poll as a fallback
     // so new admin-added products appear without a manual refresh.

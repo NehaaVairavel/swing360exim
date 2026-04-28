@@ -25,7 +25,7 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
       className={`admin-product-card relative flex flex-col bg-white overflow-hidden group ${isSold ? "opacity-90 grayscale-[0.2]" : ""} w-full h-full max-w-[300px] mx-auto`}
     >
       {/* 1. Image Section (Top) */}
-      <div className="relative h-[200px] w-full shrink-0">
+      <div className="relative h-[180px] w-full shrink-0">
         <ProductCarousel 
           images={product.images} 
           image={product.image}
@@ -50,7 +50,7 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
       </div>
       
       {/* 2. Content Section */}
-      <div className="p-4 flex flex-col gap-3 flex-1">
+      <div className="p-4 flex flex-col gap-2.5 flex-1">
         <div className="flex items-center justify-between">
             <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 px-2 py-1 rounded-md">{product.category}</span>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{product.model || 'N/A'}</span>
@@ -80,7 +80,7 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
           </div>
         </div>
         
-        <div className="mt-3 pt-3 border-t border-slate-100">
+        <div className="mt-2.5 pt-2.5 border-t border-slate-100">
           {/* Bottom Buttons - Admin Specific */}
           <div className={`grid gap-2.5 ${isSold ? "grid-cols-2" : "grid-cols-2"}`}>
             <Link 

@@ -26,10 +26,10 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       layout
       style={{ width: "100%", maxWidth: "300px", cursor: "pointer" }}
       onClick={handleCardClick}
-      className={`relative flex flex-col gap-[10px] rounded-[28px] overflow-hidden bg-white shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition-all duration-250 hover:-translate-y-[6px] group ${isSold ? "opacity-90" : ""} lg:w-[300px] lg:h-[440px]`}
+      className={`relative flex flex-col gap-[10px] rounded-[28px] overflow-hidden bg-white shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition-all duration-250 hover:-translate-y-[6px] group ${isSold ? "opacity-90" : ""} lg:w-[300px] lg:h-[410px]`}
     >
       {/* 1. Image Section (Top) */}
-      <div className="relative h-[165px] w-full rounded-t-[28px] overflow-hidden shrink-0">
+      <div className="relative h-[150px] w-full rounded-t-[28px] overflow-hidden shrink-0">
         <ProductCarousel 
           images={product.images} 
           image={product.image}
@@ -56,7 +56,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       </div>
       
       {/* 2. Content Section */}
-      <div style={{ padding: "12px 18px 18px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+      <div style={{ padding: "12px 18px 16px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
         <Link to={`/product/${product.id}`}>
           <h3 style={{ fontSize: "18px", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.4px", color: "#111827", marginTop: 0, marginBottom: "6px" }} className="font-display line-clamp-2">
             {product.name}
@@ -75,7 +75,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             </div>
             
             {/* Ref Box */}
-            <div style={{ width: "90px", height: "58px", borderRadius: "16px", background: "#f8fafc", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "11px", color: "#111827", flexDirection: "column", lineHeight: 1.2 }}>
+            <div style={{ width: "90px", height: "54px", borderRadius: "16px", background: "#f8fafc", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "11px", color: "#111827", flexDirection: "column", lineHeight: 1.2 }}>
               <span style={{ fontSize: "10px", color: "#6b7280", letterSpacing: "1px" }}>Ref No:</span>
               {refNumber}
             </div>

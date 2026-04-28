@@ -144,6 +144,7 @@ const AddProduct = () => {
       await productService.create(payload);
       // Invalidate queries to refresh data instantly
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["products", "admin"] });
       queryClient.invalidateQueries({ queryKey: ["featuredProducts"] });
       
       toast.success("Equipment published with permanent image storage!");
