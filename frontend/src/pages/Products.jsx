@@ -187,20 +187,56 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] relative font-body antialiased">
-      {/* Compact Top Strip */}
-      <section className="pt-[120px] pb-12 relative overflow-hidden rounded-b-[24px] border-b border-slate-200/60 shadow-sm" style={{ background: 'linear-gradient(135deg, #f8fafc 0%, #eef2f7 50%, #e5e7eb 100%)' }}>
-        <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(0,0,0,.03) 1px, transparent 0)', backgroundSize: '24px 24px' }} />
-        <div className="container-section relative z-10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-display font-black text-[#0f172a] mb-2 tracking-tight">
-                Certified Heavy Equipment <span className="text-[#f59e0b]">Ready for Export</span>
-              </h1>
-              <p className="text-slate-600 font-semibold text-[15px]">
-                500+ Machines | Dubai Hub | Fast Shipping
-              </p>
-            </div>
+      {/* Hero Section */}
+      <section 
+        className="relative border-b border-slate-200/60 shadow-sm" 
+        style={{ 
+          background: 'linear-gradient(135deg, #eef1f5, #f8fafc, #e9edf2)',
+          paddingTop: 'calc(72px + 28px)', // Accounts for fixed navbar
+          paddingBottom: '38px',
+          textAlign: 'center',
+          borderRadius: '0 0 26px 26px',
+          overflow: 'hidden'
+        }}
+      >
+        <div className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+        
+        <div className="container-section relative z-10 px-4">
+          <div style={{
+            display: 'inline-block',
+            padding: '8px 18px',
+            borderRadius: '999px',
+            fontSize: '12px',
+            letterSpacing: '4px',
+            fontWeight: '700',
+            color: '#d18a00',
+            background: 'rgba(245,158,11,0.12)',
+            border: '1px solid rgba(245,158,11,0.22)',
+            marginBottom: '22px'
+          }}>
+            EXPORT HUB CATALOG
           </div>
+          
+          <h1 className="font-display" style={{
+            fontSize: 'clamp(42px, 6vw, 88px)',
+            fontWeight: '900',
+            lineHeight: '0.95',
+            letterSpacing: '-1.5px',
+            color: '#111827'
+          }}>
+            Our Heavy Machinery<br/>
+            <span style={{ color: '#f59e0b' }}>Fleet</span>
+          </h1>
+          
+          <p style={{
+            fontSize: 'clamp(18px, 3vw, 24px)',
+            fontStyle: 'italic',
+            color: '#6b7280',
+            fontWeight: '500',
+            marginTop: '18px'
+          }}>
+            "Engineered for performance, curated for global markets."
+          </p>
         </div>
       </section>
 
