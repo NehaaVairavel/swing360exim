@@ -82,6 +82,34 @@ def serialize(doc):
     if doc is None:
         return None
     doc["id"] = str(doc.pop("_id"))
+    
+    # Format image URLs correctly as per Exact Fix Requirement
+    R2_PUBLIC_URL = os.getenv("R2_PUBLIC_URL", "https://pub-bacc7aff08774085bc1991eba26158b8.r2.dev")
+    
+    # Try to get API_BASE from request, fallback if out of context
+    try:
+        from flask import request
+        API_BASE = request.host_url.rstrip("/")
+    except:
+        API_BASE = ""
+
+    def process_url(img):
+        if not img: return img
+        if img.startswith("http://") or img.startswith("https://") or img.startswith("blob:"):
+            return img
+        if img.startswith("uploads/"):
+            return f"{API_BASE}/{img}"
+        if img.startswith("/uploads/"):
+            return f"{API_BASE}{img}"
+        # Assume R2 object key
+        return f"{R2_PUBLIC_URL}/{img}"
+
+    if "images" in doc and isinstance(doc["images"], list):
+        doc["images"] = [process_url(img) for img in doc["images"] if img]
+        
+    if "image" in doc and isinstance(doc["image"], str):
+        doc["image"] = process_url(doc["image"])
+        
     return doc
 
 def serialize_list(docs):
