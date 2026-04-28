@@ -33,11 +33,13 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
-        scrolled 
-          ? "bg-white/90 backdrop-blur-xl border-primary/10 shadow-lg" 
-          : "bg-white/80 backdrop-blur-md border-border/20 shadow-sm"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-white/20`}
+      style={{
+        backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.7)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        boxShadow: scrolled ? '0 6px 20px rgba(0,0,0,.05)' : 'none'
+      }}
     >
       <div className="w-full max-w-[1520px] mx-auto px-6 md:px-12 flex items-center justify-between h-[72px] transition-all duration-500">
         {/* ── Logo + Brand Name ── */}

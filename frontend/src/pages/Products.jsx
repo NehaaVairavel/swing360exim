@@ -436,19 +436,6 @@ const Products = () => {
         </div>
       </section>
 
-      {/* Floating WhatsApp CTA */}
-      <a 
-        href="https://wa.me/971000000000" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="whatsapp-float group"
-      >
-        <div className="absolute right-full mr-4 bg-white text-[#030814] px-4 py-2 rounded-xl text-[12px] font-black uppercase tracking-widest shadow-2xl opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0 pointer-events-none whitespace-nowrap">
-          Enquire on WhatsApp
-        </div>
-        <MessageCircle size={32} fill="currentColor" />
-      </a>
-
       <EnquiryModal open={enquiryOpen} onClose={() => setEnquiryOpen(false)} productName={selectedProduct?.name} product={selectedProduct} />
     </div>
   );

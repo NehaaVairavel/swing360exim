@@ -11,7 +11,6 @@ const PublicLayout = () => {
         <Outlet />
       </main>
       <Footer />
-      <FloatingActions />
     </>
   );
 };
