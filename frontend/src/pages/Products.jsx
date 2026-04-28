@@ -66,6 +66,11 @@ const Products = () => {
   const { data: products = [], isLoading: loading, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: productService.getAll,
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true
   });
 
   useEffect(() => {

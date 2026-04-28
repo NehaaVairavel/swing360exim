@@ -22,7 +22,13 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
     >
       {/* 1. Image Section (Top) */}
       <div className="relative h-[180px] w-full rounded-t-[28px] overflow-hidden shrink-0">
-        <ProductCarousel images={product.images || product.image} isSold={isSold} name={product.name} id={product.id} />
+        <ProductCarousel 
+          images={product.images || product.image} 
+          isSold={isSold} 
+          name={product.name} 
+          id={product.id}
+          updatedAt={product.updatedAt}
+        />
 
         {/* Top Left Year Badge */}
         {product.year && (

@@ -86,6 +86,15 @@ def serialize(doc):
     # Format image URLs correctly as per Exact Fix Requirement
     R2_PUBLIC_URL = os.getenv("R2_PUBLIC_URL", "https://pub-bacc7aff08774085bc1991eba26158b8.r2.dev")
     
+    # Get updatedAt for versioning
+    updated_at = doc.get("updated_at") or doc.get("updatedAt")
+    v_param = ""
+    if updated_at:
+        if isinstance(updated_at, datetime):
+            v_param = f"?v={int(updated_at.timestamp())}"
+        else:
+            v_param = f"?v={updated_at}"
+            
     # Try to get API_BASE from request, fallback if out of context
     try:
         from flask import request
@@ -95,20 +104,36 @@ def serialize(doc):
 
     def process_url(img):
         if not img: return img
-        if img.startswith("http://") or img.startswith("https://") or img.startswith("blob:"):
+        if img.startswith("blob:"):
             return img
-        if img.startswith("uploads/"):
-            return f"{API_BASE}/{img}"
-        if img.startswith("/uploads/"):
-            return f"{API_BASE}{img}"
-        # Assume R2 object key
-        return f"{R2_PUBLIC_URL}/{img}"
+            
+        final_url = img
+        if not (img.startswith("http://") or img.startswith("https://")):
+            if img.startswith("uploads/"):
+                final_url = f"{API_BASE}/{img}"
+            elif img.startswith("/uploads/"):
+                final_url = f"{API_BASE}{img}"
+            else:
+                # Assume R2 object key
+                final_url = f"{R2_PUBLIC_URL}/{img}"
+        
+        # Append version param if not already present
+        if v_param and "?" not in final_url:
+            final_url = f"{final_url}{v_param}"
+        return final_url
 
     if "images" in doc and isinstance(doc["images"], list):
         doc["images"] = [process_url(img) for img in doc["images"] if img]
         
     if "image" in doc and isinstance(doc["image"], str):
         doc["image"] = process_url(doc["image"])
+    
+    # Ensure updatedAt is in the response for frontend cache busting
+    if updated_at:
+        doc["updatedAt"] = str(updated_at)
+    else:
+        # Fallback to a fixed version if missing to at least provide something
+        doc["updatedAt"] = "1.0"
         
     return doc
 

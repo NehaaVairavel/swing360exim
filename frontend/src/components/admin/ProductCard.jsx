@@ -26,7 +26,13 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
     >
       {/* 1. Image Section (Top) */}
       <div className="relative h-[220px] w-full shrink-0">
-        <ProductCarousel images={product.images || product.image} isSold={isSold} name={product.name} id={product.id} />
+        <ProductCarousel 
+          images={product.images || product.image} 
+          isSold={isSold} 
+          name={product.name} 
+          id={product.id} 
+          updatedAt={product.updatedAt}
+        />
 
         {/* Top Left Admin Status Badge */}
         <div style={{ position: "absolute", top: "16px", left: "16px", background: isSold ? "#f43f5e" : isDraft ? "#64748b" : isHidden ? "#0f172a" : "#10b981", color: "white", padding: "6px 14px", borderRadius: "999px", fontWeight: 800, fontSize: "11px", letterSpacing: "1px", zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>

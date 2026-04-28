@@ -1,19 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../../utils/imageUrl';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const ProductCarousel = ({ images, isSold, name, id }) => {
+const ImageWithRetry = ({ src, alt, isSold }) => {
+  const [imgSrc, setImgSrc] = useState(src);
+  const [hasRetried, setHasRetried] = useState(false);
+  const [error, setError] = useState(false);
+  const fallbackImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
+
+  useEffect(() => {
+    setImgSrc(src);
+    setHasRetried(false);
+    setError(false);
+  }, [src]);
+
+  const handleError = () => {
+    if (!hasRetried) {
+      // Retry once by adding a fresh timestamp
+      const separator = imgSrc.includes('?') ? '&' : '?';
+      setImgSrc(`${imgSrc}${separator}retry=${Date.now()}`);
+      setHasRetried(true);
+    } else {
+      // If retry fails, show fallback
+      setError(true);
+    }
+  };
+
+  return (
+    <img
+      src={error ? fallbackImage : imgSrc}
+      alt={alt}
+      className={`w-full h-full object-cover transition-transform duration-700 ${isSold ? "grayscale-[0.5]" : "group-hover:scale-105"}`}
+      loading="lazy"
+      onError={handleError}
+    />
+  );
+};
+
+const ProductCarousel = ({ images, isSold, name, id, updatedAt }) => {
   // Check if images is an array, or if it's a single string, or fallback to an empty array
   let displayImages = [];
   if (Array.isArray(images) && images.length > 0) {
-    displayImages = images.filter(Boolean);
+    displayImages = images.map(img => getImageUrl(img, updatedAt)).filter(Boolean);
   } else if (typeof images === 'string' && images.trim() !== '') {
-    displayImages = [images];
+    displayImages = [getImageUrl(images, updatedAt)];
   }
   
   if (displayImages.length === 0) {
@@ -35,11 +71,10 @@ const ProductCarousel = ({ images, isSold, name, id }) => {
         {displayImages.map((img, index) => (
           <SwiperSlide key={index}>
             <Link to={`/products/${id}`} className="block h-full w-full bg-slate-100 flex items-center justify-center">
-              <img
+              <ImageWithRetry
                 src={img}
                 alt={`${name || 'Product'} - view ${index + 1}`}
-                className={`w-full h-full object-cover transition-transform duration-700 ${isSold ? "grayscale-[0.5]" : "group-hover:scale-105"}`}
-                loading="lazy"
+                isSold={isSold}
               />
             </Link>
           </SwiperSlide>

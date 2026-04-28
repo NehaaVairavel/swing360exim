@@ -25,6 +25,11 @@ const AdminProducts = () => {
   const { data: products = [], isLoading: loading, refetch } = useQuery({
     queryKey: ["products", "admin"],
     queryFn: () => productService.getAll({ all: true }),
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true
   });
   
   const [searchQuery, setSearchQuery] = useState("");
