@@ -389,7 +389,7 @@ const Products = () => {
 
           {/* Active Inventory Grid */}
           {availableProducts.length > 0 && activeStatus !== "Sold" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[28px] justify-items-center w-full">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[22px] justify-items-center w-full">
               <AnimatePresence mode="popLayout">
                 {availableProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>
@@ -407,7 +407,7 @@ const Products = () => {
 
           {/* Sold Inventory Grid */}
           {soldProducts.length > 0 && activeStatus !== "Available" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[28px] justify-items-center w-full">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[22px] justify-items-center w-full">
               <AnimatePresence mode="popLayout">
                 {soldProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>

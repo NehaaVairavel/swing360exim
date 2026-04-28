@@ -22,10 +22,10 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
     <motion.div
       variants={itemVariant}
       layout
-      className={`admin-product-card relative flex flex-col bg-white overflow-hidden group ${isSold ? "opacity-90 grayscale-[0.2]" : ""} w-full h-full max-w-sm mx-auto`}
+      className={`admin-product-card relative flex flex-col bg-white overflow-hidden group ${isSold ? "opacity-90 grayscale-[0.2]" : ""} w-full h-full max-w-[300px] mx-auto`}
     >
       {/* 1. Image Section (Top) */}
-      <div className="relative h-[220px] w-full shrink-0">
+      <div className="relative h-[200px] w-full shrink-0">
         <ProductCarousel 
           images={product.images} 
           image={product.image}
@@ -37,27 +37,27 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
         />
 
         {/* Top Left Admin Status Badge */}
-        <div style={{ position: "absolute", top: "16px", left: "16px", background: isSold ? "#f43f5e" : isDraft ? "#64748b" : isHidden ? "#0f172a" : "#10b981", color: "white", padding: "6px 14px", borderRadius: "999px", fontWeight: 800, fontSize: "11px", letterSpacing: "1px", zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
+        <div style={{ position: "absolute", top: "14px", left: "14px", background: isSold ? "#f43f5e" : isDraft ? "#64748b" : isHidden ? "#0f172a" : "#10b981", color: "white", padding: "5px 12px", borderRadius: "999px", fontWeight: 800, fontSize: "10px", letterSpacing: "1px", zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
           {statusLabel}
         </div>
 
         {/* Top Right Badge (Year / Featured) */}
         {(product.year || product.featured) && (
-          <div style={{ position: "absolute", top: "16px", right: "16px", background: "white", color: "#111827", padding: "8px 16px", borderRadius: "999px", fontSize: "12px", fontWeight: 800, zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+          <div style={{ position: "absolute", top: "14px", right: "14px", background: "white", color: "#111827", padding: "7px 14px", borderRadius: "999px", fontSize: "11px", fontWeight: 800, zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
             {product.featured ? "⭐ FEATURED" : product.year}
           </div>
         )}
       </div>
       
       {/* 2. Content Section */}
-      <div className="p-5 flex flex-col gap-3 flex-1">
+      <div className="p-4 flex flex-col gap-3 flex-1">
         <div className="flex items-center justify-between">
             <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 px-2 py-1 rounded-md">{product.category}</span>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{product.model || 'N/A'}</span>
         </div>
 
         <Link to={`/products/${product.id}`}>
-          <h3 className="text-lg font-display font-black text-slate-900 leading-tight line-clamp-2 hover:text-amber-500 transition-colors">
+          <h3 className="text-[15px] font-display font-black text-slate-900 leading-tight line-clamp-2 hover:text-amber-500 transition-colors">
             {product.name}
           </h3>
         </Link>
@@ -67,31 +67,31 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
           <div className="flex items-end justify-between">
             <div>
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Export Price</div>
-              <div className="text-2xl font-display font-black text-amber-500 leading-none">
+              <div className="text-xl font-display font-black text-amber-500 leading-none">
                 {product.price}
               </div>
             </div>
             
             {/* Ref Box */}
-            <div className="bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5 text-center">
+            <div className="bg-slate-50 border border-slate-100 rounded-xl px-2.5 py-1.5 text-center">
               <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Ref No</span>
               <span className="block text-xs font-black text-slate-700">{refNumber}</span>
             </div>
           </div>
         </div>
         
-        <div className="mt-4 pt-4 border-t border-slate-100">
+        <div className="mt-3 pt-3 border-t border-slate-100">
           {/* Bottom Buttons - Admin Specific */}
           <div className={`grid gap-2.5 ${isSold ? "grid-cols-2" : "grid-cols-2"}`}>
             <Link 
               to={`/admin/edit-product/${product.id}`}
-              className="admin-pill-btn admin-pill-btn-edit"
+              className="admin-pill-btn admin-pill-btn-edit text-[12px] py-2"
             >
               ✏️ Edit
             </Link>
             <button 
               onClick={() => handleDelete(product.id)}
-              className="admin-pill-btn admin-pill-btn-delete"
+              className="admin-pill-btn admin-pill-btn-delete text-[12px] py-2"
             >
               🗑️ Delete
             </button>
@@ -100,13 +100,13 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
               <>
                 <button 
                   onClick={() => handleFeature && handleFeature(product.id, product.featured)}
-                  className="admin-pill-btn admin-pill-btn-feature"
+                  className="admin-pill-btn admin-pill-btn-feature text-[12px] py-2"
                 >
                   ⭐ Feature
                 </button>
                 <button 
                   onClick={() => handleMarkSold(product.id)}
-                  className="admin-pill-btn admin-pill-btn-sold"
+                  className="admin-pill-btn admin-pill-btn-sold text-[12px] py-2"
                 >
                   ✔️ Mark Sold
                 </button>

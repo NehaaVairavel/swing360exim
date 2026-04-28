@@ -168,7 +168,7 @@ const AdminProducts = () => {
 
       {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] justify-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] justify-items-center">
           {filteredProducts.map(product => (
             <ProductCard 
               key={product.id} 
