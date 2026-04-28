@@ -63,6 +63,18 @@ const Products = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
+  const [realtimeConnected, setRealtimeConnected] = useState(socket.connected);
+  useEffect(() => {
+    const onConnect = () => setRealtimeConnected(true);
+    const onDisconnect = () => setRealtimeConnected(false);
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+
   const { data: products = [], isLoading: loading, refetch } = useQuery({
     queryKey: ["products"],
     queryFn: productService.getAll,
@@ -70,7 +82,10 @@ const Products = () => {
     gcTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
-    refetchOnReconnect: true
+    refetchOnReconnect: true,
+    // Socket.IO should handle real-time updates; if not connected, poll as a fallback
+    // so new admin-added products appear without a manual refresh.
+    refetchInterval: realtimeConnected ? false : 1000,
   });
 
   useEffect(() => {

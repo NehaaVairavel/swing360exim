@@ -131,14 +131,28 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [realtimeConnected, setRealtimeConnected] = useState(socket.connected);
+  useEffect(() => {
+    const onConnect = () => setRealtimeConnected(true);
+    const onDisconnect = () => setRealtimeConnected(false);
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+
   const { data: allProducts = [], refetch: refetchAll } = useQuery({
     queryKey: ["products"],
     queryFn: productService.getAll,
+    refetchInterval: realtimeConnected ? false : 1000,
   });
 
   const { data: featuredProducts = [], refetch: refetchFeatured } = useQuery({
     queryKey: ["featuredProducts"],
     queryFn: () => productService.getAll({ featured: true }).then(data => data.slice(0, 4)),
+    refetchInterval: realtimeConnected ? false : 1000,
   });
 
   useEffect(() => {
