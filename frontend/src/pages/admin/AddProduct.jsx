@@ -84,6 +84,7 @@ const AddProduct = () => {
     serial_number: "",
     availability: "in_stock",
     status: "active",
+    location: "Dubai, UAE",
     short_description: "",
     full_description: ""
   });
@@ -122,6 +123,10 @@ const AddProduct = () => {
     e.preventDefault();
     if (!formData.name || !formData.category || !formData.price) {
         return toast.error("Please fill in required fields: Name, Category, Price");
+    }
+
+    if (imageFiles.length === 0) {
+        return toast.error("Media Gallery is mandatory. Please upload at least one image.");
     }
 
     setSubmitting(true);
@@ -196,14 +201,27 @@ const AddProduct = () => {
               <Select label="Category" name="category" value={formData.category} onChange={handleInputChange} options={categories} required />
               <Input label="Brand" name="brand" value={formData.brand} onChange={handleInputChange} placeholder="Caterpillar" required />
               <Input label="Model Number" name="model" value={formData.model} onChange={handleInputChange} placeholder="320 GC" required />
-              <Select label="Condition" name="condition" value={formData.condition} onChange={handleInputChange} options={["New", "Used - Like New", "Used - Good", "Reconditioned"]} required />
-              <Input label="Year" name="year" value={formData.year} onChange={handleInputChange} type="number" placeholder="2024" required />
+              <Select label="Condition" name="condition" value={formData.condition} onChange={handleInputChange} options={["New", "Used", "Refurbished"]} required />
+              <Input label="Engine Hours" name="engine_hours" value={formData.engine_hours} onChange={handleInputChange} type="number" placeholder="e.g. 1200" />
+              <Input label="Price" name="price" value={formData.price} onChange={handleInputChange} type="text" placeholder="e.g. $125,000" required />
+              <Input label="Location" name="location" value={formData.location} onChange={handleInputChange} placeholder="e.g. Dubai, UAE" />
+            </div>
+            <div className="mt-4">
+              <label className="block text-sm font-bold text-slate-700 mb-2">Description <span className="text-rose-500">*</span></label>
+              <textarea 
+                name="full_description"
+                value={formData.full_description}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm h-32"
+                placeholder="Describe the machine's features, history, and technical condition..."
+                required
+              />
             </div>
           </Section>
 
           <Section title="Pricing & Availability" icon={DollarSign}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6">
-              <Input label="Price" name="price" value={formData.price} onChange={handleInputChange} type="text" placeholder="e.g. $125,000" required />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+              <Input label="Year" name="year" value={formData.year} onChange={handleInputChange} type="number" placeholder="2024" required />
               <Select label="Currency" name="currency" value={formData.currency} onChange={handleInputChange} options={["USD", "AED", "EUR", "GBP"]} required />
               <Select label="Negotiable" name="negotiable" value={formData.negotiable} onChange={handleInputChange} options={[{id:"true", name:"Yes"}, {id:"false", name:"No"}]} />
               <div className="mb-6">
@@ -222,26 +240,12 @@ const AddProduct = () => {
             </div>
           </Section>
 
-          <Section title="Detailed Description" icon={FileText}>
-            <div className="mb-6">
-              <label className="block text-sm font-bold text-slate-700 mb-2">Short Description</label>
-              <textarea 
-                name="short_description"
-                value={formData.short_description}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm h-24"
-                placeholder="Brief summary..."
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-bold text-slate-700 mb-2">Full Specifications</label>
-              <textarea 
-                name="full_description"
-                value={formData.full_description}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm h-48"
-                placeholder="Detailed features..."
-              />
+          <Section title="Technical Details" icon={SettingsIcon}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+              <Input label="Short Description" name="short_description" value={formData.short_description} onChange={handleInputChange} placeholder="Brief summary for list view..." />
+              <Input label="Serial Number" name="serial_number" value={formData.serial_number} onChange={handleInputChange} />
+              <Input label="Weight (tons)" name="weight" value={formData.weight} onChange={handleInputChange} />
+              <Input label="Fuel Type" name="fuel_type" value={formData.fuel_type} onChange={handleInputChange} />
             </div>
           </Section>
         </div>
@@ -260,6 +264,7 @@ const AddProduct = () => {
               <input type="file" ref={fileInputRef} className="hidden" multiple accept="image/*" onChange={(e) => e.target.files && handleFiles(e.target.files)} />
               <UploadCloud size={32} className="text-amber-500 mb-3" />
               <p className="text-xs font-bold text-slate-800 text-center">Drag & Drop Images</p>
+              <p className="text-[10px] text-slate-400 mt-2 text-center">First image will be the Main Product Image</p>
             </div>
             
             {images.length > 0 && (
@@ -276,9 +281,7 @@ const AddProduct = () => {
             )}
           </Section>
 
-          <Section title="Technical Specs" icon={SettingsIcon}>
-            <Input label="Engine Hours" name="engine_hours" value={formData.engine_hours} onChange={handleInputChange} type="number" />
-            <Input label="Serial Number" name="serial_number" value={formData.serial_number} onChange={handleInputChange} />
+          <Section title="Status & Visibility" icon={FileText}>
             <Select label="Availability" name="availability" value={formData.availability} onChange={handleInputChange} options={[{id:"in_stock", name:"In Stock"}, {id:"sold", name:"Sold"}, {id:"reserved", name:"Reserved"}]} />
             <Select label="Visibility Status" name="status" value={formData.status} onChange={handleInputChange} options={[{id:"active", name:"Active (Public)"}, {id:"draft", name:"Draft (Hidden)"}, {id:"inactive", name:"Inactive"}]} />
           </Section>

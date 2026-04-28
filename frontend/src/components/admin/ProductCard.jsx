@@ -11,7 +11,7 @@ const itemVariant = {
 
 const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) => {
   const isSold = product.availability === "sold";
-  const refNumber = product.reference || `SG${product.id ? product.id.substring(product.id.length - 5).toUpperCase() : '36012'}`;
+  const refNumber = product.reference_number || product.reference_no || `EXC-000`;
 
   // Ensure availability string is displayed cleanly
   const statusLabel = product.availability ? product.availability.replace('_', ' ').toUpperCase() : 'ACTIVE';
@@ -74,7 +74,7 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
             
             {/* Ref Box */}
             <div className="bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5 text-center">
-              <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Ref</span>
+              <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Ref No</span>
               <span className="block text-xs font-black text-slate-700">{refNumber}</span>
             </div>
           </div>

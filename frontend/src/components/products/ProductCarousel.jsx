@@ -86,7 +86,7 @@ const ProductCarousel = ({ images, image, photo, isSold, name, id, updatedAt }) 
       >
         {displayImages.map((img, index) => (
           <SwiperSlide key={index}>
-            <Link to={`/products/${id}`} className="block h-full w-full bg-slate-100 flex items-center justify-center">
+            <Link to={`/product/${id}`} className="block h-full w-full bg-slate-100 flex items-center justify-center">
               <ImageWithRetry
                 src={img}
                 alt={`${name || 'Product'} - view ${index + 1}`}

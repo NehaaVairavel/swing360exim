@@ -16,6 +16,11 @@ const productService = {
     return response.data;
   },
 
+  getByRef: async (ref) => {
+    const response = await api.get(`/products/ref/${ref}`);
+    return response.data;
+  },
+
   // Creates a product — sends JSON (images as URLs from R2 upload)
   create: async (data) => {
     const response = await api.post('/products', data);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Eye, Send } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Eye, Send, MapPin, Hash } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 
 const itemVariant = {
@@ -10,14 +10,22 @@ const itemVariant = {
 };
 
 const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
+  const navigate = useNavigate();
   const isSold = product.availability === "sold";
-  const refNumber = product.reference || `SG${product.id ? product.id.substring(product.id.length - 5).toUpperCase() : '36012'}`;
+  const refNumber = product.reference_number || product.reference_no || `EXC-000`;
+
+  const handleCardClick = (e) => {
+    // Only navigate if it wasn't a click on the Enquiry button or Carousel arrows
+    if (e.target.closest('button')) return;
+    navigate(`/product/${product.id}`);
+  };
 
   return (
     <motion.div
       variants={itemVariant}
       layout
-      style={{ width: "100%", maxWidth: "320px" }}
+      style={{ width: "100%", maxWidth: "320px", cursor: "pointer" }}
+      onClick={handleCardClick}
       className={`relative flex flex-col gap-[10px] rounded-[28px] overflow-hidden bg-white shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition-all duration-250 hover:-translate-y-[6px] group ${isSold ? "opacity-90" : ""} lg:w-[320px] lg:h-[470px]`}
     >
       {/* 1. Image Section (Top) */}
@@ -49,7 +57,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       
       {/* 2. Content Section */}
       <div style={{ padding: "14px 22px 22px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
-        <Link to={`/products/${product.id}`}>
+        <Link to={`/product/${product.id}`}>
           <h3 style={{ fontSize: "20px", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.4px", color: "#111827", marginTop: 0, marginBottom: "8px" }} className="font-display line-clamp-2">
             {product.name}
           </h3>
@@ -68,7 +76,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             
             {/* Ref Box */}
             <div style={{ width: "95px", height: "65px", borderRadius: "18px", background: "#f8fafc", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "12px", color: "#111827", flexDirection: "column", lineHeight: 1.2 }}>
-              <span style={{ fontSize: "10px", color: "#6b7280", letterSpacing: "1px" }}>REF:</span>
+              <span style={{ fontSize: "10px", color: "#6b7280", letterSpacing: "1px" }}>Ref No:</span>
               {refNumber}
             </div>
           </div>
@@ -78,7 +86,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
           {/* Bottom Buttons */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "10px" }}>
             <Link 
-              to={`/products/${product.id}`}
+              to={`/product/${product.id}`}
               style={{ height: "52px", borderRadius: "16px", border: "1px solid #dbe1ea", background: "white", fontWeight: 800, color: "#111827", fontSize: "14px" }}
               className="flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
             >

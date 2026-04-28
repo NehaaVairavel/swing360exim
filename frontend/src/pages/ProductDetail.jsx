@@ -9,7 +9,13 @@ import {
   Share2,
   ChevronRight,
   ChevronLeft,
-  Globe
+  Globe,
+  MapPin,
+  Phone,
+  Hash,
+  Clock,
+  Settings,
+  Info
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import productService from "@/services/productService";
@@ -32,8 +38,19 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const data = await productService.getById(id);
-        setProduct(data);
+        setLoading(true);
+        let data;
+        // Try fetching by ID first
+        try {
+          data = await productService.getById(id);
+        } catch (e) {
+          // If ID fetch fails (e.g. invalid ObjectId), try fetching by Ref
+          data = await productService.getByRef(id);
+        }
+        
+        if (data) {
+          setProduct(data);
+        }
       } catch (error) {
         console.error("Error fetching product", error);
       } finally {
@@ -45,13 +62,22 @@ const ProductDetail = () => {
   }, [id]);
 
   const handleShareLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setIsCopied(true);
-    setTimeout(() => setIsCopied(false), 2000);
+    if (navigator.share) {
+      navigator.share({
+        title: product?.name || 'Swing360 Machine',
+        text: `Check out this ${product?.name} on Swing360`,
+        url: window.location.href,
+      }).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2000);
+    }
   };
 
   const images = product?.images || [];
   const isSold = product?.availability === "sold";
+  const refNumber = product?.reference_number || product?.reference_no || `EXC-000`;
 
   const nextImage = () => {
     setDirection(1);
@@ -63,35 +89,29 @@ const ProductDetail = () => {
     setActiveImage((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  const slideVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 500 : -500,
-      opacity: 0,
-      scale: 0.95
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      scale: 1
-    },
-    exit: (direction) => ({
-      zIndex: 0,
-      x: direction < 0 ? 500 : -500,
-      opacity: 0,
-      scale: 0.95
-    })
-  };
-
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white font-display font-bold text-gray-400">Loading Technical Specs...</div>;
+  if (loading) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+      <div className="relative">
+        <AnimatedGear size={80} className="text-primary/20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      </div>
+      <p className="mt-6 font-display font-black text-heading/40 uppercase tracking-[0.2em] text-xs">Loading Machine Specs...</p>
+    </div>
+  );
 
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="text-center">
-          <h2 className="text-3xl font-display font-black text-heading mb-6 tracking-tight">Machine Not Found</h2>
-          <Link to="/products" className="btn-cta inline-flex items-center gap-3 px-8 py-4 rounded-2xl">
-            <ArrowLeft size={20} /> Back to Catalog
+        <div className="text-center px-6">
+          <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8 border border-gray-100">
+            <Info size={40} className="text-gray-300" />
+          </div>
+          <h2 className="text-3xl font-display font-black text-heading mb-4 tracking-tight">Machine Not Found</h2>
+          <p className="text-gray-500 mb-8 max-w-md mx-auto font-medium">The machine you are looking for might have been sold or removed from our catalog.</p>
+          <Link to="/products" className="bg-primary text-white px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:-translate-y-1 transition-all inline-flex items-center gap-3">
+            <ArrowLeft size={18} /> Back to Catalog
           </Link>
         </div>
       </div>
@@ -99,162 +119,255 @@ const ProductDetail = () => {
   }
 
   const specifications = [
-    { label: "Brand", value: product.brand },
-    { label: "Model", value: product.model },
-    { label: "Year", value: product.year },
-    { label: "Category", value: product.category },
-    { label: "Condition", value: product.condition || "Inspected" },
-    { label: "Engine Hours", value: product.engine_hours || "N/A" }
+    { label: "Category", value: product.category, icon: Tag },
+    { label: "Brand", value: product.brand, icon: Settings },
+    { label: "Model Number", value: product.model, icon: Info },
+    { label: "Year", value: product.year, icon: Clock },
+    { label: "Condition", value: product.condition || "Used - Good", icon: ShieldCheck },
+    { label: "Engine Hours", value: product.engine_hours || "N/A", icon: Clock },
+    { label: "Location", value: product.location || "Dubai, UAE", icon: MapPin },
+    { label: "Reference No", value: refNumber, icon: Hash },
   ];
 
   return (
-    <div className="min-h-screen bg-[#fcfcfc] relative pt-32 pb-24">
-      <div className="absolute top-[5%] right-[-5%] w-[500px] h-[500px] rounded-full bg-primary/[0.05] blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[10%] left-[-10%] w-[600px] h-[600px] rounded-full bg-accent/[0.03] blur-[150px] pointer-events-none" />
+    <div className="min-h-screen bg-[#FDFDFD] relative pt-24 pb-24 font-sans">
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-full h-[600px] bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
+      <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.04] blur-[100px] pointer-events-none" />
 
       <div className="container-section relative z-10">
-        <div className="mb-10 flex flex-wrap items-center justify-between gap-6">
+        {/* Breadcrumbs & Actions */}
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-6">
           <Link to="/products" className="flex items-center gap-3 text-heading/40 hover:text-primary transition-all font-black uppercase tracking-widest text-[11px] group">
             <div className="w-10 h-10 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
               <ArrowLeft size={18} />
             </div>
-            Back to Products
+            Back to Global Inventory
           </Link>
           
-          <div className="flex gap-4">
-             <button onClick={handleShareLink} className="h-12 px-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
-               {isCopied ? <><CheckCircle2 size={16} className="text-green-500" /> Copied</> : <><Share2 size={16} /> Copy Link</>}
+          <div className="flex gap-3">
+             <button onClick={handleShareLink} className="h-11 px-5 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
+               {isCopied ? <><CheckCircle2 size={16} className="text-green-500" /> Copied</> : <><Share2 size={16} /> Share Machine</>}
              </button>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[55%_1fr] gap-10 lg:gap-14">
-          <div className="space-y-4">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden bg-white border border-gray-100 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] group">
+        <div className="grid lg:grid-cols-[58%_1fr] gap-10 lg:gap-16 items-start">
+          {/* Left Column: Gallery */}
+          <div className="space-y-6">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              className="relative aspect-[16/11] rounded-[2.5rem] overflow-hidden bg-white border border-gray-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] group"
+            >
               <AnimatePresence initial={false} custom={direction}>
                 <motion.img
                   key={activeImage}
                   src={images[activeImage] || "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=1200"}
                   custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ x: { type: "tween", ease: "easeOut", duration: 0.15 }, opacity: { duration: 0.1 }, scale: { duration: 0.1 } }}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]"
                 />
               </AnimatePresence>
 
+              {/* Navigation Arrows */}
               {images.length > 1 && (
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 flex justify-between z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={(e) => { e.stopPropagation(); prevImage(); }} className="w-12 h-12 rounded-full bg-white/90 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto">
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 flex justify-between z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <button onClick={(e) => { e.stopPropagation(); prevImage(); }} className="w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto active:scale-95">
                     <ChevronLeft size={24} />
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); nextImage(); }} className="w-12 h-12 rounded-full bg-white/90 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto">
+                  <button onClick={(e) => { e.stopPropagation(); nextImage(); }} className="w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto active:scale-95">
                     <ChevronRight size={24} />
                   </button>
                 </div>
               )}
               
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2.5 z-20 p-2 rounded-full bg-black/10 backdrop-blur-md border border-white/10 group-hover:scale-110 transition-transform">
-                {images.map((_, idx) => (
-                  <button key={idx} onClick={() => { setDirection(idx > activeImage ? 1 : -1); setActiveImage(idx); }} className={`h-2 transition-all rounded-full ${activeImage === idx ? 'w-8 bg-primary' : 'w-2 bg-white/40 hover:bg-white'}`} />
-                ))}
+              {/* Image Badges */}
+              <div className="absolute top-8 left-8 z-20 flex flex-col gap-3">
+                <div className="bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-xl border border-white/50">
+                  <ShieldCheck className="text-primary" size={20} />
+                  <span className="text-[11px] font-black text-heading uppercase tracking-[0.2em]">Verified Inspection</span>
+                </div>
+                {isSold && (
+                  <div className="bg-rose-500 text-white px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-xl font-black uppercase tracking-[0.2em] text-[11px]">
+                    Sold Out
+                  </div>
+                )}
               </div>
 
-              <div className="absolute top-8 left-8 z-20">
-                <div className="bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-[1.25rem] flex items-center gap-3 shadow-xl border border-white/50">
-                  <ShieldCheck className="text-primary" size={20} />
-                  <span className="text-[11px] font-black text-heading uppercase tracking-[0.2em]">Verified Hub Inspection</span>
-                </div>
-              </div>
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
 
-            <div className="grid grid-cols-4 gap-3 px-1">
+            {/* Thumbnail Slider */}
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
               {images.map((img, idx) => (
-                <button key={idx} onClick={() => { setDirection(idx > activeImage ? 1 : -1); setActiveImage(idx); }} className={`aspect-square rounded-[1.25rem] overflow-hidden border-2 transition-all duration-300 relative group ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-gray-50 opacity-100 hover:border-primary/30'}`}>
-                  <img src={img} alt={`Thumbnail ${idx}`} className={`w-full h-full object-cover transition-all duration-500 ${activeImage === idx ? 'opacity-100' : 'opacity-40 grayscale group-hover:opacity-100 group-hover:grayscale-0'}`} />
+                <button 
+                  key={idx} 
+                  onClick={() => { setDirection(idx > activeImage ? 1 : -1); setActiveImage(idx); }} 
+                  className={`aspect-[4/3] rounded-2xl overflow-hidden border-2 transition-all duration-300 relative group ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-gray-50 opacity-60 hover:opacity-100 hover:border-primary/30'}`}
+                >
+                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
           </div>
 
+          {/* Right Column: Info & CTAs */}
           <div className="flex flex-col">
-            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.8 }}>
-              <div className="flex items-center gap-3 mb-5">
-                <span className="bg-primary text-white px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.3em]">{product.category}</span>
-                <span className="text-white/80 font-bold uppercase tracking-[0.12em] text-[10px] flex items-center gap-2 bg-gray-800 border border-gray-700 px-3.5 py-1.5 rounded-xl shadow-sm">
-                  <Tag size={12} className="text-primary" /> Model: <span className="text-white font-black">{product.model}</span>
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
+              <div className="flex items-center gap-3 mb-6">
+                <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">{product.category}</span>
+                <span className="bg-gray-100 text-gray-500 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                  <Hash size={12} /> Reference No: {refNumber}
                 </span>
               </div>
 
-              <h1 className="text-3xl lg:text-4xl font-display font-black text-heading mb-3 leading-[1.1] tracking-tight">{product.name}</h1>
+              <h1 className="text-4xl lg:text-5xl font-display font-black text-heading mb-4 leading-tight tracking-tight">{product.name}</h1>
+              
+              <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-center gap-2 text-gray-400 font-bold text-sm">
+                  <MapPin size={16} className="text-primary" />
+                  {product.location || "Dubai, UAE"}
+                </div>
+                <div className="w-1.5 h-1.5 rounded-full bg-gray-200" />
+                <div className="flex items-center gap-2 text-gray-400 font-bold text-sm">
+                  <Clock size={16} className="text-primary" />
+                  Ready for Export
+                </div>
+              </div>
 
-              <div className="bg-gray-50/60 rounded-2xl p-4 mb-5 border border-gray-100 relative overflow-hidden group">
-                <div className="absolute top-0 right-0 p-2 opacity-[0.04] rotate-12 pointer-events-none"><AnimatedGear size={120} /></div>
-                <div className="flex items-center justify-between gap-4 relative z-10">
-                  <div>
-                    <span className="text-primary text-[9px] uppercase font-black tracking-[0.4em] mb-0.5 block">Global Export Price</span>
-                    <h2 className={`text-4xl font-display tracking-tighter drop-shadow-sm whitespace-nowrap transition-all duration-300 ${isSold ? "text-[#9CA3AF] line-through font-medium" : "text-primary font-black"}`}>{product.price}</h2>
-                  </div>
-                  <div className="flex flex-col items-end pt-2">
-                    <CurrencyToggle />
-                    <span className="text-[11px] text-gray-400 font-bold mt-1.5 block">✦ Best Export Price</span>
+              <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm mb-8 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
+                  <AnimatedGear size={160} />
+                </div>
+                
+                <div className="relative z-10">
+                  <span className="text-primary text-[10px] uppercase font-black tracking-[0.4em] mb-2 block">Premium Export Price</span>
+                  <div className="flex items-end justify-between gap-4">
+                    <h2 className={`text-5xl font-display tracking-tighter transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-primary font-black"}`}>
+                      {product.price}
+                    </h2>
+                    <div className="flex flex-col items-end pb-1">
+                      <CurrencyToggle />
+                      <span className="text-[10px] text-gray-400 font-bold mt-2 uppercase tracking-widest">USD / AED / EUR</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2.5 mb-5">
+              {/* Technical Grid */}
+              <div className="grid grid-cols-2 gap-3 mb-10">
                 {specifications.map((spec, i) => (
-                  <div key={i} className="flex flex-col gap-1 bg-white border border-gray-100 rounded-xl px-3.5 py-3 shadow-sm hover:border-primary/20 hover:shadow-md transition-all duration-200 group">
-                    <span className="text-gray-800 text-[9px] font-black uppercase tracking-widest group-hover:text-primary transition-colors">{spec.label}</span>
-                    <span className="text-gray-900 font-black text-[13px] tracking-tight">{spec.value}</span>
+                  <div key={i} className="flex items-center gap-4 bg-white border border-gray-100 rounded-2xl p-4 hover:border-primary/20 hover:shadow-md transition-all group">
+                    <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-primary group-hover:text-white transition-all">
+                      <spec.icon size={18} />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-0.5">{spec.label}</span>
+                      <span className="text-sm font-black text-heading leading-none">{spec.value}</span>
+                    </div>
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => !isSold && setEnquiryOpen(true)}
-                  disabled={isSold}
-                  className={`w-full py-4 px-8 flex items-center justify-center gap-3 rounded-2xl font-black uppercase tracking-widest text-[13px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-primary text-white shadow-lg shadow-primary/20 hover:-translate-y-1"}`}
-                >
-                  <MessageSquare size={20} /> {isSold ? "Sold Out" : "Enquire Now"}
-                </button>
-              </div>
-
-              <a href="https://wa.me/918778868739" target="_blank" rel="noopener noreferrer" className={`mt-3 w-full flex items-center justify-center gap-3 py-3.5 rounded-2xl transition-all duration-300 font-black uppercase tracking-widest text-[12px] ${isSold ? "opacity-50 pointer-events-none" : "bg-[#25D366]/10 border border-[#25D366]/25 text-[#1a9e4d] hover:bg-[#25D366] hover:text-white"}`}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                {isSold ? "WhatsApp Disabled" : "Chat on WhatsApp"}
-              </a>
-
-              <div className="mt-5 flex items-center gap-4 p-3.5 rounded-2xl bg-orange-50/70 border border-orange-100">
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span></span>
-                  <div className="flex -space-x-2">{[1,2,3].map(i => (<div key={i} className="w-7 h-7 rounded-full border-2 border-white bg-gray-200 overflow-hidden"><img src={`https://i.pravatar.cc/150?img=${i+20}`} alt="Active Buyer" /></div>))}</div>
+              {/* CTA Buttons */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <button
+                    onClick={() => !isSold && setEnquiryOpen(true)}
+                    disabled={isSold}
+                    className={`h-16 flex items-center justify-center gap-3 rounded-2xl font-black uppercase tracking-[0.2em] text-xs transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-primary text-white shadow-xl shadow-primary/30 hover:-translate-y-1 hover:shadow-2xl"}`}
+                  >
+                    <MessageSquare size={20} /> {isSold ? "Machine Sold" : "Enquire Now"}
+                  </button>
+                  
+                  <a 
+                    href={`tel:+918778868739`}
+                    className="h-16 flex items-center justify-center gap-3 rounded-2xl bg-white border-2 border-gray-100 font-black uppercase tracking-[0.2em] text-xs text-heading hover:border-primary hover:text-primary hover:-translate-y-1 transition-all"
+                  >
+                    <Phone size={20} /> Call Now
+                  </a>
                 </div>
-                <p className="text-[12px] text-heading/70 font-bold leading-tight">🔥 <strong className="text-heading">18+ buyers</strong> currently interested in <strong className="text-primary">{product.category}</strong></p>
+
+                <a 
+                  href={`https://wa.me/918778868739?text=Hi, I am interested in ${product.name} (Ref: ${refNumber})`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className={`w-full h-14 flex items-center justify-center gap-3 rounded-2xl transition-all duration-300 font-black uppercase tracking-[0.2em] text-xs ${isSold ? "opacity-50 pointer-events-none" : "bg-[#25D366]/10 border border-[#25D366]/20 text-[#1a9e4d] hover:bg-[#25D366] hover:text-white"}`}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  Chat on WhatsApp
+                </a>
               </div>
             </motion.div>
           </div>
         </div>
 
-        <div className="mt-12 grid md:grid-cols-3 gap-5">
+        {/* Description Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
+          viewport={{ once: true }}
+          className="mt-20"
+        >
+          <div className="flex items-center gap-6 mb-10">
+            <h2 className="text-3xl font-display font-black text-heading tracking-tight whitespace-nowrap">Technical Description</h2>
+            <div className="h-px w-full bg-gray-100" />
+          </div>
+          
+          <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-sm">
+            <div className="prose prose-slate max-w-none">
+              <p className="text-gray-600 font-medium leading-relaxed text-lg whitespace-pre-line">
+                {product.full_description || product.short_description || "Detailed technical specifications for this machine are available upon request. Our team has thoroughly inspected this unit to ensure it meets global export standards."}
+              </p>
+            </div>
+            
+            <div className="mt-12 grid sm:grid-cols-3 gap-8 pt-10 border-t border-gray-50">
+              {[
+                { label: "Inspection Status", value: "360° Certified", icon: ShieldCheck },
+                { label: "Transit Status", value: "Export Ready", icon: Globe },
+                { label: "Payment Options", value: "L/C, T/T, Escrow", icon: Info }
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-primary font-black uppercase tracking-widest text-[10px]">
+                    <item.icon size={14} /> {item.label}
+                  </div>
+                  <div className="text-heading font-black text-lg">{item.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* trust indicators */}
+        <div className="mt-20 grid md:grid-cols-3 gap-6">
           {[
-            { icon: Globe, title: "Global Logistics", desc: "Strategic international trading delivering excellence from Dubai to the world." },
-            { icon: ShieldCheck, title: "Certified Units", desc: "Every unit undergoes a comprehensive 360° technical inspection." },
-            { icon: CheckCircle2, title: "Export Ready", desc: "Complete documentation support for seamless international transit." }
+            { icon: Globe, title: "Global Logistics", desc: "Door-to-door delivery across GCC, Africa, and Southeast Asia." },
+            { icon: ShieldCheck, title: "Verified Hub", desc: "Every machine passes a rigorous 150-point technical check." },
+            { icon: CheckCircle2, title: "Documentation", desc: "We handle all export paperwork and customs clearance." }
           ].map((item, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="p-8 rounded-[2rem] border border-gray-100 bg-white hover:border-primary/20 hover:shadow-lg transition-all duration-300 group">
-              <div className="w-14 h-14 rounded-2xl bg-primary/8 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors"><item.icon className="text-primary" size={26} /></div>
-              <h3 className="text-xl font-display font-black text-heading mb-2 tracking-tight">{item.title}</h3>
-              <p className="text-heading/40 text-[14px] font-medium leading-relaxed">{item.desc}</p>
-            </motion.div>
+            <div key={i} className="p-8 rounded-[2rem] border border-gray-100 bg-white hover:border-primary/20 hover:shadow-xl transition-all group">
+              <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                <item.icon size={28} />
+              </div>
+              <h3 className="text-xl font-display font-black text-heading mb-3 tracking-tight">{item.title}</h3>
+              <p className="text-gray-400 text-sm font-medium leading-relaxed">{item.desc}</p>
+            </div>
           ))}
         </div>
       </div>
-      <EnquiryModal open={enquiryOpen} onClose={() => setEnquiryOpen(false)} productName={product.name} product={product} />
+      
+      <EnquiryModal 
+        open={enquiryOpen} 
+        onClose={() => setEnquiryOpen(false)} 
+        productName={product.name} 
+        product={product} 
+      />
     </div>
   );
 };

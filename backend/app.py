@@ -68,12 +68,14 @@ enquiries_col = db["enquiries"]
 gallery_col   = db["gallery"]
 settings_col  = db["settings"]
 admins_col    = db["admins"]
+counters_col  = db["counters"]
 
 # ── Database Indexes (Performance Optimization) ───────────────────────────
 try:
     products_col.create_index("category")
     products_col.create_index("featured")
     products_col.create_index("availability")
+    products_col.create_index("reference_no", unique=True, sparse=True)
     admins_col.create_index("username")
     admins_col.create_index("email")
     enquiries_col.create_index("status")
@@ -165,10 +167,58 @@ def serialize(doc):
     else:
         doc["updatedAt"] = "1.0"
         
+    # Reference Number Logic
+    # 1. Use existing reference_no if present
+    if doc.get("reference_no"):
+        doc["reference_number"] = doc.get("reference_no")
+    # 2. Fallback to old keys for backward compatibility
+    elif doc.get("reference_number"):
+        doc["reference_number"] = doc.get("reference_number")
+    elif doc.get("reference"):
+        doc["reference_number"] = doc.get("reference")
+    # 3. Dynamic generation (only if still missing, though new products should have it)
+    else:
+        obj_id_str = str(doc.get("id") or "")
+        doc["reference_number"] = f"SG{obj_id_str[-5:].upper()}" if obj_id_str else "SG360"
+        
     return doc
 
 def serialize_list(docs):
     return [serialize(d) for d in docs]
+
+# ── Reference Number Generator ───────────────────────────────────────────
+CATEGORY_CODES = {
+    "Excavators": "EXC",
+    "Backhoe Loaders": "BHL",
+    "Dozers": "DOZ",
+    "Wheel Loaders": "WHL",
+    "Graders": "GRD",
+    "Rollers": "ROL",
+    "Skid Steer": "SKD",
+    "Buckets": "BKT",
+    "Material Handlers": "MTH",
+    "Forklifts": "FLT",
+    "Generators": "GEN",
+    "Cranes": "CRN",
+    "Others": "OTH",
+    "Other": "OTH"
+}
+
+def get_next_reference(category_name):
+    # Normalize category name to match map
+    code = CATEGORY_CODES.get(category_name, "OTH")
+    
+    # Atomic increment in MongoDB
+    counter = counters_col.find_one_and_update(
+        {"category": code},
+        {"$inc": {"seq": 1}},
+        upsert=True,
+        return_document=True
+    )
+    
+    seq = counter.get("seq", 1)
+    # Format: [CODE]-[3 DIGITS] (e.g. EXC-001)
+    return f"{code}-{str(seq).zfill(3)}"
 
 # ── Auto-sync admin from Easypanel Runtime Environment ─────────────────
 def sync_admin_from_runtime_env():
@@ -314,10 +364,23 @@ def get_products():
     featured = request.args.get("featured")
     show_all = request.args.get("all") == "true"
     query = {} if show_all else {}
+    search = request.args.get("search")
+    
     if category and category.lower() not in ("all", ""):
         query["category"] = category
     if featured == "true":
         query["featured"] = True
+        
+    # Enhanced search support for reference_no
+    if search:
+        query["$or"] = [
+            {"name": {"$regex": search, "$options": "i"}},
+            {"brand": {"$regex": search, "$options": "i"}},
+            {"model": {"$regex": search, "$options": "i"}},
+            {"reference_no": {"$regex": search, "$options": "i"}},
+            {"reference_number": {"$regex": search, "$options": "i"}}
+        ]
+        
     products = serialize_list(products_col.find(query).sort("_id", -1))
     return jsonify(products), 200
 
@@ -328,6 +391,34 @@ def get_product(product_id):
         product = products_col.find_one({"_id": ObjectId(product_id)})
         if not product:
             return jsonify({"error": "Product not found"}), 404
+        return jsonify(serialize(product)), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.route("/api/products/ref/<ref_number>", methods=["GET"])
+def get_product_by_ref(ref_number):
+    try:
+        # Search by 'reference_no', 'reference_number' or 'reference'
+        product = products_col.find_one({
+            "$or": [
+                {"reference_no": ref_number},
+                {"reference_number": ref_number},
+                {"reference": ref_number}
+            ]
+        })
+        
+        # If not found, we might need a more complex check if we don't store ref in DB
+        if not product:
+            # Fallback: scan all products and check their generated ref (inefficient but works for small sets)
+            all_products = products_col.find({})
+            for p in all_products:
+                serialized = serialize(p)
+                if serialized.get("reference_number") == ref_number:
+                    return jsonify(serialized), 200
+            
+            return jsonify({"error": "Product not found"}), 404
+            
         return jsonify(serialize(product)), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 400
@@ -349,6 +440,11 @@ def create_product():
     if not data:
         return jsonify({"error": "No data provided"}), 400
     data["created_at"] = datetime.utcnow().isoformat()
+    
+    # Generate Automatic Reference Number
+    category = data.get("category", "Others")
+    data["reference_no"] = get_next_reference(category)
+    
     result = products_col.insert_one(data)
     data["id"] = str(result.inserted_id)
     data.pop("_id", None)
