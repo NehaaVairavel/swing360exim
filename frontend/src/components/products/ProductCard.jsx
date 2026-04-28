@@ -21,7 +21,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       className={`relative flex flex-col gap-[10px] rounded-[28px] overflow-hidden bg-white shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition-all duration-250 hover:-translate-y-[6px] group ${isSold ? "opacity-90" : ""} lg:w-[320px] lg:h-[470px]`}
     >
       {/* 1. Image Section (Top) */}
-      <div className="relative h-[180px] w-full rounded-t-[28px] overflow-hidden shrink-0" style={{ marginBottom: "10px" }}>
+      <div className="relative h-[180px] w-full rounded-t-[28px] overflow-hidden shrink-0">
         <ProductCarousel images={product.images} isSold={isSold} name={product.name} id={product.id} />
 
         {/* Top Left Year Badge */}
@@ -42,7 +42,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       {/* 2. Content Section */}
       <div style={{ padding: "14px 22px 22px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
         <Link to={`/products/${product.id}`}>
-          <h3 style={{ fontSize: "20px", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.4px", color: "#111827", marginTop: 0 }} className="font-display line-clamp-2">
+          <h3 style={{ fontSize: "20px", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.4px", color: "#111827", marginTop: 0, marginBottom: "8px" }} className="font-display line-clamp-2">
             {product.name}
           </h3>
         </Link>
