@@ -71,21 +71,12 @@ const AddProduct = () => {
     brand: "",
     model: "",
     category: "",
-    year: "",
-    condition: "Used - Good",
+    condition: "Used",
     price: "",
     currency: "USD",
-    negotiable: "false",
     engine_hours: "",
-    weight: "",
-    capacity: "",
-    fuel_type: "Diesel",
-    transmission: "",
-    serial_number: "",
-    availability: "in_stock",
-    status: "active",
+    availability: "",
     location: "Dubai, UAE",
-    short_description: "",
     full_description: ""
   });
 
@@ -121,12 +112,15 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.category || !formData.price) {
-        return toast.error("Please fill in required fields: Name, Category, Price");
+    const requiredFields = ["name", "category", "engine_hours", "location", "availability", "price", "currency"];
+    const missingFields = requiredFields.filter(f => !formData[f]);
+
+    if (missingFields.length > 0) {
+        return toast.error(`Please fill in required fields: ${missingFields.map(f => f.replace('_', ' ')).join(", ")}`);
     }
 
     if (imageFiles.length === 0) {
-        return toast.error("Media Gallery is mandatory. Please upload at least one image.");
+        return toast.error("Main Image is required. Please upload at least one image.");
     }
 
     setSubmitting(true);
@@ -145,9 +139,6 @@ const AddProduct = () => {
         ...formData,
         images: finalImageUrls, 
         image: finalImageUrls.length > 0 ? finalImageUrls[0] : null,
-        availability: formData.availability || 'in_stock',
-        status: formData.status || 'active',
-        featured: formData.featured === 'true',
       };
 
       await productService.create(payload);
@@ -202,9 +193,9 @@ const AddProduct = () => {
               <Input label="Brand" name="brand" value={formData.brand} onChange={handleInputChange} placeholder="Caterpillar" required />
               <Input label="Model Number" name="model" value={formData.model} onChange={handleInputChange} placeholder="320 GC" required />
               <Select label="Condition" name="condition" value={formData.condition} onChange={handleInputChange} options={["New", "Used", "Refurbished"]} required />
-              <Input label="Engine Hours" name="engine_hours" value={formData.engine_hours} onChange={handleInputChange} type="number" placeholder="e.g. 1200" />
-              <Input label="Price" name="price" value={formData.price} onChange={handleInputChange} type="text" placeholder="e.g. $125,000" required />
-              <Input label="Location" name="location" value={formData.location} onChange={handleInputChange} placeholder="e.g. Dubai, UAE" />
+              <Input label="Engine Hours" name="engine_hours" value={formData.engine_hours} onChange={handleInputChange} type="number" placeholder="e.g. 1200" required />
+              <Input label="Location" name="location" value={formData.location} onChange={handleInputChange} placeholder="e.g. Dubai, UAE" required />
+              <Select label="Availability" name="availability" value={formData.availability} onChange={handleInputChange} options={[{id:"in_stock", name:"In Stock"}, {id:"sold", name:"Sold"}, {id:"coming_soon", name:"Coming Soon"}]} required />
             </div>
             <div className="mt-4">
               <label className="block text-sm font-bold text-slate-700 mb-2">Description <span className="text-rose-500">*</span></label>
@@ -221,31 +212,8 @@ const AddProduct = () => {
 
           <Section title="Pricing & Availability" icon={DollarSign}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-              <Input label="Year" name="year" value={formData.year} onChange={handleInputChange} type="number" placeholder="2024" required />
-              <Select label="Currency" name="currency" value={formData.currency} onChange={handleInputChange} options={["USD", "AED", "EUR", "GBP"]} required />
-              <Select label="Negotiable" name="negotiable" value={formData.negotiable} onChange={handleInputChange} options={[{id:"true", name:"Yes"}, {id:"false", name:"No"}]} />
-              <div className="mb-6">
-                <label className="block text-sm font-bold text-slate-700 mb-2">Featured Listing</label>
-                <div className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                  <input 
-                    type="checkbox" 
-                    name="featured" 
-                    checked={formData.featured === "true"} 
-                    onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked ? "true" : "false" }))}
-                    className="w-5 h-5 rounded border-slate-300 text-amber-500 focus:ring-amber-500"
-                  />
-                  <span className="text-sm font-medium text-slate-600">Show on homepage featured section</span>
-                </div>
-              </div>
-            </div>
-          </Section>
-
-          <Section title="Technical Details" icon={SettingsIcon}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-              <Input label="Short Description" name="short_description" value={formData.short_description} onChange={handleInputChange} placeholder="Brief summary for list view..." />
-              <Input label="Serial Number" name="serial_number" value={formData.serial_number} onChange={handleInputChange} />
-              <Input label="Weight (tons)" name="weight" value={formData.weight} onChange={handleInputChange} />
-              <Input label="Fuel Type" name="fuel_type" value={formData.fuel_type} onChange={handleInputChange} />
+              <Input label="Price" name="price" value={formData.price} onChange={handleInputChange} type="text" placeholder="e.g. $125,000" required />
+              <Select label="Currency" name="currency" value={formData.currency} onChange={handleInputChange} options={[{id:"INR", name:"INR ₹"}, {id:"USD", name:"USD $"}, {id:"AED", name:"AED د.إ"}, {id:"EUR", name:"EUR €"}]} required />
             </div>
           </Section>
         </div>
@@ -279,11 +247,6 @@ const AddProduct = () => {
                 ))}
               </div>
             )}
-          </Section>
-
-          <Section title="Status & Visibility" icon={FileText}>
-            <Select label="Availability" name="availability" value={formData.availability} onChange={handleInputChange} options={[{id:"in_stock", name:"In Stock"}, {id:"sold", name:"Sold"}, {id:"reserved", name:"Reserved"}]} />
-            <Select label="Visibility Status" name="status" value={formData.status} onChange={handleInputChange} options={[{id:"active", name:"Active (Public)"}, {id:"draft", name:"Draft (Hidden)"}, {id:"inactive", name:"Inactive"}]} />
           </Section>
         </div>
       </form>
