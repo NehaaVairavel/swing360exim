@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, LayoutGrid, Pickaxe, Mountain, CircleDashed, Map, Database, Anchor, Package, Zap, Wrench, Boxes, MoreHorizontal } from "lucide-react";
 import productService from "@/services/productService";
 import { socket } from "@/socket";
 import EnquiryModal from "@/components/EnquiryModal";
@@ -94,6 +94,20 @@ const MASTER_CATEGORIES = [
   "Material Handlers",
   "Others"
 ];
+
+const CATEGORY_ICONS = {
+  "All": LayoutGrid,
+  "Excavators": Pickaxe,
+  "Backhoe Loaders": Truck,
+  "Dozers": Mountain,
+  "Wheel Loaders": CircleDashed,
+  "Graders": Map,
+  "Rollers": Database,
+  "Skid Steer": Package,
+  "Buckets": Wrench,
+  "Material Handlers": Boxes,
+  "Others": MoreHorizontal
+};
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -336,23 +350,29 @@ const Products = () => {
             <div className="lg:sticky lg:top-[180px] lg:bg-white lg:border lg:border-slate-200 lg:rounded-[24px] lg:p-[22px] lg:shadow-[0_12px_30px_rgba(0,0,0,0.06)] flex flex-col gap-6">
               
               {/* Categories */}
-              <div>
-                <h3 className="font-black text-slate-900 uppercase tracking-widest text-[11px] mb-3">Categories</h3>
+              <div style={{ fontFamily: "'Poppins', sans-serif" }}>
+                <style>{"@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap');"}</style>
+                <h3 style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "2px", textTransform: "uppercase" }} className="text-slate-900 mb-3">CATEGORIES</h3>
                 <div className="flex flex-col gap-2">
                   {MASTER_CATEGORIES.map((cat) => {
                     const count = getCategoryCount(cat);
                     const isActive = activeCategory === cat;
+                    const Icon = CATEGORY_ICONS[cat] || LayoutGrid;
                     return (
                       <button 
                         key={cat} 
                         onClick={() => { handleCategoryClick(cat); setIsMobileFiltersOpen(false); }}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-[14px] font-bold text-[13px] transition-all duration-250 cursor-pointer ${
+                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.2px", fontSize: "16px" }}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-[14px] transition-all duration-250 cursor-pointer ${
                           isActive 
                             ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-[0_10px_20px_rgba(245,158,11,0.22)] border border-transparent' 
                             : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-sm'
                         }`}
                       >
-                        {cat}
+                        <div className="flex items-center">
+                          <Icon size={18} strokeWidth={2} style={{ marginRight: '12px', color: isActive ? 'white' : '#0f172a' }} />
+                          {cat}
+                        </div>
                         <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}>
                           {count}
                         </span>
