@@ -23,7 +23,9 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       {/* 1. Image Section (Top) */}
       <div className="relative h-[180px] w-full rounded-t-[28px] overflow-hidden shrink-0">
         <ProductCarousel 
-          images={product.images || product.image} 
+          images={product.images} 
+          image={product.image}
+          photo={product.photo}
           isSold={isSold} 
           name={product.name} 
           id={product.id}

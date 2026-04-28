@@ -125,22 +125,32 @@ const AddProduct = () => {
     }
 
     setSubmitting(true);
-    // Send as JSON — images are stored as object URLs until R2 upload is wired
-    const payload = {
-      ...formData,
-      images: images, // array of preview URLs (or R2 URLs later)
-      availability: formData.availability || 'in_stock',
-      status: formData.status || 'active',
-      featured: formData.featured === 'true',
-    };
-
+    
     try {
+      // 1. Upload actual files first if any
+      let finalImageUrls = [];
+      if (imageFiles.length > 0) {
+        toast.info(`Uploading ${imageFiles.length} images...`);
+        const uploadRes = await productService.uploadImages(imageFiles);
+        finalImageUrls = uploadRes.urls || [];
+      }
+
+      // 2. Prepare payload with permanent R2 keys (not blobs)
+      const payload = {
+        ...formData,
+        images: finalImageUrls, 
+        image: finalImageUrls.length > 0 ? finalImageUrls[0] : null,
+        availability: formData.availability || 'in_stock',
+        status: formData.status || 'active',
+        featured: formData.featured === 'true',
+      };
+
       await productService.create(payload);
       // Invalidate queries to refresh data instantly
       queryClient.invalidateQueries({ queryKey: ["products"] });
       queryClient.invalidateQueries({ queryKey: ["featuredProducts"] });
       
-      toast.success("Equipment published to global market!");
+      toast.success("Equipment published with permanent image storage!");
       navigate("/admin/products");
     } catch (error) {
       const msg = error?.response?.data?.error || "Failed to publish product";

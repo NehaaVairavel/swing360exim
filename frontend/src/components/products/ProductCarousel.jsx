@@ -43,19 +43,31 @@ const ImageWithRetry = ({ src, alt, isSold }) => {
   );
 };
 
-const ProductCarousel = ({ images, isSold, name, id, updatedAt }) => {
-  // Priority: 1. images array, 2. singular image field, 3. fallback machinery image
+const ProductCarousel = ({ images, image, photo, isSold, name, id, updatedAt }) => {
+  // Priority: 1. image, 2. first item of images array, 3. photo field, 4. fallback machinery image
   const fallbackMachineImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
   
   let displayImages = [];
   
-  if (Array.isArray(images) && images.length > 0) {
-    displayImages = images.filter(img => img && typeof img === 'string');
-  } else if (typeof images === 'string' && images.trim() !== '') {
-    displayImages = [images];
+  // 1. Check if singular 'image' exists
+  if (typeof image === 'string' && image.trim() !== '' && !image.startsWith('blob:')) {
+    displayImages.push(image);
   }
   
-  // If still empty, use the fallback
+  // 2. Check if 'images' array has content
+  if (Array.isArray(images) && images.length > 0) {
+    const validGallery = images.filter(img => img && typeof img === 'string' && !img.startsWith('blob:'));
+    validGallery.forEach(img => {
+      if (!displayImages.includes(img)) displayImages.push(img);
+    });
+  }
+  
+  // 3. Check if 'photo' field exists (backward compatibility)
+  if (displayImages.length === 0 && typeof photo === 'string' && photo.trim() !== '' && !photo.startsWith('blob:')) {
+    displayImages.push(photo);
+  }
+  
+  // 4. Global fallback
   if (displayImages.length === 0) {
     displayImages = [fallbackMachineImage];
   }

@@ -27,7 +27,9 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
       {/* 1. Image Section (Top) */}
       <div className="relative h-[220px] w-full shrink-0">
         <ProductCarousel 
-          images={product.images || product.image} 
+          images={product.images} 
+          image={product.image}
+          photo={product.photo}
           isSold={isSold} 
           name={product.name} 
           id={product.id} 

@@ -15,6 +15,10 @@ from bson import ObjectId
 from dotenv import load_dotenv
 from flask_socketio import SocketIO, emit
 
+# Import custom utils
+from utils.r2 import upload_file_to_r2
+
+
 load_dotenv(override=True)
 
 app = Flask(__name__)
@@ -88,12 +92,13 @@ def serialize(doc):
     FALLBACK_IMAGE = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800"
     
     # Get updatedAt for versioning
-    updated_at = doc.get("updated_at") or doc.get("updatedAt")
+    updated_at = doc.get("updated_at") or doc.get("updatedAt") or doc.get("created_at")
     v_param = ""
     if updated_at:
         if isinstance(updated_at, datetime):
             v_param = f"?v={int(updated_at.timestamp())}"
         else:
+            # Try to handle string date if needed
             v_param = f"?v={updated_at}"
             
     # Try to get API_BASE from request, fallback if out of context
@@ -104,44 +109,55 @@ def serialize(doc):
         API_BASE = ""
 
     def process_url(img):
-        if not img or not isinstance(img, str): return None
+        if not img or not isinstance(img, str) or img.strip() == "": return None
+        # Clean the string
+        img = img.strip()
+        
         if img.startswith("blob:"):
+            # blob: URLs are invalid after refresh, but we return them if they are there
             return img
             
         final_url = img
         if not (img.startswith("http://") or img.startswith("https://")):
-            if img.startswith("uploads/"):
-                final_url = f"{API_BASE}/{img}"
-            elif img.startswith("/uploads/"):
-                final_url = f"{API_BASE}{img}"
+            if img.startswith("uploads/") or img.startswith("/uploads/"):
+                final_url = f"{API_BASE}/{img.lstrip('/')}"
             else:
                 # Assume R2 object key
                 final_url = f"{R2_PUBLIC_URL}/{img.lstrip('/')}"
         
-        # Append version param if not already present
-        if v_param and "?" not in final_url:
-            final_url = f"{final_url}{v_param}"
+        # Append version param if not already present and not a blob
+        if v_param and "?" not in final_url and not final_url.startswith("blob:"):
+            # Clean v_param if it contains spaces or weird chars
+            clean_v = str(v_param).replace(" ", "_")
+            final_url = f"{final_url}{clean_v}"
         return final_url
 
-    # Step 1: Normalize all images in the list
-    if "images" in doc and isinstance(doc["images"], list):
-        doc["images"] = [process_url(img) for img in doc["images"] if img]
-    else:
-        doc["images"] = []
-
-    # Step 2: Ensure singular 'image' field is set and normalized
-    # Prefer existing 'image' field, else use first item from 'images'
-    raw_image = doc.get("image")
-    if not raw_image and doc["images"]:
-        doc["image"] = doc["images"][0]
-    elif raw_image:
-        doc["image"] = process_url(raw_image)
+    # Normalize all potential image fields
+    # 1. photos/gallery/images (arrays)
+    gallery_fields = ["images", "gallery", "photos", "photo_list"]
+    all_images = []
+    for field in gallery_fields:
+        if field in doc and isinstance(doc[field], list):
+            processed = [process_url(img) for img in doc[field] if process_url(img)]
+            doc[field] = processed
+            all_images.extend(processed)
     
-    # Step 3: Global fallback if absolutely nothing found
-    if not doc.get("image"):
-        doc["image"] = FALLBACK_IMAGE
-    if not doc.get("images"):
-        doc["images"] = [doc["image"]]
+    # 2. singular image fields
+    singular_fields = ["image", "photo", "image_url", "thumbnail"]
+    main_image = None
+    for field in singular_fields:
+        if field in doc and doc[field]:
+            val = process_url(doc[field])
+            if val:
+                doc[field] = val
+                if not main_image: main_image = val
+
+    # 3. Consolidate into 'image' and 'images' for frontend consistency
+    if not main_image and all_images:
+        main_image = all_images[0]
+    
+    doc["image"] = main_image or FALLBACK_IMAGE
+    doc["images"] = all_images if all_images else [doc["image"]]
     
     # Ensure updatedAt is in the response for frontend cache busting
     if updated_at:
@@ -265,6 +281,28 @@ def dashboard():
         "featured_count":     featured
     }), 200
 
+
+# ════════════════════════════════════════════════════════════════════
+#  MEDIA UPLOAD
+# ════════════════════════════════════════════════════════════════════
+
+@app.route("/api/upload", methods=["POST"])
+@jwt_required()
+def upload_files():
+    if 'files' not in request.files:
+        return jsonify({"error": "No files part"}), 400
+    
+    files = request.files.getlist('files')
+    uploaded_urls = []
+    
+    for file in files:
+        if file.filename == '': continue
+        # Upload to R2
+        key = upload_file_to_r2(file, file.filename)
+        if key:
+            uploaded_urls.append(key)
+            
+    return jsonify({"urls": uploaded_urls}), 200
 
 # ════════════════════════════════════════════════════════════════════
 #  PRODUCTS
@@ -421,14 +459,26 @@ def get_gallery():
 @app.route("/api/gallery", methods=["POST"])
 @jwt_required()
 def create_gallery_item():
-    data = request.get_json(force=True, silent=True) or {}
-    if not data:
-        return jsonify({"error": "No data provided"}), 400
+    # Handle both JSON (for existing URL) and Form Data (for new upload)
+    if request.is_json:
+        data = request.get_json()
+    else:
+        # Multipart form data
+        data = request.form.to_dict()
+        if 'image' in request.files:
+            file = request.files['image']
+            key = upload_file_to_r2(file, file.filename)
+            if key:
+                data['image_url'] = key
+
+    if not data or not data.get('image_url'):
+        return jsonify({"error": "No image provided"}), 400
+        
     data["created_at"] = datetime.utcnow().isoformat()
     result = gallery_col.insert_one(data)
     data["id"] = str(result.inserted_id)
     data.pop("_id", None)
-    return jsonify(data), 201
+    return jsonify(serialize(data)), 201
 
 
 @app.route("/api/gallery/<item_id>", methods=["DELETE"])

@@ -32,6 +32,18 @@ const productService = {
     return response.data;
   },
 
+  // Uploads raw file objects to R2 via backend
+  uploadImages: async (files) => {
+    const formData = new FormData();
+    Array.from(files).forEach(file => {
+      formData.append('files', file);
+    });
+    const response = await api.post('/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+    return response.data; // returns { urls: [...] }
+  },
+
   getCategories: async () => {
     try {
       const response = await api.get('/categories');
