@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
+import ProductCard from "@/components/admin/ProductCard";
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
@@ -153,53 +154,15 @@ const AdminProducts = () => {
 
       {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredProducts.map(product => {
-            const isSold = product.availability === "sold";
-            return (
-              <div key={product.id} className="bg-white rounded-[2rem] border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden flex flex-col group relative">
-                <div className="h-56 bg-slate-100 relative overflow-hidden">
-                  <div className={`absolute top-4 left-4 z-10 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border shadow-sm ${
-                    isSold ? 'bg-rose-50 text-rose-600 border-rose-200/50' : 'bg-emerald-50 text-emerald-600 border-emerald-200/50'
-                  }`}>
-                    {product.availability}
-                  </div>
-                  
-                  {product.images?.[0] ? (
-                    <img src={product.images?.[0] || "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800"} alt={product.name} className={`w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 ${isSold ? 'grayscale-[50%] opacity-80' : ''}`} />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-50 text-slate-200"><ImageIcon size={48} /></div>
-                  )}
-                  
-                  <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
-                    <button className="p-3 bg-white rounded-xl text-[#0F172A] hover:bg-amber-500 hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300"><Eye size={20} /></button>
-                    <button className="p-3 bg-white rounded-xl text-[#0F172A] hover:bg-amber-500 hover:text-white transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 delay-75"><Edit size={20} /></button>
-                    {!isSold && <button onClick={() => handleMarkSold(product.id)} className="p-3 bg-emerald-500 rounded-xl text-white hover:bg-emerald-600 transition-all transform translate-y-4 group-hover:translate-y-0 duration-300 delay-150" title="Mark as Sold"><CheckCircle size={20} /></button>}
-                  </div>
-                </div>
-                
-                <div className="p-6 flex flex-col flex-1">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 px-2 py-1 rounded-md">{product.category}</span>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{product.model || 'N/A'}</span>
-                  </div>
-                  <h3 className={`font-display font-bold text-lg mb-4 line-clamp-2 leading-snug ${isSold ? 'text-slate-400' : 'text-[#0F172A] group-hover:text-amber-600 transition-colors'}`}>
-                    {product.name}
-                  </h3>
-                  
-                  <div className="mt-auto pt-6 border-t border-slate-100 flex items-center justify-between">
-                    <div>
-                       <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Price</p>
-                       <p className={`font-display font-black text-xl ${isSold ? 'text-slate-400 line-through' : 'text-[#0F172A]'}`}>
-                        {product.price}
-                      </p>
-                    </div>
-                    <button onClick={() => handleDelete(product.id)} className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"><Trash2 size={18} /></button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+          {filteredProducts.map(product => (
+            <ProductCard 
+              key={product.id} 
+              product={product} 
+              handleDelete={handleDelete} 
+              handleMarkSold={handleMarkSold} 
+            />
+          ))}
         </div>
       )}
 
