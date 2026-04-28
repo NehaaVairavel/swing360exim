@@ -1,53 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getImageUrl } from '../../utils/imageUrl';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const fallbackSvg = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23f1f5f9' width='800' height='600'/%3E%3Cpath fill='%23cbd5e1' d='M300 250h200v100H300zM350 200h100v50H350z'/%3E%3Ccircle fill='%2394a3b8' cx='350' cy='350' r='30'/%3E%3Ccircle fill='%2394a3b8' cx='450' cy='350' r='30'/%3E%3Ctext x='400' y='420' font-family='sans-serif' font-size='24' font-weight='bold' fill='%2364748b' text-anchor='middle'%3EMachine Image%3C/text%3E%3C/svg%3E";
-
-const ImageWithLoader = ({ src, alt, isSold }) => {
-  const [loaded, setLoaded] = useState(false);
-  const [error, setError] = useState(false);
-
-  return (
-    <div className="relative w-full h-full bg-slate-100 overflow-hidden">
-      {!loaded && !error && (
-        <div className="absolute inset-0 bg-slate-200 animate-pulse shimmer-effect" />
-      )}
-      <img
-        src={error || !src ? fallbackSvg : src}
-        alt={alt}
-        className={`transition-all duration-700 ${isSold ? "grayscale-[0.5]" : "group-hover:scale-105"} ${loaded || error ? 'opacity-100' : 'opacity-0'}`}
-        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-        loading="lazy"
-        onLoad={() => setLoaded(true)}
-        onError={() => {
-          if (!error) {
-            setError(true);
-            setLoaded(true);
-          }
-        }}
-      />
-    </div>
-  );
-};
-
 const ProductCarousel = ({ images, isSold, name, id }) => {
-  // Ensure images is always treated as an array and format the URLs
+  // Check if images is an array, or if it's a single string, or fallback to an empty array
   let displayImages = [];
   if (Array.isArray(images) && images.length > 0) {
-    displayImages = images.map(img => getImageUrl(img)).filter(Boolean);
+    displayImages = images.filter(Boolean);
   } else if (typeof images === 'string' && images.trim() !== '') {
-    displayImages = [getImageUrl(images)].filter(Boolean);
+    displayImages = [images];
   }
   
   if (displayImages.length === 0) {
-    displayImages = [fallbackSvg];
+    displayImages = ["https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800"];
   }
 
   return (
@@ -64,8 +34,13 @@ const ProductCarousel = ({ images, isSold, name, id }) => {
       >
         {displayImages.map((img, index) => (
           <SwiperSlide key={index}>
-            <Link to={`/products/${id}`} className="block h-full w-full">
-              <ImageWithLoader src={img} alt={`${name || 'Product'} - view ${index + 1}`} isSold={isSold} />
+            <Link to={`/products/${id}`} className="block h-full w-full bg-slate-100 flex items-center justify-center">
+              <img
+                src={img}
+                alt={`${name || 'Product'} - view ${index + 1}`}
+                className={`w-full h-full object-cover transition-transform duration-700 ${isSold ? "grayscale-[0.5]" : "group-hover:scale-105"}`}
+                loading="lazy"
+              />
             </Link>
           </SwiperSlide>
         ))}
