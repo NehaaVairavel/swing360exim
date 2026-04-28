@@ -22,19 +22,19 @@ const itemVariant = {
 };
 
 const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
-  const { formatPrice } = useCurrency();
   const images = product.images || [];
   const isSold = product.availability === "sold";
-  const refNumber = product.reference || `#SG${product.id ? product.id.substring(product.id.length - 5).toUpperCase() : '36024'}`;
+  const refNumber = product.reference || `SG${product.id ? product.id.substring(product.id.length - 5).toUpperCase() : '36012'}`;
 
   return (
     <motion.div
       variants={itemVariant}
       layout
-      className={`relative flex flex-col rounded-[28px] overflow-hidden bg-white shadow-[0_14px_30px_rgba(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_45px_rgba(0,0,0,0.12)] group ${isSold ? "opacity-90" : ""}`}
+      style={{ width: "100%", maxWidth: "380px" }}
+      className={`relative flex flex-col rounded-[32px] overflow-hidden bg-white shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition-all duration-250 hover:-translate-y-[6px] group ${isSold ? "opacity-90" : ""} lg:w-[380px] lg:h-[540px]`}
     >
-      {/* Top Image Section */}
-      <div className="relative h-[320px] w-full bg-[#111827] overflow-hidden shrink-0">
+      {/* 1. Image Section (Top) */}
+      <div className="relative h-[195px] w-full rounded-t-[32px] overflow-hidden shrink-0">
         <Link to={`/products/${product.id}`} className="block h-full w-full">
           <img
             src={images[0] || "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800"}
@@ -43,74 +43,63 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             loading="lazy"
           />
         </Link>
-        {/* Dark overlay gradient at bottom of image for contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
-        {/* Top Left Badge */}
-        {isSold ? (
-          <div className="absolute top-4 left-4 bg-rose-500 text-white px-3 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest shadow-lg">Sold</div>
-        ) : product.featured ? (
-          <div className="absolute top-4 left-4 bg-amber-500 text-white px-3 py-1.5 rounded-full text-[12px] font-black uppercase tracking-widest shadow-lg">Featured</div>
-        ) : null}
-
-        {/* Top Right Badge (Year) */}
+        {/* Top Left Year Badge */}
         {product.year && (
-          <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-slate-900 px-3 py-1.5 rounded-full text-[13px] font-black shadow-lg">
+          <div style={{ position: "absolute", top: "16px", left: "16px", background: "#f59e0b", color: "white", padding: "8px 16px", borderRadius: "999px", fontWeight: 800, fontSize: "14px", zIndex: 10 }}>
             {product.year}
           </div>
         )}
 
-        {/* Bottom Left Overlay Badge (Hours) */}
-        {product.hours && (
-          <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1.5 rounded-full text-[13px] font-semibold flex items-center gap-1.5 shadow-lg">
-            <Settings size={14} /> {product.hours} hrs
+        {/* Top Right Badge */}
+        {(isSold || product.featured || product.verified !== false) && (
+          <div style={{ position: "absolute", top: "16px", right: "16px", background: "white", color: "#111827", padding: "10px 18px", borderRadius: "999px", fontSize: "13px", fontWeight: 800, zIndex: 10 }}>
+            {isSold ? "SOLD" : product.featured ? "FEATURED" : "VERIFIED"}
           </div>
         )}
       </div>
       
-      {/* Content Section */}
-      <div className="p-[24px] flex flex-col flex-1">
+      {/* 2. Content Section */}
+      <div style={{ padding: "28px 26px", display: "flex", flexDirection: "column", gap: "18px", flex: 1 }}>
         <Link to={`/products/${product.id}`}>
-          <h3 className={`font-display text-[28px] font-[800] leading-[1.1] mb-2 line-clamp-2 ${isSold ? "text-slate-400" : "text-slate-900 group-hover:text-amber-500 transition-colors"}`}>
+          <h3 style={{ fontSize: "22px", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.4px", color: "#111827" }} className="font-display line-clamp-2">
             {product.name}
           </h3>
         </Link>
-        <div className="text-[16px] text-[#6b7280] font-medium mb-6">
-          {product.brand} {product.model ? `• ${product.model}` : ''}
-        </div>
         
-        <div className="mt-auto">
-          {/* Price Section */}
-          <div className="flex items-end justify-between mb-6">
-            <div>
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-1">Price</div>
-              <div className="flex items-center gap-3">
-                <div className={`font-display font-[800] text-[24px] tracking-tight ${isSold ? "text-slate-300 line-through" : "text-[#030814]"}`}>
-                  {product.price}
-                </div>
-                {product.old_price && !isSold && (
-                  <div className="text-slate-400 line-through text-[14px] font-semibold">
-                    {product.old_price}
-                  </div>
-                )}
-              </div>
+        <div className="flex-1 flex flex-col justify-end">
+          <div style={{ fontSize: "12px", letterSpacing: "4px", fontWeight: 700, color: "#6b7280", marginBottom: "6px" }}>
+            EXPORT PRICE
+          </div>
+          
+          {/* Price Row */}
+          <div className="flex items-center justify-between">
+            <div style={{ fontSize: "28px", fontWeight: 900, color: "#f59e0b" }} className="font-display">
+              {product.price}
             </div>
-            <div className="text-[13px] font-bold text-slate-400">
+            
+            {/* Ref Box */}
+            <div style={{ width: "110px", height: "78px", borderRadius: "22px", background: "#f8fafc", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "13px", color: "#111827", flexDirection: "column", lineHeight: 1.2 }}>
+              <span style={{ fontSize: "11px", color: "#6b7280", letterSpacing: "1px" }}>REF:</span>
               {refNumber}
             </div>
           </div>
-          
+        </div>
+        
+        <div className="mt-auto">
           {/* Bottom Buttons */}
-          <div className="flex gap-3">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginTop: "10px" }}>
             <Link 
               to={`/products/${product.id}`}
-              className="flex-1 h-[48px] bg-[#f8fafc] border border-[#e5e7eb] text-slate-700 rounded-xl font-bold text-[14px] flex items-center justify-center gap-2 hover:bg-slate-100 transition-colors"
+              style={{ height: "58px", borderRadius: "18px", border: "1px solid #dbe1ea", background: "white", fontWeight: 800, color: "#111827" }}
+              className="flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
             >
               <Eye size={18} /> Details
             </Link>
             <button 
               onClick={() => { setSelectedProduct(product); setEnquiryOpen(true); }}
-              className="flex-1 h-[48px] shrink-0 rounded-xl bg-gradient-to-br from-[#f59e0b] to-[#ff8a00] text-white font-[700] text-[14px] flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform shadow-lg shadow-orange-500/25"
+              style={{ height: "58px", borderRadius: "18px", background: "linear-gradient(135deg,#f59e0b,#ff9900)", color: "white", fontWeight: 800, boxShadow: "0 14px 24px rgba(245,158,11,.25)" }}
+              className="flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform"
             >
               <Send size={18} /> Enquire
             </button>
@@ -453,7 +442,7 @@ const Products = () => {
 
           {/* Active Inventory Grid */}
           {availableProducts.length > 0 && activeStatus !== "Sold" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[28px] justify-items-center w-full">
               <AnimatePresence mode="popLayout">
                 {availableProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>
@@ -471,7 +460,7 @@ const Products = () => {
 
           {/* Sold Inventory Grid */}
           {soldProducts.length > 0 && activeStatus !== "Available" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[28px] justify-items-center w-full">
               <AnimatePresence mode="popLayout">
                 {soldProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>
