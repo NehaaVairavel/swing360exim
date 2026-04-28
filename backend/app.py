@@ -65,6 +65,18 @@ gallery_col   = db["gallery"]
 settings_col  = db["settings"]
 admins_col    = db["admins"]
 
+# ── Database Indexes (Performance Optimization) ───────────────────────────
+try:
+    products_col.create_index("category")
+    products_col.create_index("featured")
+    products_col.create_index("availability")
+    admins_col.create_index("username")
+    admins_col.create_index("email")
+    enquiries_col.create_index("status")
+    print("[✓] Database indexes ensured.", flush=True)
+except Exception as e:
+    print(f"[!] Failed to create indexes: {e}", flush=True)
+
 # ── Helpers ───────────────────────────────────────────────────────────────
 def serialize(doc):
     if doc is None:
