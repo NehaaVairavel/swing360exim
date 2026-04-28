@@ -192,8 +192,8 @@ const Products = () => {
         className="relative border-b border-slate-200/60 shadow-sm" 
         style={{ 
           background: 'linear-gradient(135deg, #eef1f5, #f8fafc, #e9edf2)',
-          paddingTop: 'calc(72px + 28px)', // Accounts for fixed navbar
-          paddingBottom: '38px',
+          paddingTop: 'calc(72px + 16px)', // Accounts for fixed navbar + reduced padding
+          paddingBottom: '24px',
           textAlign: 'center',
           borderRadius: '0 0 26px 26px',
           overflow: 'hidden'
@@ -204,24 +204,24 @@ const Products = () => {
         <div className="container-section relative z-10 px-4">
           <div style={{
             display: 'inline-block',
-            padding: '8px 18px',
+            padding: '6px 14px',
             borderRadius: '999px',
-            fontSize: '12px',
-            letterSpacing: '4px',
+            fontSize: '11px',
+            letterSpacing: '3px',
             fontWeight: '700',
             color: '#d18a00',
             background: 'rgba(245,158,11,0.12)',
             border: '1px solid rgba(245,158,11,0.22)',
-            marginBottom: '22px'
+            marginBottom: '16px'
           }}>
             EXPORT HUB CATALOG
           </div>
           
           <h1 className="font-display" style={{
-            fontSize: 'clamp(42px, 6vw, 88px)',
+            fontSize: 'clamp(32px, 5vw, 64px)',
             fontWeight: '900',
             lineHeight: '0.95',
-            letterSpacing: '-1.5px',
+            letterSpacing: '-1px',
             color: '#111827'
           }}>
             Our Heavy Machinery<br/>
@@ -229,11 +229,11 @@ const Products = () => {
           </h1>
           
           <p style={{
-            fontSize: 'clamp(18px, 3vw, 24px)',
+            fontSize: 'clamp(16px, 2vw, 20px)',
             fontStyle: 'italic',
             color: '#6b7280',
             fontWeight: '500',
-            marginTop: '18px'
+            marginTop: '12px'
           }}>
             "Engineered for performance, curated for global markets."
           </p>
@@ -432,9 +432,6 @@ const Products = () => {
               <MessageCircle size={18} />
               WhatsApp Us
             </a>
-            <button onClick={() => setEnquiryOpen(true)} className="h-[46px] px-8 bg-slate-900 text-white rounded-xl font-black text-sm uppercase tracking-widest hover:bg-primary transition-all shadow-xl shadow-slate-900/20">
-              Request Quote
-            </button>
           </div>
         </div>
       </section>
