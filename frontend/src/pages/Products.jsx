@@ -399,7 +399,7 @@ const Products = () => {
                         }`}
                       >
                         <div className="flex items-center">
-                          <Icon style={{ width: '20px', height: '20px', strokeWidth: 2, flexShrink: 0, marginRight: '12px', color: isActive ? 'white' : '#0f172a' }} />
+                          <Icon style={{ width: '24px', height: '24px', flexShrink: 0, marginRight: '12px', fill: 'currentColor', stroke: 'none', color: isActive ? 'white' : '#111827' }} />
                           {cat}
                         </div>
                         <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}>
