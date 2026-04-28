@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
 import ProductCard from "@/components/admin/ProductCard";
+import "@/styles/admin.css";
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
@@ -73,17 +74,27 @@ const AdminProducts = () => {
     }
   };
 
+  const handleFeature = async (id, currentFeatured) => {
+    try {
+      await productService.update(id, { featured: !currentFeatured });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      toast.success(`Machine ${!currentFeatured ? 'featured' : 'unfeatured'} successfully`);
+    } catch (error) {
+      toast.error("Update failed");
+    }
+  };
+
   const categories = ["All", "Excavators", "Dozers", "Loaders", "Graders"];
 
   if (loading) return <div className="p-12 text-center text-slate-500 font-bold">Loading Fleet...</div>;
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8">
+    <div className="admin-page-bg -m-6 p-6 animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8">
       {/* Page Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-3xl font-display font-bold text-[#0F172A] tracking-tight">Machine Inventory</h1>
-          <p className="text-slate-500 font-medium mt-1">Manage and track your global heavy equipment fleet</p>
+          <h1 className="text-3xl font-display font-bold text-[#0F172A] tracking-tight">Products Management</h1>
+          <p className="text-slate-500 font-medium mt-1">Total Products: <span className="font-bold text-amber-500">{products.length}</span></p>
         </div>
         <Link 
           to="/admin/add-product" 
@@ -95,7 +106,7 @@ const AdminProducts = () => {
       </div>
 
       {/* Advanced Filter Bar */}
-      <div className="bg-white p-4 rounded-[2rem] shadow-sm border border-slate-200 flex flex-col xl:flex-row justify-between gap-4">
+      <div className="bg-white p-4 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200 flex flex-col xl:flex-row justify-between gap-4">
         <div className="flex flex-1 flex-wrap items-center gap-4">
           <div className="relative flex-1 min-w-[280px] max-w-md">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -154,13 +165,14 @@ const AdminProducts = () => {
 
       {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 justify-items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[24px] justify-items-center">
           {filteredProducts.map(product => (
             <ProductCard 
               key={product.id} 
               product={product} 
               handleDelete={handleDelete} 
-              handleMarkSold={handleMarkSold} 
+              handleMarkSold={handleMarkSold}
+              handleFeature={handleFeature}
             />
           ))}
         </div>

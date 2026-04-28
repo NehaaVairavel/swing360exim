@@ -1,0 +1,64 @@
+.admin-page-bg {
+  background: linear-gradient(180deg, #f8fafc, #eef2f7);
+  min-height: 100vh;
+}
+
+.admin-product-card {
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+  transition: .25s ease;
+}
+
+.admin-product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,.12);
+}
+
+.admin-pill-btn {
+  height: 44px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.admin-pill-btn-edit {
+  background: #f8fafc;
+  color: #111827;
+  border: 1px solid #e2e8f0;
+}
+.admin-pill-btn-edit:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.admin-pill-btn-delete {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #ffe4e6;
+}
+.admin-pill-btn-delete:hover {
+  background: #ffe4e6;
+}
+
+.admin-pill-btn-feature {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fef3c7;
+}
+.admin-pill-btn-feature:hover {
+  background: #fef3c7;
+}
+
+.admin-pill-btn-sold {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #d1fae5;
+}
+.admin-pill-btn-sold:hover {
+  background: #d1fae5;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Eye, Edit, Trash2, CheckCircle } from 'lucide-react';
+import { Eye, Edit, Trash2, CheckCircle, Star } from 'lucide-react';
 import ProductCarousel from '../products/ProductCarousel';
 
 const itemVariant = {
@@ -9,7 +9,7 @@ const itemVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
 };
 
-const ProductCard = ({ product, handleDelete, handleMarkSold }) => {
+const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) => {
   const isSold = product.availability === "sold";
   const refNumber = product.reference || `SG${product.id ? product.id.substring(product.id.length - 5).toUpperCase() : '36012'}`;
 
@@ -22,85 +22,89 @@ const ProductCard = ({ product, handleDelete, handleMarkSold }) => {
     <motion.div
       variants={itemVariant}
       layout
-      style={{ width: "100%", maxWidth: "320px" }}
-      className={`relative flex flex-col gap-[10px] rounded-[28px] overflow-hidden bg-white shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition-all duration-250 hover:-translate-y-[6px] group ${isSold ? "opacity-90" : ""} lg:w-[320px] lg:h-[470px]`}
+      className={`admin-product-card relative flex flex-col bg-white overflow-hidden group ${isSold ? "opacity-90 grayscale-[0.2]" : ""} w-full h-full max-w-sm mx-auto`}
     >
       {/* 1. Image Section (Top) */}
-      <div className="relative h-[180px] w-full rounded-t-[28px] overflow-hidden shrink-0">
+      <div className="relative h-[220px] w-full shrink-0">
         <ProductCarousel images={product.images} isSold={isSold} name={product.name} id={product.id} />
 
         {/* Top Left Admin Status Badge */}
-        <div style={{ position: "absolute", top: "16px", left: "16px", background: isSold ? "#f43f5e" : isDraft ? "#64748b" : isHidden ? "#0f172a" : "#10b981", color: "white", padding: "8px 16px", borderRadius: "999px", fontWeight: 800, fontSize: "12px", letterSpacing: "1px", zIndex: 10 }}>
+        <div style={{ position: "absolute", top: "16px", left: "16px", background: isSold ? "#f43f5e" : isDraft ? "#64748b" : isHidden ? "#0f172a" : "#10b981", color: "white", padding: "6px 14px", borderRadius: "999px", fontWeight: 800, fontSize: "11px", letterSpacing: "1px", zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
           {statusLabel}
         </div>
 
         {/* Top Right Badge (Year / Featured) */}
         {(product.year || product.featured) && (
-          <div style={{ position: "absolute", top: "16px", right: "16px", background: "white", color: "#111827", padding: "10px 18px", borderRadius: "999px", fontSize: "13px", fontWeight: 800, zIndex: 10 }}>
-            {product.featured ? "FEATURED" : product.year}
+          <div style={{ position: "absolute", top: "16px", right: "16px", background: "white", color: "#111827", padding: "8px 16px", borderRadius: "999px", fontSize: "12px", fontWeight: 800, zIndex: 10, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+            {product.featured ? "⭐ FEATURED" : product.year}
           </div>
         )}
       </div>
       
       {/* 2. Content Section */}
-      <div style={{ padding: "14px 22px 22px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+      <div className="p-5 flex flex-col gap-3 flex-1">
         <div className="flex items-center justify-between">
             <span className="text-[10px] font-black text-amber-600 uppercase tracking-widest bg-amber-50 px-2 py-1 rounded-md">{product.category}</span>
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{product.model || 'N/A'}</span>
         </div>
 
         <Link to={`/products/${product.id}`}>
-          <h3 style={{ fontSize: "20px", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.4px", color: "#111827", marginTop: 0, marginBottom: "8px" }} className="font-display line-clamp-2 hover:text-amber-500 transition-colors">
+          <h3 className="text-lg font-display font-black text-slate-900 leading-tight line-clamp-2 hover:text-amber-500 transition-colors">
             {product.name}
           </h3>
         </Link>
         
-        <div className="flex-1 flex flex-col justify-end">
-          <div style={{ fontSize: "12px", letterSpacing: "4px", fontWeight: 700, color: "#6b7280", marginBottom: "6px" }}>
-            EXPORT PRICE
-          </div>
-          
+        <div className="flex-1 flex flex-col justify-end mt-2">
           {/* Price Row */}
-          <div className="flex items-center justify-between">
-            <div style={{ fontSize: "26px", fontWeight: 900, color: "#f59e0b" }} className="font-display">
-              {product.price}
+          <div className="flex items-end justify-between">
+            <div>
+              <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Export Price</div>
+              <div className="text-2xl font-display font-black text-amber-500 leading-none">
+                {product.price}
+              </div>
             </div>
             
             {/* Ref Box */}
-            <div style={{ width: "95px", height: "65px", borderRadius: "18px", background: "#f8fafc", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "12px", color: "#111827", flexDirection: "column", lineHeight: 1.2 }}>
-              <span style={{ fontSize: "10px", color: "#6b7280", letterSpacing: "1px" }}>REF:</span>
-              {refNumber}
+            <div className="bg-slate-50 border border-slate-100 rounded-xl px-3 py-1.5 text-center">
+              <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Ref</span>
+              <span className="block text-xs font-black text-slate-700">{refNumber}</span>
             </div>
           </div>
         </div>
         
-        <div className="mt-auto">
+        <div className="mt-4 pt-4 border-t border-slate-100">
           {/* Bottom Buttons - Admin Specific */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "10px" }}>
+          <div className={`grid gap-2.5 ${isSold ? "grid-cols-2" : "grid-cols-2"}`}>
             <Link 
               to={`/admin/edit-product/${product.id}`}
-              style={{ height: "52px", borderRadius: "16px", border: "1px solid #dbe1ea", background: "white", fontWeight: 800, color: "#111827", fontSize: "14px" }}
-              className="flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
+              className="admin-pill-btn admin-pill-btn-edit"
             >
-              <Edit size={18} /> Edit
+              ✏️ Edit
             </Link>
             <button 
               onClick={() => handleDelete(product.id)}
-              style={{ height: "52px", borderRadius: "16px", background: "#fef2f2", border: "1px solid #fecaca", color: "#ef4444", fontWeight: 800, fontSize: "14px" }}
-              className="flex items-center justify-center gap-2 hover:bg-red-100 transition-colors"
+              className="admin-pill-btn admin-pill-btn-delete"
             >
-              <Trash2 size={18} /> Delete
+              🗑️ Delete
             </button>
+            
+            {!isSold && (
+              <>
+                <button 
+                  onClick={() => handleFeature && handleFeature(product.id, product.featured)}
+                  className="admin-pill-btn admin-pill-btn-feature"
+                >
+                  ⭐ Feature
+                </button>
+                <button 
+                  onClick={() => handleMarkSold(product.id)}
+                  className="admin-pill-btn admin-pill-btn-sold"
+                >
+                  ✔️ Mark Sold
+                </button>
+              </>
+            )}
           </div>
-          
-          {/* Optional actions row if not sold */}
-          {!isSold && (
-              <div className="flex justify-center mt-3">
-                 <button onClick={() => handleMarkSold(product.id)} className="flex items-center gap-1.5 text-[11px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-700 transition-colors">
-                     <CheckCircle size={14} /> Mark as Sold
-                 </button>
-              </div>
-          )}
         </div>
       </div>
     </motion.div>

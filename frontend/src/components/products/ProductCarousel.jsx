@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -6,6 +6,32 @@ import { Link } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
+const ImageWithLoader = ({ src, alt, isSold }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
+  const defaultImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
+
+  return (
+    <div className="relative w-full h-full bg-slate-100 overflow-hidden">
+      {!loaded && !error && (
+        <div className="absolute inset-0 bg-slate-200 animate-pulse shimmer-effect" />
+      )}
+      <img
+        src={error ? defaultImage : src}
+        alt={alt}
+        className={`transition-all duration-700 ${isSold ? "grayscale-[0.5]" : "group-hover:scale-105"} ${loaded ? 'opacity-100' : 'opacity-0'}`}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        onError={() => {
+          setError(true);
+          setLoaded(true);
+        }}
+      />
+    </div>
+  );
+};
 
 const ProductCarousel = ({ images, isSold, name, id }) => {
   const defaultImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
@@ -26,12 +52,7 @@ const ProductCarousel = ({ images, isSold, name, id }) => {
         {displayImages.map((img, index) => (
           <SwiperSlide key={index}>
             <Link to={`/products/${id}`} className="block h-full w-full">
-              <img
-                src={img}
-                alt={`${name} - view ${index + 1}`}
-                className={`w-full h-full object-cover transition-transform duration-700 ${isSold ? "grayscale-[0.5]" : "group-hover:scale-105"}`}
-                loading="lazy"
-              />
+              <ImageWithLoader src={img} alt={`${name} - view ${index + 1}`} isSold={isSold} />
             </Link>
           </SwiperSlide>
         ))}
