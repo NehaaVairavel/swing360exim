@@ -63,6 +63,14 @@ const Products = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
+  const normalizeAvailability = (value) => {
+    const v = (value ?? "").toString().trim().toLowerCase();
+    if (v === "sold") return "sold";
+    if (v === "in_stock" || v === "in stock" || v === "available") return "in_stock";
+    if (v === "coming_soon" || v === "coming soon") return "coming_soon";
+    return v || "in_stock";
+  };
+
   const [realtimeConnected, setRealtimeConnected] = useState(socket.connected);
   useEffect(() => {
     const onConnect = () => setRealtimeConnected(true);
@@ -122,16 +130,18 @@ const Products = () => {
       
       let matchesStatus = true;
       if (activeStatus === "In Stock") {
-        matchesStatus = product.availability === "in_stock";
+        matchesStatus = normalizeAvailability(product.availability) === "in_stock";
       } else if (activeStatus === "Sold") {
-        matchesStatus = product.availability === "sold";
+        matchesStatus = normalizeAvailability(product.availability) === "sold";
       }
       
       return matchesCategory && matchesSearch && matchesStatus;
     });
 
-  const availableProducts = filteredProducts.filter(p => p.availability === "in_stock");
-  const soldProducts = filteredProducts.filter(p => p.availability === "sold");
+  // Main grid should show newly-added products immediately, even if they are "coming_soon".
+  // Keep sold items separated in the existing "Previously Sold Units" section.
+  const availableProducts = filteredProducts.filter(p => normalizeAvailability(p.availability) !== "sold");
+  const soldProducts = filteredProducts.filter(p => normalizeAvailability(p.availability) === "sold");
 
   const getCategoryCount = (cat) => {
     if (cat === "All") return products.length;
