@@ -197,10 +197,13 @@ const Products = () => {
       </section>
 
       {/* Top Functional Bar (Sticky Unified Toolbar) */}
-      <div className={`sticky top-[72px] z-40 transition-all duration-500 ${scrolled ? 'py-2 px-4' : 'py-6 px-0'}`}>
+      <div 
+        className="sticky top-[84px] z-50 py-4 px-4 sm:px-0"
+        style={{ transform: 'none', transition: 'none', willChange: 'auto', backfaceVisibility: 'hidden' }}
+      >
         <div className="container-section max-w-7xl mx-auto">
           
-          <div className="bg-white/95 backdrop-blur-[14px] rounded-[22px] p-3.5 shadow-[0_12px_35px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col lg:flex-row items-stretch lg:items-center gap-3.5 transition-all duration-500">
+          <div className="bg-white/95 backdrop-blur-[14px] rounded-[22px] p-3.5 shadow-[0_12px_35px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col lg:flex-row items-stretch lg:items-center gap-3.5">
             
             {/* Search Part */}
             <div className="relative flex-1 group">
@@ -304,15 +307,15 @@ const Products = () => {
                       <button 
                         key={cat} 
                         onClick={() => { handleCategoryClick(cat); setIsMobileFiltersOpen(false); }}
-                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.2px", fontSize: "16px", minHeight: "72px" }}
-                        className={`w-full flex items-center justify-between gap-[12px] px-4 py-3 rounded-[14px] transition-all duration-250 cursor-pointer ${
+                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.2px", fontSize: "15px", minHeight: "68px", marginBottom: "12px" }}
+                        className={`w-full flex items-center justify-between gap-[12px] px-[18px] py-[14px] rounded-[18px] transition-all duration-250 cursor-pointer ${
                           isActive 
                             ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-[0_10px_20px_rgba(245,158,11,0.22)] border border-transparent' 
                             : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-sm'
                         }`}
                       >
                         <div className="flex items-center gap-[12px] min-w-0 flex-1">
-                          <Icon style={{ width: '24px', height: '24px', flexShrink: 0, fill: 'currentColor', stroke: 'none', color: isActive ? 'white' : '#111827' }} />
+                          <Icon style={{ width: '20px', height: '20px', flexShrink: 0, fill: 'currentColor', stroke: 'none', color: isActive ? 'white' : '#111827' }} />
                           <span className="whitespace-normal sm:whitespace-nowrap overflow-hidden text-ellipsis leading-[1.25] sm:leading-none text-left">
                             {cat}
                           </span>
