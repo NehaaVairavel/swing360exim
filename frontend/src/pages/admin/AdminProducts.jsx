@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
 import ProductCard from "@/components/admin/ProductCard";
 import "@/styles/admin.css";
+import "@/styles/cards.css";
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();

@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, Send, MapPin, Hash } from 'lucide-react';
+import { Eye, Send } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
+import '@/styles/cards.css';
 
 const itemVariant = {
   hidden: { opacity: 0, y: 30 },
@@ -24,12 +25,11 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
     <motion.div
       variants={itemVariant}
       layout
-      style={{ width: "100%", maxWidth: "300px", cursor: "pointer" }}
       onClick={handleCardClick}
-      className={`relative flex flex-col gap-[10px] rounded-[28px] overflow-hidden bg-white shadow-[0_18px_40px_rgba(0,0,0,0.10)] transition-all duration-250 hover:-translate-y-[6px] group ${isSold ? "opacity-90" : ""} lg:w-[300px] lg:h-[410px]`}
+      className={`product-card group ${isSold ? "opacity-90" : ""}`}
     >
       {/* 1. Image Section (Top) */}
-      <div className="relative h-[150px] w-full rounded-t-[28px] overflow-hidden shrink-0">
+      <div className="product-card-image-section">
         <ProductCarousel 
           images={product.images} 
           image={product.image}
@@ -42,64 +42,60 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
 
         {/* Top Left Year Badge */}
         {product.year && (
-          <div style={{ position: "absolute", top: "14px", left: "14px", background: "#f59e0b", color: "white", padding: "6px 14px", borderRadius: "999px", fontWeight: 800, fontSize: "13px", zIndex: 10 }}>
+          <div className="badge-year">
             {product.year}
           </div>
         )}
 
         {/* Top Right Badge */}
         {(isSold || product.featured || product.verified !== false) && (
-          <div style={{ position: "absolute", top: "14px", right: "14px", background: "white", color: "#111827", padding: "8px 16px", borderRadius: "999px", fontSize: "12px", fontWeight: 800, zIndex: 10 }}>
+          <div className="badge-verified">
             {isSold ? "SOLD" : product.featured ? "FEATURED" : "VERIFIED"}
           </div>
         )}
       </div>
       
       {/* 2. Content Section */}
-      <div style={{ padding: "12px 18px 16px", display: "flex", flexDirection: "column", gap: "10px", flex: 1 }}>
+      <div className="product-card-content">
         <Link to={`/product/${product.id}`}>
-          <h3 style={{ fontSize: "18px", fontWeight: 900, lineHeight: 1.15, letterSpacing: "-0.4px", color: "#111827", marginTop: 0, marginBottom: "6px" }} className="font-display line-clamp-2">
+          <h3 className="product-card-name">
             {product.name}
           </h3>
         </Link>
         
-        <div className="flex-1 flex flex-col justify-end">
-          <div style={{ fontSize: "12px", letterSpacing: "4px", fontWeight: 700, color: "#6b7280", marginBottom: "6px" }}>
-            EXPORT PRICE
-          </div>
-          
-          {/* Price Row */}
-          <div className="flex items-center justify-between">
-            <div style={{ fontSize: "24px", fontWeight: 900, color: "#f59e0b" }} className="font-display">
-              {product.price}
-            </div>
-            
-            {/* Ref Box */}
-            <div style={{ width: "90px", height: "54px", borderRadius: "16px", background: "#f8fafc", border: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", fontWeight: 800, fontSize: "11px", color: "#111827", flexDirection: "column", lineHeight: 1.2 }}>
-              <span style={{ fontSize: "10px", color: "#6b7280", letterSpacing: "1px" }}>Ref No:</span>
-              {refNumber}
-            </div>
+        <div className="product-card-label">
+          EXPORT PRICE
+        </div>
+        
+        <div className="product-card-price">
+          {product.price}
+        </div>
+
+        {/* Ref Box */}
+        <div className="product-card-ref-container">
+          <div className="product-card-ref-badge">
+            REF: {refNumber}
           </div>
         </div>
         
-        <div className="mt-auto">
-          {/* Bottom Buttons */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginTop: "8px" }}>
-            <Link 
-              to={`/product/${product.id}`}
-              style={{ height: "46px", borderRadius: "14px", border: "1px solid #dbe1ea", background: "white", fontWeight: 800, color: "#111827", fontSize: "13px" }}
-              className="flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
-            >
-              <Eye size={16} /> Details
-            </Link>
-            <button 
-              onClick={() => { setSelectedProduct(product); setEnquiryOpen(true); }}
-              style={{ height: "46px", borderRadius: "14px", background: "linear-gradient(135deg,#f59e0b,#ff9900)", color: "white", fontWeight: 800, boxShadow: "0 14px 24px rgba(245,158,11,.25)", fontSize: "13px" }}
-              className="flex items-center justify-center gap-2 hover:scale-[1.02] transition-transform"
-            >
-              <Send size={16} /> Enquire
-            </button>
-          </div>
+        {/* Bottom Buttons */}
+        <div className="product-card-buttons">
+          <Link 
+            to={`/product/${product.id}`}
+            className="btn-details"
+          >
+            DETAILS
+          </Link>
+          <button 
+            onClick={(e) => { 
+              e.stopPropagation();
+              setSelectedProduct(product); 
+              setEnquiryOpen(true); 
+            }}
+            className="btn-enquire"
+          >
+            ENQUIRE
+          </button>
         </div>
       </div>
     </motion.div>
@@ -107,3 +103,4 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
 };
 
 export default ProductCard;
+

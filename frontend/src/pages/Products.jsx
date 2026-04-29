@@ -11,6 +11,7 @@ import AnimatedGear from "@/components/AnimatedGear";
 import { useCurrency } from "@/context/CurrencyContext";
 import CurrencyToggle from "@/components/CurrencyToggle";
 import ProductCard from "@/components/products/ProductCard";
+import "@/styles/cards.css";
 
 const staggerContainer = {
   hidden: { opacity: 0 },
