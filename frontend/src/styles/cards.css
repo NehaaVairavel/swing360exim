@@ -4,9 +4,9 @@
 */
 
 .product-card {
-  width: 350px;
-  height: 515px;
-  border-radius: 28px;
+  width: 320px; /* Reduced from 350px */
+  height: 485px; /* Reduced from 515px to maintain balance */
+  border-radius: 24px; /* Slightly reduced radius for smaller size */
   background: #ffffff;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
@@ -24,11 +24,11 @@
 
 /* Image Section */
 .product-card-image-section {
-  height: 195px;
+  height: 180px; /* Reduced from 195px */
   width: 100%;
   position: relative;
   overflow: hidden;
-  border-radius: 28px 28px 0 0;
+  border-radius: 24px 24px 0 0;
   flex-shrink: 0;
 }
 
@@ -77,17 +77,17 @@
 
 .product-card-name {
   font-family: 'Outfit', 'Inter', sans-serif;
-  font-size: 26px; /* Larger as per image */
+  font-size: 26px; /* Optimized as requested */
   font-weight: 900;
   line-height: 1.1;
-  color: #1e293b; /* Slate 800/Navy */
+  color: #1e293b;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  height: 60px;
-  text-transform: uppercase; /* Matching the chunky look */
+  height: 58px;
+  text-transform: uppercase;
 }
 
 .product-card-middle-section {
@@ -95,24 +95,24 @@
   justify-content: space-between;
   align-items: flex-end;
   margin-top: auto;
-  margin-bottom: 24px;
+  margin-bottom: 20px; /* Reduced from 24px */
 }
 
 .product-card-label {
-  font-size: 11px;
-  letter-spacing: 3px;
+  font-size: 12px; /* Increased from 11px as requested */
+  letter-spacing: 2px;
   font-weight: 700;
-  color: #94a3b8; /* Slate 400 */
+  color: #94a3b8;
   text-transform: uppercase;
-  margin-top: 18px;
-  margin-bottom: 4px;
+  margin-top: 14px; /* Reduced from 18px */
+  margin-bottom: 2px;
 }
 
 .product-card-price {
   font-family: 'Outfit', sans-serif;
-  font-size: 32px;
+  font-size: 22px; /* Reduced from 32px as requested */
   font-weight: 900;
-  color: #f59e0b; /* Orange */
+  color: #f59e0b;
   line-height: 1;
 }
 
@@ -155,30 +155,30 @@
 
 .btn-details {
   flex: 1;
-  height: 56px;
-  border-radius: 18px;
+  height: 52px; /* Reduced from 56px */
+  border-radius: 16px;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
   color: #0f172a;
   font-weight: 900;
-  font-size: 13px;
+  font-size: 14px; /* Increased from 13px as requested */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .btn-enquire {
   flex: 1;
-  height: 56px;
-  border-radius: 18px;
+  height: 52px; /* Reduced from 56px */
+  border-radius: 16px;
   background: #f59e0b;
   color: #ffffff;
   font-weight: 900;
-  font-size: 13px;
+  font-size: 14px; /* Increased from 13px as requested */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,7 +188,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
 }
 
 .btn-enquire:hover {

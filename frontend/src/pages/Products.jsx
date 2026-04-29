@@ -180,10 +180,10 @@ const Products = () => {
         className="relative border-b border-slate-200/60 shadow-sm" 
         style={{ 
           background: 'linear-gradient(135deg, #eef1f5, #f8fafc, #e9edf2)',
-          paddingTop: 'calc(72px + 16px)', // Accounts for fixed navbar + reduced padding
-          paddingBottom: '24px',
+          paddingTop: 'calc(72px + 12px)', /* Reduced from 16px */
+          paddingBottom: '20px', /* Reduced from 24px */
           textAlign: 'center',
-          borderRadius: '0 0 26px 26px',
+          borderRadius: '0 0 20px 20px', /* Reduced from 26px */
           overflow: 'hidden'
         }}
       >
@@ -192,21 +192,21 @@ const Products = () => {
         <div className="container-section relative z-10 px-4">
           <div style={{
             display: 'inline-block',
-            padding: '6px 14px',
+            padding: '4px 12px', /* Reduced from 6px 14px */
             borderRadius: '999px',
-            fontSize: '11px',
-            letterSpacing: '3px',
+            fontSize: '10px', /* Reduced from 11px */
+            letterSpacing: '2px', /* Reduced from 3px */
             fontWeight: '700',
             color: '#d18a00',
             background: 'rgba(245,158,11,0.12)',
             border: '1px solid rgba(245,158,11,0.22)',
-            marginBottom: '16px'
+            marginBottom: '12px' /* Reduced from 16px */
           }}>
             EXPORT HUB CATALOG
           </div>
           
           <h1 className="font-display" style={{
-            fontSize: 'clamp(32px, 5vw, 64px)',
+            fontSize: 'clamp(28px, 4vw, 54px)', /* Reduced from clamp(32px, 5vw, 64px) */
             fontWeight: '900',
             lineHeight: '0.95',
             letterSpacing: '-1px',
@@ -217,11 +217,11 @@ const Products = () => {
           </h1>
           
           <p style={{
-            fontSize: 'clamp(16px, 2vw, 20px)',
+            fontSize: 'clamp(15px, 1.8vw, 18px)', /* Reduced from clamp(16px, 2vw, 20px) */
             fontStyle: 'italic',
             color: '#6b7280',
             fontWeight: '500',
-            marginTop: '12px'
+            marginTop: '8px' /* Reduced from 12px */
           }}>
             "Engineered for performance, curated for global markets."
           </p>
@@ -230,46 +230,46 @@ const Products = () => {
 
       {/* Top Functional Bar (Sticky Unified Toolbar) */}
       <div 
-        className="sticky top-[84px] z-50 py-4 px-4 sm:px-0"
+        className="sticky top-[84px] z-50 py-3 px-4 sm:px-0" /* Reduced py-4 to py-3 */
         style={{ transform: 'none', transition: 'none', willChange: 'auto', backfaceVisibility: 'hidden' }}
       >
         <div className="container-section max-w-7xl mx-auto">
           
-          <div className="bg-white/95 backdrop-blur-[14px] rounded-[22px] p-3.5 shadow-[0_12px_35px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col lg:flex-row items-stretch lg:items-center gap-3.5">
+          <div className="bg-white/95 backdrop-blur-[14px] rounded-[18px] p-2.5 shadow-[0_12px_35px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
             
             {/* Search Part */}
             <div className="relative flex-1 group">
-              <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
+              <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
               <input 
                 type="text" 
-                placeholder="Search Excavator, Loader, CAT 320..." 
+                placeholder="Search Machinery..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-6 h-[54px] bg-slate-50/50 border border-slate-200 rounded-[16px] text-[16px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400"
+                className="w-full pl-12 pr-6 h-[48px] bg-slate-50/50 border border-slate-200 rounded-[12px] text-[15px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400"
               />
             </div>
 
             {/* Controls Part */}
-            <div className="flex flex-wrap items-center gap-3.5">
-              <div className="relative min-w-[140px] group flex-1 sm:flex-none">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <div className="relative min-w-[130px] group flex-1 sm:flex-none">
                 <select 
                   value={activeSort}
                   onChange={(e) => setActiveSort(e.target.value)}
-                  className="w-full h-[54px] pl-5 pr-10 bg-white border border-slate-200 rounded-[16px] text-[13px] font-bold uppercase tracking-widest text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
+                  className="w-full h-[48px] pl-4 pr-10 bg-white border border-slate-200 rounded-[12px] text-[12px] font-bold uppercase tracking-wider text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
                 >
                   <option>Sort ▼</option>
                   <option value="Newest">Newest</option>
                   <option value="Price: Low to High">Price: Low to High</option>
                   <option value="Price: High to Low">Price: High to Low</option>
                 </select>
-                <ChevronDown size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               </div>
 
-              <div className="relative min-w-[140px] group flex-1 sm:flex-none">
+              <div className="relative min-w-[130px] group flex-1 sm:flex-none">
                 <select 
                   value={priceRange}
                   onChange={(e) => setPriceRange(e.target.value)}
-                  className="w-full h-[54px] pl-5 pr-10 bg-white border border-slate-200 rounded-[16px] text-[13px] font-bold uppercase tracking-widest text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
+                  className="w-full h-[48px] pl-4 pr-10 bg-white border border-slate-200 rounded-[12px] text-[12px] font-bold uppercase tracking-wider text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
                 >
                   <option>Price ▼</option>
                   <option value="Any Price">Any Price</option>
@@ -277,16 +277,16 @@ const Products = () => {
                   <option value="$50k - $100k">$50k - $100k</option>
                   <option value="$100k+">$100k+</option>
                 </select>
-                <ChevronDown size={16} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               </div>
 
-              <div className="h-[54px] flex items-center bg-slate-50 border border-slate-200 rounded-[16px] px-1 group-hover:bg-white transition-colors flex-1 sm:flex-none justify-center">
+              <div className="h-[48px] flex items-center bg-slate-50 border border-slate-200 rounded-[12px] px-1 group-hover:bg-white transition-colors flex-1 sm:flex-none justify-center">
                 <CurrencyToggle variant="compact" />
               </div>
 
               <button 
                 onClick={handleReset}
-                className="h-[54px] px-5 bg-slate-900 hover:bg-slate-800 text-white rounded-[16px] font-bold text-[12px] uppercase tracking-widest transition-all hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 flex items-center gap-2"
+                className="h-[48px] px-5 bg-slate-900 hover:bg-slate-800 text-white rounded-[12px] font-bold text-[11px] uppercase tracking-wider transition-all hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 flex items-center gap-2"
               >
                 <RotateCcw size={16} />
                 <span className="hidden xl:inline">Reset</span>
@@ -297,7 +297,7 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="container-section py-8 lg:py-12 flex flex-col lg:flex-row gap-8 relative z-10">
+      <div className="container-section py-6 lg:py-8 flex flex-col lg:flex-row gap-6 relative z-10">
         
         {/* Mobile Filters Drawer Overlay */}
         <AnimatePresence>
@@ -324,13 +324,13 @@ const Products = () => {
               </button>
             </div>
 
-            <div className="lg:sticky lg:top-[180px] lg:bg-white lg:border lg:border-slate-200 lg:rounded-[24px] lg:p-[22px] lg:shadow-[0_12px_30px_rgba(0,0,0,0.06)] flex flex-col gap-6">
+            <div className="lg:sticky lg:top-[160px] lg:bg-white lg:border lg:border-slate-200 lg:rounded-[20px] lg:p-[18px] lg:shadow-[0_12px_30px_rgba(0,0,0,0.06)] flex flex-col gap-5">
               
               {/* Categories */}
               <div style={{ fontFamily: "'Poppins', sans-serif" }}>
                 <style>{"@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap');"}</style>
-                <h3 style={{ fontSize: "13px", fontWeight: 800, letterSpacing: "2px", textTransform: "uppercase" }} className="text-slate-900 mb-3">CATEGORIES</h3>
-                <div className="flex flex-col gap-2">
+                <h3 style={{ fontSize: "12px", fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase" }} className="text-slate-900 mb-2.5">CATEGORIES</h3>
+                <div className="flex flex-col gap-1.5">
                   {MASTER_CATEGORIES.map((cat) => {
                     const count = getCategoryCount(cat);
                     const isActive = activeCategory === cat;
@@ -339,8 +339,8 @@ const Products = () => {
                       <button 
                         key={cat} 
                         onClick={() => { handleCategoryClick(cat); setIsMobileFiltersOpen(false); }}
-                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.2px", fontSize: "14px", minHeight: "58px", marginBottom: "10px" }}
-                        className={`w-full flex items-center justify-between gap-[12px] px-[16px] py-[10px] rounded-[16px] transition-all duration-250 cursor-pointer ${
+                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.1px", fontSize: "15px", minHeight: "52px", marginBottom: "6px" }}
+                        className={`w-full flex items-center justify-between gap-[10px] px-[14px] py-[8px] rounded-[14px] transition-all duration-250 cursor-pointer ${
                           isActive 
                             ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-[0_10px_20px_rgba(245,158,11,0.22)] border border-transparent' 
                             : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-sm'
@@ -392,7 +392,7 @@ const Products = () => {
 
           {/* Active Inventory Grid */}
           {availableProducts.length > 0 && activeStatus !== "Sold" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[22px] justify-items-center w-full">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-[18px] justify-items-center w-full">
               <AnimatePresence mode="popLayout">
                 {availableProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>
@@ -400,17 +400,17 @@ const Products = () => {
           )}
 
           {activeStatus === "All" && availableProducts.length > 0 && soldProducts.length > 0 && (
-            <div className="relative pt-16 pb-8">
+            <div className="relative pt-12 pb-6">
               <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-slate-200" />
               <div className="relative flex justify-center">
-                <div className="bg-white border border-slate-200 px-12 py-4 rounded-full shadow-sm"><h2 className="text-[12px] font-black text-slate-400 uppercase tracking-[0.4em]">Previously Sold Units</h2></div>
+                <div className="bg-white border border-slate-200 px-10 py-3 rounded-full shadow-sm"><h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Previously Sold Units</h2></div>
               </div>
             </div>
           )}
 
           {/* Sold Inventory Grid */}
           {soldProducts.length > 0 && activeStatus !== "Available" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[22px] justify-items-center w-full">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-[18px] justify-items-center w-full">
               <AnimatePresence mode="popLayout">
                 {soldProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>
