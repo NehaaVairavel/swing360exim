@@ -12,6 +12,7 @@ import { useCurrency } from "@/context/CurrencyContext";
 import CurrencyToggle from "@/components/CurrencyToggle";
 import ProductCard from "@/components/products/ProductCard";
 import "@/styles/cards.css";
+import "@/styles/products.css";
 
 const staggerContainer = {
   hidden: { opacity: 0 },
@@ -174,16 +175,16 @@ const Products = () => {
   if (loading) return <div className="pt-40 pb-20 text-center font-display font-bold text-gray-400">Syncing with Dubai Hub...</div>;
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] relative font-body antialiased">
+    <div className="min-h-screen bg-[#f8fafc] relative font-body antialiased">
       {/* Hero Section */}
       <section 
         className="relative border-b border-slate-200/60 shadow-sm" 
         style={{ 
           background: 'linear-gradient(135deg, #eef1f5, #f8fafc, #e9edf2)',
-          paddingTop: 'calc(72px + 12px)', /* Reduced from 16px */
-          paddingBottom: '20px', /* Reduced from 24px */
+          paddingTop: 'calc(72px + 10px)', /* Reduced height by 30% */
+          paddingBottom: '16px',
           textAlign: 'center',
-          borderRadius: '0 0 20px 20px', /* Reduced from 26px */
+          borderRadius: '0 0 16px 16px',
           overflow: 'hidden'
         }}
       >
@@ -230,12 +231,10 @@ const Products = () => {
 
       {/* Top Functional Bar (Sticky Unified Toolbar) */}
       <div 
-        className="sticky top-[84px] z-50 py-3 px-4 sm:px-0" /* Reduced py-4 to py-3 */
+        className={`products-filter-toolbar ${scrolled ? 'scrolled' : ''} container-section max-w-7xl mx-auto`}
         style={{ transform: 'none', transition: 'none', willChange: 'auto', backfaceVisibility: 'hidden' }}
       >
-        <div className="container-section max-w-7xl mx-auto">
-          
-          <div className="bg-white rounded-[18px] p-2.5 shadow-[0_6px_18px_rgba(0,0,0,0.03)] border border-[#edf0f5] flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
             
             {/* Search Part */}
             <div className="relative flex-1 group">
@@ -294,10 +293,10 @@ const Products = () => {
             </div>
           </div>
 
-        </div>
       </div>
 
-      <div className="container-section py-6 lg:py-8 flex flex-col lg:flex-row gap-[28px] relative z-10">
+      <div className="products-layout-container py-6 lg:py-8">
+        <div className="products-main-content relative z-10">
         
         {/* Mobile Filters Drawer Overlay */}
         <AnimatePresence>
@@ -313,7 +312,7 @@ const Products = () => {
         </AnimatePresence>
 
         {/* Sidebar Container */}
-        <aside className={`fixed inset-y-0 left-0 z-[110] w-[280px] bg-white lg:bg-transparent shadow-2xl lg:shadow-none transition-transform duration-300 lg:translate-x-0 lg:static lg:w-[280px] lg:shrink-0 ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <aside className={`products-sidebar ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
           <div className="h-full overflow-y-auto lg:overflow-visible flex flex-col p-6 lg:p-0">
             
             {/* Mobile close button */}
@@ -392,7 +391,7 @@ const Products = () => {
 
           {/* Active Inventory Grid */}
           {availableProducts.length > 0 && activeStatus !== "Sold" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-[18px] justify-items-center w-full">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="products-grid">
               <AnimatePresence mode="popLayout">
                 {availableProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>
@@ -410,7 +409,7 @@ const Products = () => {
 
           {/* Sold Inventory Grid */}
           {soldProducts.length > 0 && activeStatus !== "Available" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-[18px] justify-items-center w-full">
+            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="products-grid">
               <AnimatePresence mode="popLayout">
                 {soldProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
               </AnimatePresence>

@@ -1,0 +1,87 @@
+/* 
+  Products Page Layout & Grid System
+*/
+
+.products-layout-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.products-main-content {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* Sidebar */
+.products-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 160px;
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #EEF1F5;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+  transition: all 0.3s ease;
+}
+
+/* Sticky Toolbar */
+.products-filter-toolbar {
+  position: sticky;
+  top: 90px;
+  z-index: 50;
+  background: #ffffff;
+  border: 1px solid #edf0f5;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.03);
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Multi-Column Grid */
+.products-grid {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  justify-items: center;
+}
+
+/* Responsive Grid Columns */
+@media (min-width: 1400px) {
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .products-sidebar {
+    display: none; /* Handled by drawer in JSX */
+  }
+}
+
+/* Scroll shadow for sticky toolbar */
+.products-filter-toolbar.scrolled {
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  border-color: #e2e8f0;
+}

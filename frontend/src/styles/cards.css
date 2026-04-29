@@ -19,8 +19,8 @@
 }
 
 .product-card:hover {
-  transform: translateY(-4px); /* Tighter hover lift */
-  box-shadow: 0 18px 40px rgba(0,0,0,0.10); /* Luxury hover shadow */
+  transform: translateY(-6px); /* Requested -6px lift */
+  box-shadow: 0 18px 35px rgba(0,0,0,0.12); /* Requested deeper shadow */
 }
 
 /* Image Section */
@@ -79,7 +79,7 @@
 
 .product-card-name {
   font-family: 'Outfit', 'Inter', sans-serif;
-  font-size: 26px;
+  font-size: 24px; /* Slightly reduced for grid density */
   font-weight: 900;
   line-height: 1.1;
   color: #1e293b;
@@ -88,9 +88,28 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  /* height: 58px; REMOVED fixed height */
-  margin-bottom: 10px; /* Added 10px gap as requested */
+  margin-bottom: 6px; /* Tightened */
   text-transform: uppercase;
+}
+
+.product-card-specs {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.product-card-specs span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.product-card-specs .separator {
+  color: #cbd5e1;
+  font-size: 10px;
 }
 
 .product-card-middle-section {
@@ -113,10 +132,19 @@
 
 .product-card-price {
   font-family: 'Outfit', sans-serif;
-  font-size: 22px; /* Reduced from 32px as requested */
+  font-size: 28px; /* Stronger price styling */
   font-weight: 900;
   color: #f59e0b;
   line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.product-card-price .currency-symbol {
+  font-size: 16px; /* Smaller currency symbol */
+  font-weight: 700;
+  margin-right: 2px;
 }
 
 /* Reference Badge */
@@ -176,12 +204,12 @@
 
 .btn-enquire {
   flex: 1;
-  height: 52px; /* Reduced from 56px */
+  height: 52px;
   border-radius: 16px;
   background: #f59e0b;
   color: #ffffff;
   font-weight: 900;
-  font-size: 14px; /* Increased from 13px as requested */
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -189,15 +217,26 @@
   box-shadow: 0 8px 20px rgba(245, 158, 11, 0.2);
   border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .btn-enquire:hover {
-  transform: scale(1.03);
-  box-shadow: 0 14px 30px rgba(245, 158, 11, 0.35);
+  transform: scale(1.02);
+  box-shadow: 0 0 18px rgba(255, 165, 0, 0.35);
   background: #ea580c;
+}
+
+/* Pulse animation for premium feel */
+@keyframes soft-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+
+.btn-enquire.pulse-effect {
+  animation: soft-pulse 2s infinite;
 }
 
 /* Admin Specific Overrides/Additions */

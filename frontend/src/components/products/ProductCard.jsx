@@ -15,6 +15,12 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
   const navigate = useNavigate();
   const isSold = product.availability === "sold";
   const refNumber = product.reference_number || product.reference_no || `EXC-000`;
+  const priceStr = cleanPrice(product.price);
+  
+  // Extract currency symbol if present (e.g., ₹, $, USD, AED)
+  const currencyMatch = priceStr.match(/^([^0-9\s,]+|USD|AED|EUR|GBP|INR|₹|\$)\s*/i);
+  const currency = currencyMatch ? currencyMatch[0].trim() : "";
+  const numericPrice = currencyMatch ? priceStr.substring(currencyMatch[0].length).trim() : priceStr;
 
   const handleCardClick = (e) => {
     // Only navigate if it wasn't a click on the Enquiry button or Carousel arrows
@@ -63,6 +69,15 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             {product.name}
           </h3>
         </Link>
+
+        {/* Small Specs Row */}
+        <div className="product-card-specs">
+          {product.year && <span>{product.year}</span>}
+          {product.year && product.engine_hours && <span className="separator">•</span>}
+          {product.engine_hours && <span>{product.engine_hours} Hrs</span>}
+          {(product.year || product.engine_hours) && product.location && <span className="separator">•</span>}
+          {product.location && <span>{product.location.split(',')[0]}</span>}
+        </div>
         
         <div className="product-card-middle-section">
           <div>
@@ -70,7 +85,8 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
               EXPORT PRICE
             </div>
             <div className="product-card-price">
-              {cleanPrice(product.price)}
+              {currency && <span className="currency-symbol">{currency}</span>}
+              {numericPrice}
             </div>
           </div>
 
@@ -95,7 +111,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
               setSelectedProduct(product); 
               setEnquiryOpen(true); 
             }}
-            className="btn-enquire"
+            className="btn-enquire pulse-effect"
           >
             <MessageCircle size={18} fill="currentColor" fillOpacity={0.2} />
             ENQUIRE

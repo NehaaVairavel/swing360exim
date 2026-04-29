@@ -14,6 +14,12 @@ const itemVariant = {
 const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) => {
   const isSold = product.availability === "sold";
   const refNumber = product.reference_number || product.reference_no || `EXC-000`;
+  const priceStr = cleanPrice(product.price);
+  
+  // Extract currency symbol if present (e.g., ₹, $, USD, AED)
+  const currencyMatch = priceStr.match(/^([^0-9\s,]+|USD|AED|EUR|GBP|INR|₹|\$)\s*/i);
+  const currency = currencyMatch ? currencyMatch[0].trim() : "";
+  const numericPrice = currencyMatch ? priceStr.substring(currencyMatch[0].length).trim() : priceStr;
 
   // Ensure availability string is displayed cleanly
   const statusLabel = product.availability ? product.availability.replace('_', ' ').toUpperCase() : 'ACTIVE';
@@ -60,13 +66,23 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
           </h3>
         </Link>
         
+        {/* Small Specs Row */}
+        <div className="product-card-specs">
+          {product.year && <span>{product.year}</span>}
+          {product.year && product.engine_hours && <span className="separator">•</span>}
+          {product.engine_hours && <span>{product.engine_hours} Hrs</span>}
+          {(product.year || product.engine_hours) && product.location && <span className="separator">•</span>}
+          {product.location && <span>{product.location.split(',')[0]}</span>}
+        </div>
+        
         <div className="product-card-middle-section">
           <div>
             <div className="product-card-label">
               EXPORT PRICE
             </div>
             <div className="product-card-price">
-              {cleanPrice(product.price)}
+              {currency && <span className="currency-symbol">{currency}</span>}
+              {numericPrice}
             </div>
           </div>
 
