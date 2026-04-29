@@ -174,7 +174,7 @@ const Products = () => {
   if (loading) return <div className="pt-40 pb-20 text-center font-display font-bold text-gray-400">Syncing with Dubai Hub...</div>;
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] relative font-body antialiased">
+    <div className="min-h-screen bg-[#F5F7FA] relative font-body antialiased">
       {/* Hero Section */}
       <section 
         className="relative border-b border-slate-200/60 shadow-sm" 
@@ -235,7 +235,7 @@ const Products = () => {
       >
         <div className="container-section max-w-7xl mx-auto">
           
-          <div className="bg-white/95 backdrop-blur-[14px] rounded-[18px] p-2.5 shadow-[0_12px_35px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
+          <div className="bg-white rounded-[18px] p-2.5 shadow-[0_6px_18px_rgba(0,0,0,0.03)] border border-[#edf0f5] flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
             
             {/* Search Part */}
             <div className="relative flex-1 group">
@@ -297,7 +297,7 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="container-section py-6 lg:py-8 flex flex-col lg:flex-row gap-6 relative z-10">
+      <div className="container-section py-6 lg:py-8 flex flex-col lg:flex-row gap-[28px] relative z-10">
         
         {/* Mobile Filters Drawer Overlay */}
         <AnimatePresence>
@@ -324,7 +324,7 @@ const Products = () => {
               </button>
             </div>
 
-            <div className="lg:sticky lg:top-[160px] lg:bg-white lg:border lg:border-slate-200 lg:rounded-[20px] lg:p-[18px] lg:shadow-[0_12px_30px_rgba(0,0,0,0.06)] flex flex-col gap-5">
+            <div className="lg:sticky lg:top-[160px] lg:bg-white lg:border lg:border-[#EEF1F5] lg:rounded-[20px] lg:p-[18px] lg:shadow-[0_8px_24px_rgba(0,0,0,0.04)] flex flex-col gap-5">
               
               {/* Categories */}
               <div style={{ fontFamily: "'Poppins', sans-serif" }}>

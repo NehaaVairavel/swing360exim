@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Edit, Trash2, CheckCircle, Star } from 'lucide-react';
 import ProductCarousel from '../products/ProductCarousel';
+import { cleanPrice } from '@/utils/priceFormatter';
 import '@/styles/cards.css';
 
 const itemVariant = {
@@ -65,7 +66,7 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
               EXPORT PRICE
             </div>
             <div className="product-card-price">
-              {product.price}
+              {cleanPrice(product.price)}
             </div>
           </div>
 

@@ -23,6 +23,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import AnimatedGear from "@/components/AnimatedGear";
 import { useCurrency } from "@/context/CurrencyContext";
 import CurrencyToggle from "@/components/CurrencyToggle";
+import { cleanPrice } from "@/utils/priceFormatter";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -250,7 +251,7 @@ const ProductDetail = () => {
                   <span className="text-primary text-[10px] uppercase font-black tracking-[0.4em] mb-2 block">Premium Export Price</span>
                   <div className="flex items-end justify-between gap-4">
                     <h2 className={`text-5xl font-display tracking-tighter transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-primary font-black"}`}>
-                      {product.price}
+                      {cleanPrice(product.price)}
                     </h2>
                     <div className="flex flex-col items-end pb-1">
                       <CurrencyToggle />

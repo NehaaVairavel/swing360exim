@@ -8,19 +8,19 @@
   /* height: 485px; REMOVED - let auto-adjust */
   min-height: 410px; /* Reduced min-height */
   border-radius: 24px;
-  background: #ffffff;
+  background: #FFFFFF; /* Pure clean white */
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06); /* Soft luxury shadow */
+  transition: 0.3s ease; /* 0.3s ease as requested */
   display: flex;
   flex-direction: column;
   position: relative;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid #EEF1F5; /* Subtle border */
 }
 
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px); /* Tighter hover lift */
+  box-shadow: 0 18px 40px rgba(0,0,0,0.10); /* Luxury hover shadow */
 }
 
 /* Image Section */
