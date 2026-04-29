@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, Send } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 import '@/styles/cards.css';
 
@@ -63,18 +63,20 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
           </h3>
         </Link>
         
-        <div className="product-card-label">
-          EXPORT PRICE
-        </div>
-        
-        <div className="product-card-price">
-          {product.price}
-        </div>
+        <div className="product-card-middle-section">
+          <div>
+            <div className="product-card-label">
+              EXPORT PRICE
+            </div>
+            <div className="product-card-price">
+              {product.price}
+            </div>
+          </div>
 
-        {/* Ref Box */}
-        <div className="product-card-ref-container">
+          {/* Ref Box */}
           <div className="product-card-ref-badge">
-            REF: {refNumber}
+            <span className="product-card-ref-label">REF:</span>
+            {refNumber}
           </div>
         </div>
         
@@ -94,6 +96,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             }}
             className="btn-enquire"
           >
+            <MessageCircle size={18} fill="currentColor" fillOpacity={0.2} />
             ENQUIRE
           </button>
         </div>
@@ -103,4 +106,5 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
 };
 
 export default ProductCard;
+
 

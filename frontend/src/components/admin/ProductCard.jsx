@@ -59,18 +59,20 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
           </h3>
         </Link>
         
-        <div className="product-card-label">
-          EXPORT PRICE
-        </div>
-        
-        <div className="product-card-price">
-          {product.price}
-        </div>
+        <div className="product-card-middle-section">
+          <div>
+            <div className="product-card-label">
+              EXPORT PRICE
+            </div>
+            <div className="product-card-price">
+              {product.price}
+            </div>
+          </div>
 
-        {/* Ref Box */}
-        <div className="product-card-ref-container" style={{ margin: "12px 0" }}>
+          {/* Ref Box */}
           <div className="product-card-ref-badge">
-            REF: {refNumber}
+            <span className="product-card-ref-label">REF:</span>
+            {refNumber}
           </div>
         </div>
         
@@ -112,4 +114,5 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
 };
 
 export default ProductCard;
+
 
