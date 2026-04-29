@@ -241,7 +241,7 @@ const Products = () => {
               <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
               <input 
                 type="text" 
-                placeholder="Search CAT, JCB, Dozer, Loader..." 
+                placeholder="Search CAT, JCB, Loader..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-6 h-[48px] bg-slate-50/50 border border-slate-200 rounded-[12px] text-[15px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400"
@@ -347,7 +347,7 @@ const Products = () => {
                       >
                         <div className="flex items-center gap-[12px] min-w-0 flex-1">
                           <Icon style={{ width: '18px', height: '18px', flexShrink: 0, fill: 'currentColor', stroke: 'none', color: isActive ? 'white' : '#111827' }} />
-                          <span className="whitespace-normal sm:whitespace-nowrap overflow-hidden text-ellipsis leading-[1.25] sm:leading-none text-left">
+                          <span className="whitespace-normal overflow-hidden leading-[1.2] text-left max-w-[140px]">
                             {cat}
                           </span>
                         </div>

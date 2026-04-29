@@ -20,7 +20,8 @@
 
 .product-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0,0,0,.08);
+  box-shadow: 0 24px 40px rgba(0,0,0,.08);
+  cursor: pointer;
 }
 
 /* Image Section */
@@ -67,22 +68,6 @@
   text-transform: uppercase;
   letter-spacing: 0.8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.badge-ready {
-  position: absolute;
-  top: 52px; /* Positioned below verified badge */
-  right: 15px;
-  background: #f0fdf4; /* Light Green */
-  color: #16a34a; /* Success Green */
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-weight: 900;
-  font-size: 9px;
-  z-index: 10;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border: 1px solid #dcfce7;
 }
 
 /* Content Area */
@@ -197,19 +182,19 @@
 /* Buttons Section */
 .product-card-buttons {
   display: flex;
-  gap: 12px;
-  margin-top: 4px; /* Move buttons slightly upward */
+  gap: 4%;
+  margin-top: 4px;
 }
 
 .btn-details {
-  flex: 1;
-  height: 52px; /* Reduced from 56px */
-  border-radius: 16px;
+  width: 48%;
+  height: 52px;
+  border-radius: 14px;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
   color: #0f172a;
-  font-weight: 900;
-  font-size: 14px; /* Increased from 13px as requested */
+  font-weight: 700;
+  font-size: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -220,12 +205,12 @@
 }
 
 .btn-enquire {
-  flex: 1;
+  width: 48%;
   height: 52px;
-  border-radius: 16px;
+  border-radius: 14px;
   background: #f59e0b;
   color: #ffffff;
-  font-weight: 900;
+  font-weight: 700;
   font-size: 14px;
   display: flex;
   align-items: center;

@@ -42,9 +42,10 @@
 }
 
 .category-btn.active {
-  background: #ffffff !important;
-  border-left: 4px solid #f59e0b !important;
-  color: #f59e0b !important;
+  background: linear-gradient(135deg, #f59e0b, #ff8a00) !important;
+  color: white !important;
+  box-shadow: 0 10px 20px rgba(245, 158, 11, 0.25) !important;
+  border: none !important;
 }
 
 /* Sticky Toolbar */

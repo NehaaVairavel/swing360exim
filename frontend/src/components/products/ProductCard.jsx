@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { MessageCircle, Clock, MapPin } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 import { cleanPrice } from '@/utils/priceFormatter';
+import { useCurrency } from '@/context/CurrencyContext';
 import '@/styles/cards.css';
 
 const itemVariant = {
@@ -15,12 +16,12 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
   const navigate = useNavigate();
   const isSold = product.availability === "sold";
   const refNumber = product.reference_number || product.reference_no || `EXC-000`;
+  const { formatPrice } = useCurrency();
   const priceStr = cleanPrice(product.price);
   
-  // Extract currency symbol if present (e.g., ₹, $, USD, AED)
-  const currencyMatch = priceStr.match(/^([^0-9\s,]+|USD|AED|EUR|GBP|INR|₹|\$)\s*/i);
-  const currency = currencyMatch ? currencyMatch[0].trim() : "";
-  const numericPrice = currencyMatch ? priceStr.substring(currencyMatch[0].length).trim() : priceStr;
+  // Extract number for formatPrice (removing non-digits except decimals)
+  const numericValue = parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+  const displayPrice = formatPrice(numericValue);
 
   const handleCardClick = (e) => {
     // Only navigate if it wasn't a click on the Enquiry button or Carousel arrows
@@ -56,16 +57,9 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
 
         {/* Top Right Badge */}
         {(isSold || product.featured || product.verified !== false) && (
-          <>
-            <div className="badge-verified">
-              {isSold ? "SOLD" : product.featured ? "FEATURED" : "VERIFIED"}
-            </div>
-            {!isSold && (
-              <div className="badge-ready">
-                READY TO EXPORT
-              </div>
-            )}
-          </>
+          <div className="badge-verified">
+            {isSold ? "SOLD" : product.featured ? "FEATURED" : "VERIFIED"}
+          </div>
         )}
       </div>
       
@@ -102,8 +96,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
               EXPORT PRICE
             </div>
             <div className="product-card-price">
-              {currency && <span className="currency-symbol">{currency}</span>}
-              {numericPrice}
+              {displayPrice}
             </div>
           </div>
 

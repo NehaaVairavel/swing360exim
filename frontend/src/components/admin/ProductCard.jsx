@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Edit, Trash2, CheckCircle, Star, Clock, MapPin } from 'lucide-react';
 import ProductCarousel from '../products/ProductCarousel';
 import { cleanPrice } from '@/utils/priceFormatter';
+import { useCurrency } from '@/context/CurrencyContext';
 import '@/styles/cards.css';
 
 const itemVariant = {
@@ -14,12 +15,12 @@ const itemVariant = {
 const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) => {
   const isSold = product.availability === "sold";
   const refNumber = product.reference_number || product.reference_no || `EXC-000`;
+  const { formatPrice } = useCurrency();
   const priceStr = cleanPrice(product.price);
   
-  // Extract currency symbol if present (e.g., ₹, $, USD, AED)
-  const currencyMatch = priceStr.match(/^([^0-9\s,]+|USD|AED|EUR|GBP|INR|₹|\$)\s*/i);
-  const currency = currencyMatch ? currencyMatch[0].trim() : "";
-  const numericPrice = currencyMatch ? priceStr.substring(currencyMatch[0].length).trim() : priceStr;
+  // Extract number for formatPrice (removing non-digits except decimals)
+  const numericValue = parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+  const displayPrice = formatPrice(numericValue);
 
   // Ensure availability string is displayed cleanly
   const statusLabel = product.availability ? product.availability.replace('_', ' ').toUpperCase() : 'ACTIVE';
@@ -52,16 +53,9 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
 
         {/* Top Right Badge (Year / Featured) */}
         {(product.year || product.featured) && (
-          <>
-            <div className="badge-verified">
-              {product.featured ? "⭐ FEATURED" : product.year}
-            </div>
-            {!isSold && (
-              <div className="badge-ready">
-                READY TO EXPORT
-              </div>
-            )}
-          </>
+          <div className="badge-verified">
+            {product.featured ? "⭐ FEATURED" : product.year}
+          </div>
         )}
       </div>
       
@@ -98,8 +92,7 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
               EXPORT PRICE
             </div>
             <div className="product-card-price">
-              {currency && <span className="currency-symbol">{currency}</span>}
-              {numericPrice}
+              {displayPrice}
             </div>
           </div>
 
