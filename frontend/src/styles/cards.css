@@ -4,23 +4,23 @@
 */
 
 .product-card {
-  width: 320px;
-  /* height: 485px; REMOVED - let auto-adjust */
-  min-height: 410px; /* Reduced min-height */
+  width: 285px; /* Reduced from 320px */
+  /* height: auto; */
+  min-height: 400px;
   border-radius: 24px;
-  background: #FFFFFF; /* Pure clean white */
+  background: #FFFFFF;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.06); /* Soft luxury shadow */
-  transition: 0.3s ease; /* 0.3s ease as requested */
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  transition: 0.3s ease;
   display: flex;
   flex-direction: column;
   position: relative;
-  border: 1px solid #EEF1F5; /* Subtle border */
+  border: 1px solid #EEF1F5;
 }
 
 .product-card:hover {
-  transform: translateY(-6px); /* Requested -6px lift */
-  box-shadow: 0 18px 35px rgba(0,0,0,0.12); /* Requested deeper shadow */
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,.08);
 }
 
 /* Image Section */
@@ -59,13 +59,30 @@
   right: 15px;
   background: #ffffff;
   color: #111827; /* Dark Navy */
-  padding: 8px 20px;
+  padding: 8px 18px;
   border-radius: 999px;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 11px;
   z-index: 10;
   text-transform: uppercase;
   letter-spacing: 0.8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.badge-ready {
+  position: absolute;
+  top: 52px; /* Positioned below verified badge */
+  right: 15px;
+  background: #f0fdf4; /* Light Green */
+  color: #16a34a; /* Success Green */
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 9px;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid #dcfce7;
 }
 
 /* Content Area */
@@ -132,7 +149,7 @@
 
 .product-card-price {
   font-family: 'Outfit', sans-serif;
-  font-size: 28px; /* Stronger price styling */
+  font-size: 32px; /* Increased for high emphasis */
   font-weight: 900;
   color: #f59e0b;
   line-height: 1;

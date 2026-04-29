@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Clock, MapPin } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 import { cleanPrice } from '@/utils/priceFormatter';
 import '@/styles/cards.css';
@@ -56,9 +56,16 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
 
         {/* Top Right Badge */}
         {(isSold || product.featured || product.verified !== false) && (
-          <div className="badge-verified">
-            {isSold ? "SOLD" : product.featured ? "FEATURED" : "VERIFIED"}
-          </div>
+          <>
+            <div className="badge-verified">
+              {isSold ? "SOLD" : product.featured ? "FEATURED" : "VERIFIED"}
+            </div>
+            {!isSold && (
+              <div className="badge-ready">
+                READY TO EXPORT
+              </div>
+            )}
+          </>
         )}
       </div>
       
@@ -74,11 +81,21 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
         <div className="product-card-specs">
           {product.year && <span>{product.year}</span>}
           {product.year && product.engine_hours && <span className="separator">•</span>}
-          {product.engine_hours && <span>{product.engine_hours} Hrs</span>}
+          {product.engine_hours && (
+            <span className="flex items-center gap-1">
+              <Clock size={12} className="text-slate-400" />
+              {product.engine_hours} Hrs
+            </span>
+          )}
           {(product.year || product.engine_hours) && product.location && <span className="separator">•</span>}
-          {product.location && <span>{product.location.split(',')[0]}</span>}
+          {product.location && (
+            <span className="flex items-center gap-1">
+              <MapPin size={12} className="text-slate-400" />
+              {product.location.split(',')[0]}
+            </span>
+          )}
         </div>
-        
+
         <div className="product-card-middle-section">
           <div>
             <div className="product-card-label">

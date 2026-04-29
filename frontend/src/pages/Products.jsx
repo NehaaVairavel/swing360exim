@@ -175,14 +175,14 @@ const Products = () => {
   if (loading) return <div className="pt-40 pb-20 text-center font-display font-bold text-gray-400">Syncing with Dubai Hub...</div>;
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] relative font-body antialiased">
+    <div className="min-h-screen bg-[#f3f6fa] relative font-body antialiased">
       {/* Hero Section */}
       <section 
         className="relative border-b border-slate-200/60 shadow-sm" 
         style={{ 
           background: 'linear-gradient(135deg, #eef1f5, #f8fafc, #e9edf2)',
-          paddingTop: 'calc(72px + 10px)', /* Reduced height by 30% */
-          paddingBottom: '16px',
+          paddingTop: 'calc(72px + 8px)', /* Reduced height further by 20% */
+          paddingBottom: '12px',
           textAlign: 'center',
           borderRadius: '0 0 16px 16px',
           overflow: 'hidden'
@@ -241,7 +241,7 @@ const Products = () => {
               <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
               <input 
                 type="text" 
-                placeholder="Search Machinery..." 
+                placeholder="Search CAT, JCB, Dozer, Loader..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-6 h-[48px] bg-slate-50/50 border border-slate-200 rounded-[12px] text-[15px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400"
@@ -339,9 +339,9 @@ const Products = () => {
                         key={cat} 
                         onClick={() => { handleCategoryClick(cat); setIsMobileFiltersOpen(false); }}
                         style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.1px", fontSize: "15px", minHeight: "52px", marginBottom: "6px" }}
-                        className={`w-full flex items-center justify-between gap-[10px] px-[14px] py-[8px] rounded-[14px] transition-all duration-250 cursor-pointer ${
+                        className={`w-full flex items-center justify-between gap-[10px] px-[14px] py-[8px] rounded-[14px] transition-all duration-250 cursor-pointer category-btn ${
                           isActive 
-                            ? 'bg-gradient-to-br from-amber-500 to-orange-500 text-white shadow-[0_10px_20px_rgba(245,158,11,0.22)] border border-transparent' 
+                            ? 'bg-white shadow-sm border border-slate-200 active' 
                             : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-sm'
                         }`}
                       >
