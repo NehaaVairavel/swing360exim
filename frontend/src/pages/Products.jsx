@@ -418,6 +418,7 @@ const Products = () => {
           </div>
         </main>
       </div>
+    </div>
 
       {/* Pre-Footer CTA */}
       <section className="py-[70px] bg-white relative overflow-hidden">
