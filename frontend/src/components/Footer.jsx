@@ -36,29 +36,29 @@ const Footer = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="container-section py-12 md:py-14 relative z-10"
+        className="container-section py-8 md:py-10 relative z-10"
       >
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 lg:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-10">
           
           {/* LEFT: BRAND SECTION */}
           <div className="md:col-span-12 lg:col-span-5">
-            <div className="flex items-center gap-4 mb-6 group cursor-default relative">
+            <div className="flex items-center gap-4 mb-4 group cursor-default relative">
               <img 
                 src={logo} 
                 alt="Swing360 EXIM" 
-                className="h-16 w-auto object-contain transition-transform duration-500 group-hover:scale-[1.02] relative z-10" 
+                className="h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-[1.02] relative z-10" 
               />
               <div className="h-10 w-[1px] bg-white/20 mx-2 hidden sm:block relative z-10" />
               <div className="flex flex-col relative z-10">
-                 <span className="font-display font-bold text-2xl tracking-wide text-[#EAEAEA] leading-none antialiased">Swing360</span>
-                 <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary mt-1">Exim Trading</span>
+                 <span className="font-display font-bold text-xl tracking-wide text-[#EAEAEA] leading-none antialiased">Swing360</span>
+                 <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-primary mt-1">Exim Trading</span>
               </div>
             </div>
 
             {/* Tagline Improvement */}
-            <div className="relative pl-4 mb-8">
+            <div className="relative pl-4 mb-6">
               <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-primary rounded-full" />
-              <p className="text-[#EAEAEA]/90 text-[14px] leading-relaxed max-w-sm font-normal antialiased">
+              <p className="text-[#EAEAEA]/90 text-[13px] leading-relaxed max-w-sm font-normal antialiased">
                 Global hub for heavy equipment trading. Delivering certified premium machinery with excellence from Dubai.
               </p>
             </div>
@@ -80,7 +80,7 @@ const Footer = () => {
 
           {/* CENTER: NAVIGATION */}
           <div className="md:col-span-6 lg:col-span-3 lg:col-start-7">
-            <h4 className="font-display font-bold text-[#EAEAEA] mb-7 text-[12px] uppercase tracking-[0.2em] antialiased">
+            <h4 className="font-display font-bold text-[#EAEAEA] mb-5 text-[11px] uppercase tracking-[0.2em] antialiased">
               Quick Links
             </h4>
             <div className="flex flex-col gap-4">
@@ -96,7 +96,7 @@ const Footer = () => {
                   key={l.path}
                   to={l.path}
                   onClick={l.path === "/" ? handleHomeClick : undefined}
-                  className="relative text-[#EAEAEA]/80 text-[14px] font-medium transition-all duration-300 w-fit hover:translate-x-1 group antialiased hover:text-primary overflow-hidden pb-1"
+                  className="relative text-[#EAEAEA]/80 text-[13px] font-medium transition-all duration-300 w-fit hover:translate-x-1 group antialiased hover:text-primary overflow-hidden pb-1"
                 >
                   <span className="relative z-10">{l.label}</span>
                   {/* Subtle underline */}
@@ -108,7 +108,7 @@ const Footer = () => {
 
           {/* RIGHT: CONTACT */}
           <div className="md:col-span-6 lg:col-span-3">
-            <h4 className="font-display font-bold text-[#EAEAEA] mb-7 text-[12px] uppercase tracking-[0.2em] antialiased">
+            <h4 className="font-display font-bold text-[#EAEAEA] mb-5 text-[11px] uppercase tracking-[0.2em] antialiased">
               Connect With Us
             </h4>
             <div className="flex flex-col">
@@ -160,7 +160,7 @@ const Footer = () => {
         </div>
         
         {/* Bottom Bar: Clean Divider & Minimal Text */}
-        <div className="mt-14 pt-8 relative flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="mt-8 pt-6 relative flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/10" />
           
           <div className="text-[11px] text-[#EAEAEA]/70 font-medium uppercase tracking-[0.1em] antialiased hover:text-[#EAEAEA] transition-colors duration-300">

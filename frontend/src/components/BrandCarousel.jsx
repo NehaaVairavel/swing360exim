@@ -26,21 +26,21 @@ const brands = [
 
 const BrandCarousel = () => {
   return (
-    <section className="bg-white py-12 md:py-16 section-divider-top relative overflow-hidden">
-      <div className="container-section text-center relative z-10 mb-10">
+    <section className="bg-white py-8 md:py-10 section-divider-top relative overflow-hidden">
+      <div className="container-section text-center relative z-10 mb-6">
         <SectionReveal>
           {/* Exact heading match to reference */}
-          <h2 className="text-4xl md:text-5xl font-display font-extrabold text-heading mb-4 heading-decorated tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-display font-extrabold text-heading mb-3 heading-decorated tracking-tight">
             Top <span className="text-gradient drop-shadow-sm">Heavy Equipment</span> Brands
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mt-2 font-medium">
+          <p className="text-muted-foreground text-base max-w-2xl mx-auto mt-2 font-medium">
             Trusted global brands powering our heavy equipment trading and export network.
           </p>
         </SectionReveal>
       </div>
 
       {/* Full-width Carousel Container */}
-      <div className="relative w-full overflow-hidden py-8 z-10 bg-white">
+      <div className="relative w-full overflow-hidden py-4 z-10 bg-white">
         
         {/* Transparent gradient masks for smooth fade at edges */}
         <div className="absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-white via-white/80 to-transparent z-20 pointer-events-none"></div>
@@ -59,7 +59,7 @@ const BrandCarousel = () => {
               <img 
                 src={brand.logo} 
                 alt={`${brand.name} logo`} 
-                className="w-full h-[50px] md:h-[65px] object-contain object-center transition-all duration-300 hover:scale-[1.20] hover:brightness-110 will-change-transform relative hover:z-10"
+                className="w-full h-[40px] md:h-[50px] object-contain object-center transition-all duration-300 hover:scale-[1.20] hover:brightness-110 will-change-transform relative hover:z-10"
                 loading="lazy"
                 draggable={false}
               />

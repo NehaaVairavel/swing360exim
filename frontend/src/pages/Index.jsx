@@ -82,16 +82,16 @@ const StatCard = ({ stat, i }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: i * 0.12 }}
-      className="text-center card-premium rounded-3xl p-6 md:p-8 border-accent-left group"
+      className="text-center card-premium rounded-3xl p-4 md:p-6 border-accent-left group"
     >
-      <div className="icon-container w-16 h-16 rounded-2xl mx-auto mb-5 relative">
+      <div className="icon-container w-12 h-12 rounded-2xl mx-auto mb-3 relative">
         <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <IconComp size={28} className="text-primary group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 relative z-10" />
+        <IconComp size={24} className="text-primary group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 relative z-10" />
       </div>
-      <div className="text-4xl md:text-5xl font-display font-black text-shimmer tracking-tight">
+      <div className="text-3xl md:text-4xl font-display font-black text-shimmer tracking-tight">
         {count}{stat.suffix}
       </div>
-      <div className="text-[15px] text-muted-foreground mt-2 font-medium">{stat.label}</div>
+      <div className="text-[14px] text-muted-foreground mt-2 font-medium">{stat.label}</div>
     </motion.div>
   );
 };
@@ -210,7 +210,7 @@ const Index = () => {
 
   return (
     <div className="overflow-hidden" onMouseMove={handleMouseMove}>
-      <section ref={heroRef} className="relative min-h-[78vh] flex items-center section-base industrial-pattern overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[60vh] flex items-center section-base industrial-pattern overflow-hidden">
         <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
           <img src={heroBg} alt="" className="w-full h-full object-cover opacity-[0.06] scale-110 blur-[1px]" />
         </motion.div>
@@ -222,7 +222,7 @@ const Index = () => {
           <AnimatedGear size={600} />
         </motion.div>
 
-        <div className="container-section relative z-10 pt-[72px] pb-10 md:pt-[80px] md:pb-12">
+        <div className="container-section relative z-10 pt-[54px] pb-6 md:pt-[60px] md:pb-8">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="hidden lg:block absolute top-[80px] right-8 z-30 w-[360px]">
             <form onSubmit={handleSearch} className="bg-white/95 backdrop-blur-md rounded-full p-1.5 shadow-premium flex items-center gap-2 border border-white/60 focus-within:ring-2 focus-within:ring-primary/30 transition-all duration-300">
               <div className="flex-1 flex items-center gap-3 px-5">
@@ -251,7 +251,7 @@ const Index = () => {
                 Global Machinery Export Hub
               </motion.div>
 
-              <div className="text-4xl md:text-5xl lg:text-[72px] font-display font-black text-heading leading-[1.05] mb-5 text-shadow-lg drop-shadow-sm">
+              <div className="text-3xl md:text-4xl lg:text-[56px] font-display font-black text-heading leading-[1.05] mb-4 text-shadow-lg drop-shadow-sm">
                 {heroTitle.split(" ").map((word, i) => (
                   <motion.span key={i} custom={i} initial="hidden" animate="visible" variants={wordVariants} className={`inline-block mr-3 lg:mr-4 ${word === "Dubai" ? "text-shimmer relative" : ""}`}>
                     {word}
@@ -260,12 +260,12 @@ const Index = () => {
                 ))}
               </div>
 
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55 }} className="text-base md:text-[17px] mb-6 text-heading/65 leading-[1.6] font-semibold max-w-[520px]">
+              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55 }} className="text-sm md:text-base mb-5 text-heading/65 leading-[1.6] font-semibold max-w-[520px]">
                 Reliable Machinery • Transparent Trade • Worldwide Logistics
               </motion.p>
 
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.3 }} className="flex flex-wrap gap-4">
-                <Link to="/products" className="group btn-cta px-8 py-3.5 rounded-xl font-display font-black flex items-center gap-2 text-[15px] shadow-glow shadow-primary/20">
+                <Link to="/products" className="group btn-cta px-6 py-2.5 rounded-xl font-display font-black flex items-center gap-2 text-sm shadow-glow shadow-primary/20">
                   <span className="relative z-10 flex items-center gap-2">
                     Explore Products
                     <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform duration-300" />
@@ -316,7 +316,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="section-warm industrial-dots py-10 md:py-12 section-divider-top overflow-hidden">
+      <section className="section-warm industrial-dots py-6 md:py-8 section-divider-top overflow-hidden">
         <div className="container-section relative z-10">
           <SectionReveal className="text-center mb-6">
             <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight">
@@ -331,23 +331,23 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="section-tinted py-10 md:py-12 section-divider-top relative">
+      <section className="section-tinted py-6 md:py-8 section-divider-top relative">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[100px] -z-10 translate-x-1/3 -translate-y-1/3"></div>
         
         <div className="container-section relative z-10">
           <SectionReveal className="text-center mb-6">
-            <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight">
+            <h2 className="text-2xl md:text-3xl font-display font-black text-heading mb-2 heading-decorated tracking-tight">
               Premium <span className="text-gradient drop-shadow-sm">Categories</span>
             </h2>
-            <p className="text-muted-foreground text-base max-w-[520px] mx-auto mt-2 font-semibold">Explore our diverse range of high-quality heavy equipment ready for global export</p>
+            <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">Explore our diverse range of high-quality heavy equipment ready for global export</p>
           </SectionReveal>
           
-          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {categoriesData.map((cat) => {
               const count = allProducts.filter(p => p.category === cat.name).length;
               return (
                 <motion.div key={cat.name} variants={staggerItem}>
-                  <Link to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative overflow-hidden rounded-[1.5rem] aspect-[4/3] block card-premium shadow-premium">
+                  <Link to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative overflow-hidden rounded-[1.5rem] aspect-[16/10] block card-premium shadow-premium">
                     <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-all duration-300 ease-in-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:contrast-[1.05]" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/90 z-10" />
                     <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
@@ -368,8 +368,8 @@ const Index = () => {
             })}
           </motion.div>
           
-          <div className="mt-12 text-center">
-            <Link to="/products" className="btn-secondary-glass inline-flex items-center gap-2">
+          <div className="mt-8 text-center">
+            <Link to="/products" className="btn-secondary-glass inline-flex items-center gap-2 text-sm px-6 py-2.5">
               Browse All Products <ArrowRight size={18} />
             </Link>
           </div>
@@ -378,41 +378,41 @@ const Index = () => {
 
       <BrandCarousel />
 
-      <section className="section-base py-10 md:py-12 section-divider-top relative overflow-hidden">
+      <section className="section-base py-6 md:py-8 section-divider-top relative overflow-hidden">
         <motion.div style={{ y: shapeY1 }} className="absolute top-[20%] right-[10%] opacity-[0.03] text-primary">
           <Globe size={400} />
         </motion.div>
         
         <div className="container-section text-center relative z-10">
           <SectionReveal>
-            <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight flex items-center justify-center gap-3">
-              <Globe className="text-primary drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]" size={32} />
+            <h2 className="text-2xl md:text-3xl font-display font-black text-heading mb-2 heading-decorated tracking-tight flex items-center justify-center gap-3">
+              <Globe className="text-primary drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]" size={28} />
               Markets We <span className="text-gradient drop-shadow-sm">Serve</span>
             </h2>
-            <p className="text-muted-foreground text-base max-w-[520px] mx-auto mb-8 mt-2 font-semibold">Strategic location in Dubai enabling seamless delivery to global markets</p>
+            <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mb-6 mt-2 font-semibold">Strategic location in Dubai enabling seamless delivery to global markets</p>
           </SectionReveal>
           
-          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 lg:grid-cols-6 gap-4 md:gap-6 max-w-6xl mx-auto">
+          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid grid-cols-2 lg:grid-cols-6 gap-3 md:gap-4 max-w-6xl mx-auto">
             {markets.map((m) => (
-              <motion.div key={m.name} variants={staggerItem} whileHover={{ y: -6 }} className="group bg-white/90 backdrop-blur-md border border-border/50 rounded-2xl p-5 flex flex-col items-center justify-center gap-4 transition-all duration-300 hover:shadow-premium hover:border-primary/50 shadow-sm relative overflow-hidden cursor-default">
+              <motion.div key={m.name} variants={staggerItem} whileHover={{ y: -6 }} className="group bg-white/90 backdrop-blur-md border border-border/50 rounded-xl p-3 md:p-4 flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:shadow-premium hover:border-primary/50 shadow-sm relative overflow-hidden cursor-default">
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md transition-transform duration-500 group-hover:scale-110 relative z-10 bg-white">
+                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-md transition-transform duration-500 group-hover:scale-110 relative z-10 bg-white">
                   <img src={m.name === "UAE" ? uaeFlag : `https://flagcdn.com/w80/${m.code}.png`} alt={m.name} className="w-full h-full object-cover" />
                 </div>
-                <span className="font-display font-extrabold text-heading text-[15px] tracking-tight relative z-10">{m.name}</span>
+                <span className="font-display font-extrabold text-heading text-[13px] tracking-tight relative z-10">{m.name}</span>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      <section className="gradient-cta py-10 md:py-12 relative overflow-hidden">
-        <div className="container-section text-center relative z-20">
+      <section className="gradient-cta py-8 md:py-10 max-h-[320px] relative overflow-hidden flex items-center">
+        <div className="container-section text-center relative z-20 w-full">
           <SectionReveal>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-black text-white mb-4 drop-shadow-lg tracking-tight">Ready to Upgrade Your Fleet?</h2>
-            <p className="text-white/90 mb-6 max-w-[520px] mx-auto text-base md:text-[17px] font-semibold drop-shadow-md">Get competitive pricing, global shipping logistics, and expert consultation from our Dubai headquarters.</p>
-            <div className="flex flex-col items-center justify-center gap-3">
-              <a href={`https://wa.me/${siteSettings?.whatsapp || "971558599045"}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 bg-white text-primary px-8 py-3.5 rounded-xl font-display font-black text-[15px] hover:scale-[1.03] hover:brightness-105 shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-400 group relative overflow-hidden">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-display font-black text-white mb-3 drop-shadow-lg tracking-tight">Ready to Upgrade Your Fleet?</h2>
+            <p className="text-white/90 mb-5 max-w-[520px] mx-auto text-sm md:text-base font-semibold drop-shadow-md">Get competitive pricing, global shipping logistics, and expert consultation from our Dubai headquarters.</p>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <a href={`https://wa.me/${siteSettings?.whatsapp || "971558599045"}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 bg-white text-primary px-6 py-2.5 rounded-xl font-display font-black text-sm hover:scale-[1.03] hover:brightness-105 shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-400 group relative overflow-hidden">
                 <span className="relative z-10 flex items-center gap-2">Start Your Enquiry <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform duration-300" /></span>
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               </a>
