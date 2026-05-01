@@ -223,7 +223,7 @@ const Index = () => {
         </motion.div>
 
         <div className="container-section relative z-10 pt-[54px] pb-6 md:pt-[60px] md:pb-8">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="hidden lg:block absolute top-[80px] right-8 z-30 w-[330px]">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="hidden lg:block absolute top-[110px] right-8 z-30 w-[310px]">
             <form onSubmit={handleSearch} className="bg-white/95 backdrop-blur-md rounded-full p-[3px] shadow-premium flex items-center gap-2 border border-white/60 focus-within:ring-2 focus-within:ring-primary/30 transition-all duration-300">
               <div className="flex-1 flex items-center gap-2.5 px-3">
                 <Search size={15} className="text-muted-foreground" />
@@ -241,8 +241,8 @@ const Index = () => {
             </form>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="max-w-[560px]">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            <div className="lg:col-span-6 lg:pr-6 max-w-[520px]">
               <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-md border border-primary/20 text-heading px-3 py-1 rounded-full text-[8px] font-display font-black uppercase tracking-[0.2em] mb-4 shadow-[0_10px_30px_-10px_rgba(245,158,11,0.2)]">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -251,7 +251,7 @@ const Index = () => {
                 Global Machinery Export Hub
               </motion.div>
 
-              <div className="text-3xl md:text-4xl lg:text-[54px] font-display font-black text-heading leading-[1.05] mb-5 text-shadow-lg drop-shadow-sm">
+              <div className="text-3xl md:text-4xl lg:text-[48px] font-display font-black text-heading leading-[1.1] mb-6 text-shadow-lg drop-shadow-sm">
                 {heroTitle.split(" ").map((word, i) => {
                   const content = (
                     <motion.span key={i} custom={i} initial="hidden" animate="visible" variants={wordVariants} className={`inline-block mr-3 lg:mr-4 ${word === "Dubai" ? "text-shimmer relative" : ""}`}>
@@ -259,7 +259,7 @@ const Index = () => {
                       {word === "Dubai" && <span className="absolute inset-0 bg-primary/20 blur-2xl -z-10 rounded-full scale-150"></span>}
                     </motion.span>
                   );
-                  return word === "Equipment" ? <span key={`wrap-${i}`}>{content}<br className="hidden md:block" /></span> : content;
+                  return (word === "Heavy" || word === "Trading") ? <span key={`wrap-${i}`}>{content}<br className="hidden md:block" /></span> : content;
                 })}
               </div>
 
@@ -268,7 +268,7 @@ const Index = () => {
               </motion.p>
 
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, delay: 0.3 }} className="flex flex-wrap gap-4">
-                <Link to="/products" className="group btn-cta px-6 py-2 rounded-xl font-display font-black flex items-center gap-2 text-[13px] shadow-glow shadow-primary/20">
+                <Link to="/products" className="group btn-cta px-8 py-2 rounded-xl font-display font-black flex items-center gap-2 text-[13px] shadow-glow shadow-primary/20">
                   <span className="relative z-10 flex items-center gap-2">
                     Explore Products
                     <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform duration-300" />
@@ -295,8 +295,8 @@ const Index = () => {
               </motion.div>
             </div>
 
-            <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50 }} style={{ x: heroImageX, y: heroImageY }} className="hidden lg:block relative lg:pt-20 lg:pl-10">
-              <div className="relative animate-float-hero hero-image-wrapper max-w-[500px] ml-auto">
+            <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50 }} style={{ x: heroImageX, y: heroImageY }} className="hidden lg:col-span-6 lg:block relative lg:pt-12 lg:pl-0">
+              <div className="relative animate-float-hero hero-image-wrapper w-full max-w-[580px] ml-auto">
                 <div className="w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden shadow-hero-image border-[1.5px] border-white/50 relative z-10 bg-white">
                   <img src={excavatorImg} alt="Heavy Equipment" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -304,14 +304,14 @@ const Index = () => {
                 <div className="absolute -inset-6 rounded-[2rem] bg-primary/10 blur-[40px] -z-10 animate-glow-breathe" />
                 <div className="absolute -inset-2 rounded-[1.5rem] bg-white/60 blur-[15px] -z-10" />
 
-                <motion.div initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.6 }} className="absolute -bottom-6 -left-6 glass-card rounded-xl px-[18px] py-[14px] z-20 shadow-premium border-accent-left">
-                  <div className="text-[22px] font-display font-black text-primary drop-shadow-sm leading-none">200+</div>
-                  <div className="text-[10px] text-heading/70 font-bold uppercase tracking-wide mt-1">Units Delivered</div>
+                <motion.div initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.6 }} className="absolute -bottom-6 -left-6 glass-card rounded-2xl px-[22px] py-[16px] z-20 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] border-accent-left">
+                  <div className="text-[26px] font-display font-black text-primary drop-shadow-md leading-none">200+</div>
+                  <div className="text-[11px] text-heading/80 font-bold uppercase tracking-wide mt-1.5">Units Delivered</div>
                 </motion.div>
                 
-                <motion.div initial={{ opacity: 0, scale: 0.8, x: -20 }} animate={{ opacity: 1, scale: 1, x: 0 }} transition={{ delay: 1.4, duration: 0.6 }} className="absolute -top-6 -right-6 glass-card rounded-xl px-[18px] py-[14px] z-20 shadow-premium">
-                  <div className="text-[22px] font-display font-black text-primary drop-shadow-sm leading-none">Global</div>
-                  <div className="text-[10px] text-heading/70 font-bold uppercase tracking-wide mt-1">Export Network</div>
+                <motion.div initial={{ opacity: 0, scale: 0.8, x: -20 }} animate={{ opacity: 1, scale: 1, x: 0 }} transition={{ delay: 1.4, duration: 0.6 }} className="absolute -top-6 -right-6 glass-card rounded-2xl px-[22px] py-[16px] z-20 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)]">
+                  <div className="text-[26px] font-display font-black text-primary drop-shadow-md leading-none">Global</div>
+                  <div className="text-[11px] text-heading/80 font-bold uppercase tracking-wide mt-1.5">Export Network</div>
                 </motion.div>
               </div>
             </motion.div>
