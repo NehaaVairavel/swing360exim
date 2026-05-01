@@ -223,19 +223,19 @@ const Index = () => {
         </motion.div>
 
         <div className="container-section relative z-10 pt-[54px] pb-6 md:pt-[60px] md:pb-8">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="hidden lg:block absolute top-[80px] right-8 z-30 w-[360px]">
-            <form onSubmit={handleSearch} className="bg-white/95 backdrop-blur-md rounded-full p-1 shadow-premium flex items-center gap-2 border border-white/60 focus-within:ring-2 focus-within:ring-primary/30 transition-all duration-300">
-              <div className="flex-1 flex items-center gap-2.5 px-4">
-                <Search size={16} className="text-muted-foreground" />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="hidden lg:block absolute top-[80px] right-8 z-30 w-[330px]">
+            <form onSubmit={handleSearch} className="bg-white/95 backdrop-blur-md rounded-full p-[3px] shadow-premium flex items-center gap-2 border border-white/60 focus-within:ring-2 focus-within:ring-primary/30 transition-all duration-300">
+              <div className="flex-1 flex items-center gap-2.5 px-3">
+                <Search size={15} className="text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Search Excavators, CAT 320..."
+                  placeholder="Search Excavators..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="bg-transparent border-none outline-none text-[12px] text-heading placeholder:text-muted-foreground w-full font-semibold"
                 />
               </div>
-              <button type="submit" className="bg-primary text-white px-5 py-2 rounded-full hover:bg-primary-dark transition-all shadow-xl shadow-primary/25 font-black uppercase tracking-widest text-[11px]">
+              <button type="submit" className="bg-primary text-white px-5 py-[7px] rounded-full hover:bg-primary-dark transition-all shadow-xl shadow-primary/25 font-black uppercase tracking-widest text-[11px]">
                 Search
               </button>
             </form>
@@ -251,13 +251,16 @@ const Index = () => {
                 Global Machinery Export Hub
               </motion.div>
 
-              <div className="text-2xl md:text-3xl lg:text-[50px] font-display font-black text-heading leading-[1.05] mb-4 text-shadow-lg drop-shadow-sm">
-                {heroTitle.split(" ").map((word, i) => (
-                  <motion.span key={i} custom={i} initial="hidden" animate="visible" variants={wordVariants} className={`inline-block mr-3 lg:mr-4 ${word === "Dubai" ? "text-shimmer relative" : ""}`}>
-                    {word}
-                    {word === "Dubai" && <span className="absolute inset-0 bg-primary/20 blur-2xl -z-10 rounded-full scale-150"></span>}
-                  </motion.span>
-                ))}
+              <div className="text-3xl md:text-4xl lg:text-[54px] font-display font-black text-heading leading-[1.05] mb-5 text-shadow-lg drop-shadow-sm">
+                {heroTitle.split(" ").map((word, i) => {
+                  const content = (
+                    <motion.span key={i} custom={i} initial="hidden" animate="visible" variants={wordVariants} className={`inline-block mr-3 lg:mr-4 ${word === "Dubai" ? "text-shimmer relative" : ""}`}>
+                      {word}
+                      {word === "Dubai" && <span className="absolute inset-0 bg-primary/20 blur-2xl -z-10 rounded-full scale-150"></span>}
+                    </motion.span>
+                  );
+                  return word === "Equipment" ? <span key={`wrap-${i}`}>{content}<br className="hidden md:block" /></span> : content;
+                })}
               </div>
 
               <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.55 }} className="text-[13px] md:text-sm mb-4 text-heading/65 leading-[1.6] font-semibold max-w-[520px]">
@@ -301,14 +304,14 @@ const Index = () => {
                 <div className="absolute -inset-6 rounded-[2rem] bg-primary/10 blur-[40px] -z-10 animate-glow-breathe" />
                 <div className="absolute -inset-2 rounded-[1.5rem] bg-white/60 blur-[15px] -z-10" />
 
-                <motion.div initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.6 }} className="absolute -bottom-6 -left-6 glass-card rounded-xl px-4 py-3 z-20 shadow-premium border-accent-left">
-                  <div className="text-xl font-display font-black text-primary drop-shadow-sm">200+</div>
-                  <div className="text-[9px] text-heading/70 font-bold uppercase tracking-wide mt-0.5">Units Delivered</div>
+                <motion.div initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.6 }} className="absolute -bottom-6 -left-6 glass-card rounded-xl px-[18px] py-[14px] z-20 shadow-premium border-accent-left">
+                  <div className="text-[22px] font-display font-black text-primary drop-shadow-sm leading-none">200+</div>
+                  <div className="text-[10px] text-heading/70 font-bold uppercase tracking-wide mt-1">Units Delivered</div>
                 </motion.div>
                 
-                <motion.div initial={{ opacity: 0, scale: 0.8, x: -20 }} animate={{ opacity: 1, scale: 1, x: 0 }} transition={{ delay: 1.4, duration: 0.6 }} className="absolute -top-6 -right-6 glass-card rounded-xl px-4 py-3 z-20 shadow-premium">
-                  <div className="text-xl font-display font-black text-primary drop-shadow-sm">Global</div>
-                  <div className="text-[9px] text-heading/70 font-bold uppercase tracking-wide mt-0.5">Export Network</div>
+                <motion.div initial={{ opacity: 0, scale: 0.8, x: -20 }} animate={{ opacity: 1, scale: 1, x: 0 }} transition={{ delay: 1.4, duration: 0.6 }} className="absolute -top-6 -right-6 glass-card rounded-xl px-[18px] py-[14px] z-20 shadow-premium">
+                  <div className="text-[22px] font-display font-black text-primary drop-shadow-sm leading-none">Global</div>
+                  <div className="text-[10px] text-heading/70 font-bold uppercase tracking-wide mt-1">Export Network</div>
                 </motion.div>
               </div>
             </motion.div>
