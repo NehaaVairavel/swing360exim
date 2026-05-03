@@ -322,16 +322,22 @@ const Products = () => {
       >
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
           <div className="bg-white/75 backdrop-blur-[12px] rounded-[28px] border border-[#edf2f7] p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_320px_140px] items-center gap-[18px] transition-all">
-            {/* Search Input (minmax 420px) */}
-            <div className="relative group w-full h-[72px]">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={24} />
+            {/* 1. LUXURY SEARCH BAR (Main Focus) */}
+            <div className="relative group w-full h-[68px] transition-all duration-300 hover:-translate-y-[1px]">
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-100 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
+                <Search className="text-slate-500 group-focus-within:text-primary transition-colors" size={20} />
+              </div>
               <input 
                 type="text" 
-                placeholder="Search machinery..." 
+                placeholder="Search excavators, CAT 320D, loaders..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-16 pr-6 h-full bg-white border border-slate-200 rounded-[24px] text-[16px] font-bold text-heading focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400 shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
+                className="w-full h-full pl-16 pr-32 bg-gradient-to-b from-white to-[#f8fafc] border border-[#e5e7eb] rounded-[22px] text-[17px] font-medium text-heading placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-[4px] focus:ring-primary/10 transition-all shadow-[0_10px_25px_rgba(15,23,42,0.06)]"
               />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-2 px-4 py-2 bg-orange-50 text-primary rounded-full text-sm font-semibold pointer-events-none border border-orange-100">
+                <span className="text-[16px]">⌕</span>
+                <span>Quick Search</span>
+              </div>
             </div>
 
             {/* Sort Dropdown (220px) */}
