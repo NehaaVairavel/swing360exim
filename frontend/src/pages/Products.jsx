@@ -270,7 +270,7 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased">
-      {/* 1. PREMIUM HERO SECTION REDESIGN */}
+      {/* 1. CLONED HERO SECTION TYPOGRAPHY */}
       <section className="relative pt-12 pb-8 overflow-hidden bg-white border-b border-slate-50">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -291,19 +291,16 @@ const Products = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col items-center"
           >
-            <h1 className="text-3xl md:text-5xl lg:text-7xl font-display font-black leading-[1.1] tracking-tight flex flex-col items-center">
-              <div>
-                <span className="text-[#0B1533]">Our Heavy Machinery</span> <span className="text-primary">Fleet</span>
-              </div>
-              <div className="w-24 h-1 bg-primary mt-4 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.3)]" />
+            <h1 className="text-3xl md:text-4xl font-display font-black text-heading mb-2 heading-decorated tracking-tight">
+              Our Heavy Machinery <span className="text-gradient drop-shadow-sm">Fleet</span>
             </h1>
             
-            <p className="text-slate-500 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto mt-8">
+            <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">
               Engineered for performance, curated for global markets.
             </p>
           </motion.div>
