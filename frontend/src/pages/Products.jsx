@@ -288,8 +288,8 @@ const Products = () => {
       <div 
         className={`sticky top-[72px] z-[40] transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg py-2' : 'py-4'}`}
       >
-        <div className="container-section max-w-[1600px] mx-auto">
-          <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-2 flex flex-col md:flex-row items-stretch md:items-center gap-3">
+        <div className="container-section max-w-[1600px] mx-auto px-4 md:px-6">
+          <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-1.5 flex flex-col md:flex-row items-stretch md:items-center gap-3">
             {/* Search Part */}
             <div className="flex-1 relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
@@ -298,7 +298,7 @@ const Products = () => {
                 placeholder="Search machinery..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-6 h-[46px] bg-slate-50 border-none rounded-lg text-[14px] font-medium text-heading focus:ring-2 focus:ring-primary/20 transition-all placeholder-slate-400"
+                className="w-full pl-11 pr-6 h-[44px] bg-slate-50 border-none rounded-lg text-[14px] font-medium text-heading focus:ring-2 focus:ring-primary/20 transition-all placeholder-slate-400"
               />
             </div>
 
@@ -308,7 +308,7 @@ const Products = () => {
                 <select 
                   value={activeSort}
                   onChange={(e) => setActiveSort(e.target.value)}
-                  className="pl-4 pr-10 h-[46px] bg-white border border-slate-200 rounded-lg text-[12px] font-bold text-slate-700 appearance-none outline-none focus:border-primary transition-all cursor-pointer min-w-[160px]"
+                  className="pl-4 pr-10 h-[44px] bg-white border border-slate-200 rounded-lg text-[12px] font-bold text-slate-700 appearance-none outline-none focus:border-primary transition-all cursor-pointer min-w-[150px]"
                 >
                   <option value="Newest">Newest First</option>
                   <option value="Price: Low to High">Price: Low to High</option>
@@ -319,18 +319,17 @@ const Products = () => {
               </div>
 
               {/* Currency */}
-              <div className="h-[46px] px-2 bg-white border border-slate-200 rounded-lg flex items-center justify-center">
+              <div className="h-[44px] px-2 bg-white border border-slate-200 rounded-lg flex items-center justify-center">
                 <CurrencyToggle variant="compact" />
               </div>
 
               {/* Reset */}
               <button 
                 onClick={handleReset}
-                className="h-[46px] px-4 bg-slate-900 text-white rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-primary transition-all flex items-center gap-2"
-                title="Reset Filters"
+                className="h-[44px] px-4 bg-slate-900 text-white rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-primary transition-all flex items-center gap-2"
               >
                 <RotateCcw size={14} />
-                <span className="hidden lg:inline">Reset</span>
+                <span>Reset</span>
               </button>
             </div>
           </div>
@@ -339,16 +338,16 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1600px] mx-auto py-8 lg:py-12">
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="container-section max-w-[1600px] mx-auto py-8 px-4 md:px-6">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
           
           {/* 3. LEFT SIDEBAR (Premium Accordion Filters) */}
-          <aside className="w-full lg:w-[280px] shrink-0 sticky top-[140px]">
-            <div className="bg-white rounded-[22px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 p-2 flex flex-col gap-1 overflow-hidden">
+          <aside className="w-full lg:w-[280px] shrink-0 lg:sticky lg:top-[140px] lg:max-h-[calc(100vh-180px)] lg:overflow-y-auto hide-scrollbar">
+            <div className="bg-white rounded-[24px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col overflow-hidden">
               
               <FilterAccordion title="Categories" defaultOpen={true}>
-                <div className="flex flex-wrap gap-2 pb-4 pt-2">
-                  {MASTER_CATEGORIES.filter(c => c !== "All" && c !== "Material Handlers" && c !== "Others").map(cat => {
+                <div className="flex flex-wrap gap-1.5 pb-4 pt-2">
+                  {MASTER_CATEGORIES.filter(c => c !== "All").map(cat => {
                     const isSelected = selectedCategories.includes(cat);
                     return (
                       <button 
@@ -357,7 +356,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`px-3 py-2 rounded-xl text-[12px] font-bold transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/40'}`}
+                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/40'}`}
                       >
                         {cat}
                       </button>
@@ -366,9 +365,9 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Top Brands">
+              <FilterAccordion title="Brands">
                 <div className="flex flex-col gap-2 pb-4 pt-2">
-                  {["CAT", "JCB", "Komatsu", "Volvo", "Hyundai"].map(brand => {
+                  {["CAT", "JCB", "Komatsu", "Volvo", "Hyundai", "Doosan", "Hitachi", "Sany"].map(brand => {
                     const isSelected = selectedBrands.includes(brand);
                     return (
                       <label key={brand} className="flex items-center gap-3 cursor-pointer group">
@@ -381,7 +380,7 @@ const Products = () => {
                             setSelectedBrands(next);
                           }}
                         />
-                        <span className={`text-[14px] font-semibold transition-colors ${isSelected ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{brand}</span>
+                        <span className={`text-[13px] font-semibold transition-colors ${isSelected ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{brand}</span>
                       </label>
                     );
                   })}
@@ -390,7 +389,7 @@ const Products = () => {
 
               <FilterAccordion title="Location">
                 <div className="grid grid-cols-2 gap-2 pb-4 pt-2">
-                  {["UAE", "India", "Saudi", "Africa"].map(loc => {
+                  {["UAE", "India", "Saudi", "Africa", "USA", "Europe"].map(loc => {
                     const isSelected = selectedLocations.includes(loc);
                     return (
                       <button 
@@ -399,7 +398,7 @@ const Products = () => {
                           const next = isSelected ? selectedLocations.filter(l => l !== loc) : [...selectedLocations, loc];
                           setSelectedLocations(next);
                         }}
-                        className={`px-2 py-2 rounded-lg text-[11px] font-bold border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/50'}`}
+                        className={`px-2 py-2 rounded-lg text-[11px] font-bold border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/50'}`}
                       >
                         {loc}
                       </button>
@@ -408,54 +407,77 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Technical Specs">
-                <div className="flex flex-col gap-6 pb-4 pt-2">
-                  {/* Engine Hours */}
-                  <div>
-                    <div className="flex justify-between mb-3">
-                      <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Engine Hours</span>
-                      <span className="text-[11px] font-bold text-primary">{engineHours} hrs</span>
-                    </div>
-                    <input 
-                      type="range" min="0" max="15000" step="500" value={engineHours}
-                      onChange={(e) => setEngineHours(parseInt(e.target.value))}
-                      className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary"
-                    />
+              <FilterAccordion title="Engine Hours">
+                <div className="pb-4 pt-2">
+                  <div className="flex justify-between mb-3">
+                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Max Hours</span>
+                    <span className="text-[11px] font-bold text-primary">{engineHours} hrs</span>
                   </div>
+                  <input 
+                    type="range" min="0" max="15000" step="500" value={engineHours}
+                    onChange={(e) => setEngineHours(parseInt(e.target.value))}
+                    className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary"
+                  />
+                  <div className="flex justify-between mt-2 text-[9px] font-black text-slate-300 uppercase">
+                    <span>0</span>
+                    <span>15,000+</span>
+                  </div>
+                </div>
+              </FilterAccordion>
 
-                  {/* Price */}
-                  <div>
-                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider block mb-3">Price Range</span>
-                    <div className="grid grid-cols-2 gap-2">
-                      <input 
-                        type="number" placeholder="Min" value={minPrice || ""}
-                        onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)}
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold outline-none focus:ring-1 focus:ring-primary"
-                      />
-                      <input 
-                        type="number" placeholder="Max" value={maxPrice || ""}
-                        onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold outline-none focus:ring-1 focus:ring-primary"
-                      />
-                    </div>
-                  </div>
+              <FilterAccordion title="Price Range">
+                <div className="grid grid-cols-2 gap-2 pb-4 pt-2">
+                  <input 
+                    type="number" placeholder="Min" value={minPrice || ""}
+                    onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[12px] font-bold outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <input 
+                    type="number" placeholder="Max" value={maxPrice || ""}
+                    onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[12px] font-bold outline-none focus:ring-1 focus:ring-primary"
+                  />
                 </div>
               </FilterAccordion>
 
               <FilterAccordion title="Condition">
                 <div className="flex flex-col gap-2 pb-4 pt-2">
-                  {["All", "Used", "Refurbished", "Ready Stock"].map(cond => (
+                  {["All", "New", "Used", "Refurbished", "Rental"].map(cond => (
                     <label key={cond} className="flex items-center gap-3 cursor-pointer group">
                       <input 
                         type="radio" name="condition" checked={selectedCondition === cond}
                         onChange={() => setSelectedCondition(cond)}
                         className="w-4 h-4 text-primary focus:ring-primary border-slate-300" 
                       />
-                      <span className={`text-[14px] font-semibold transition-colors ${selectedCondition === cond ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{cond}</span>
+                      <span className={`text-[13px] font-semibold transition-colors ${selectedCondition === cond ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{cond}</span>
                     </label>
                   ))}
                 </div>
               </FilterAccordion>
+
+              <FilterAccordion title="Availability">
+                <div className="flex flex-col gap-2 pb-4 pt-2">
+                  {["All", "Available", "Sold", "Coming Soon"].map(status => (
+                    <label key={status} className="flex items-center gap-3 cursor-pointer group">
+                      <input 
+                        type="radio" name="status" checked={activeStatus === status}
+                        onChange={() => setActiveStatus(status)}
+                        className="w-4 h-4 text-primary focus:ring-primary border-slate-300" 
+                      />
+                      <span className={`text-[13px] font-semibold transition-colors ${activeStatus === status ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{status}</span>
+                    </label>
+                  ))}
+                </div>
+              </FilterAccordion>
+
+              <div className="p-4 border-t border-slate-50 bg-slate-50/50">
+                <button 
+                  onClick={handleReset}
+                  className="w-full h-[40px] bg-white border border-slate-200 text-heading rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm"
+                >
+                  Clear All Filters
+                </button>
+              </div>
             </div>
           </aside>
 
