@@ -20,6 +20,34 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
+const FilterAccordion = ({ title, children, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-slate-50 last:border-none">
+      <button 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors group"
+      >
+        <span className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em]">{title}</span>
+        <ChevronDown size={14} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="overflow-hidden px-4"
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const itemVariant = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
@@ -258,50 +286,50 @@ const Products = () => {
 
       {/* 2. SEARCH CONTROL BAR (Sticky) */}
       <div 
-        className={`sticky top-[72px] z-[40] transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg py-3' : 'py-6'}`}
+        className={`sticky top-[72px] z-[40] transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg py-2' : 'py-4'}`}
       >
-        <div className="container-section max-w-7xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-3 flex flex-col md:flex-row items-stretch md:items-center gap-4">
+        <div className="container-section max-w-[1600px] mx-auto">
+          <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-2 flex flex-col md:flex-row items-stretch md:items-center gap-3">
             {/* Search Part */}
             <div className="flex-1 relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
               <input 
                 type="text" 
-                placeholder="Search CAT, JCB, Loader, Excavator..." 
+                placeholder="Search machinery..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-6 h-[52px] bg-slate-50 border-none rounded-xl text-[15px] font-medium text-heading focus:ring-2 focus:ring-primary/20 transition-all placeholder-slate-400"
+                className="w-full pl-11 pr-6 h-[46px] bg-slate-50 border-none rounded-lg text-[14px] font-medium text-heading focus:ring-2 focus:ring-primary/20 transition-all placeholder-slate-400"
               />
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {/* Sort */}
               <div className="relative group">
                 <select 
                   value={activeSort}
                   onChange={(e) => setActiveSort(e.target.value)}
-                  className="pl-4 pr-10 h-[52px] bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 appearance-none outline-none focus:border-primary transition-all cursor-pointer"
+                  className="pl-4 pr-10 h-[46px] bg-white border border-slate-200 rounded-lg text-[12px] font-bold text-slate-700 appearance-none outline-none focus:border-primary transition-all cursor-pointer min-w-[160px]"
                 >
                   <option value="Newest">Newest First</option>
                   <option value="Price: Low to High">Price: Low to High</option>
                   <option value="Price: High to Low">Price: High to Low</option>
                   <option value="Hours: Low to High">Hours: Low to High</option>
                 </select>
-                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
               </div>
 
               {/* Currency */}
-              <div className="h-[52px] px-3 bg-white border border-slate-200 rounded-xl flex items-center justify-center">
+              <div className="h-[46px] px-2 bg-white border border-slate-200 rounded-lg flex items-center justify-center">
                 <CurrencyToggle variant="compact" />
               </div>
 
               {/* Reset */}
               <button 
                 onClick={handleReset}
-                className="h-[52px] px-5 bg-slate-900 text-white rounded-xl font-bold text-[11px] uppercase tracking-wider hover:bg-primary transition-all flex items-center gap-2"
+                className="h-[46px] px-4 bg-slate-900 text-white rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-primary transition-all flex items-center gap-2"
                 title="Reset Filters"
               >
-                <RotateCcw size={16} />
+                <RotateCcw size={14} />
                 <span className="hidden lg:inline">Reset</span>
               </button>
             </div>
@@ -311,17 +339,15 @@ const Products = () => {
 
 
 
-      <div className="container-section py-8 lg:py-12">
+      <div className="container-section max-w-[1600px] mx-auto py-8 lg:py-12">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           
-          {/* 3. LEFT SIDEBAR (Premium Filters) */}
-          <aside className="w-full lg:w-[320px] shrink-0 sticky top-[160px]">
-            <div className="bg-white rounded-[22px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 p-6 flex flex-col gap-8">
+          {/* 3. LEFT SIDEBAR (Premium Accordion Filters) */}
+          <aside className="w-full lg:w-[280px] shrink-0 sticky top-[140px]">
+            <div className="bg-white rounded-[22px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 p-2 flex flex-col gap-1 overflow-hidden">
               
-              {/* Categories */}
-              <div>
-                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Categories</h3>
-                <div className="flex flex-wrap gap-2">
+              <FilterAccordion title="Categories" defaultOpen={true}>
+                <div className="flex flex-wrap gap-2 pb-4 pt-2">
                   {MASTER_CATEGORIES.filter(c => c !== "All" && c !== "Material Handlers" && c !== "Others").map(cat => {
                     const isSelected = selectedCategories.includes(cat);
                     return (
@@ -338,12 +364,10 @@ const Products = () => {
                     );
                   })}
                 </div>
-              </div>
+              </FilterAccordion>
 
-              {/* Brand Filter */}
-              <div>
-                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Top Brands</h3>
-                <div className="flex flex-col gap-2">
+              <FilterAccordion title="Top Brands">
+                <div className="flex flex-col gap-2 pb-4 pt-2">
                   {["CAT", "JCB", "Komatsu", "Volvo", "Hyundai"].map(brand => {
                     const isSelected = selectedBrands.includes(brand);
                     return (
@@ -362,12 +386,10 @@ const Products = () => {
                     );
                   })}
                 </div>
-              </div>
+              </FilterAccordion>
 
-              {/* Location */}
-              <div>
-                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Location</h3>
-                <div className="grid grid-cols-2 gap-2">
+              <FilterAccordion title="Location">
+                <div className="grid grid-cols-2 gap-2 pb-4 pt-2">
                   {["UAE", "India", "Saudi", "Africa"].map(loc => {
                     const isSelected = selectedLocations.includes(loc);
                     return (
@@ -384,60 +406,48 @@ const Products = () => {
                     );
                   })}
                 </div>
-              </div>
+              </FilterAccordion>
 
-              {/* Engine Hours Slider */}
-              <div>
-                <div className="flex justify-between mb-4">
-                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Engine Hours</h3>
-                  <span className="text-[11px] font-bold text-primary">{engineHours} hrs</span>
-                </div>
-                <input 
-                  type="range"
-                  min="0"
-                  max="15000"
-                  step="500"
-                  value={engineHours}
-                  onChange={(e) => setEngineHours(parseInt(e.target.value))}
-                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between mt-2 text-[9px] font-black text-slate-300 uppercase">
-                  <span>0 hrs</span>
-                  <span>15,000+ hrs</span>
-                </div>
-              </div>
+              <FilterAccordion title="Technical Specs">
+                <div className="flex flex-col gap-6 pb-4 pt-2">
+                  {/* Engine Hours */}
+                  <div>
+                    <div className="flex justify-between mb-3">
+                      <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Engine Hours</span>
+                      <span className="text-[11px] font-bold text-primary">{engineHours} hrs</span>
+                    </div>
+                    <input 
+                      type="range" min="0" max="15000" step="500" value={engineHours}
+                      onChange={(e) => setEngineHours(parseInt(e.target.value))}
+                      className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary"
+                    />
+                  </div>
 
-              {/* Price Range */}
-              <div>
-                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Price Range</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  <input 
-                    type="number" 
-                    placeholder="Min"
-                    value={minPrice || ""}
-                    onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold focus:ring-1 focus:ring-primary outline-none"
-                  />
-                  <input 
-                    type="number" 
-                    placeholder="Max"
-                    value={maxPrice || ""}
-                    onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold focus:ring-1 focus:ring-primary outline-none"
-                  />
+                  {/* Price */}
+                  <div>
+                    <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider block mb-3">Price Range</span>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input 
+                        type="number" placeholder="Min" value={minPrice || ""}
+                        onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold outline-none focus:ring-1 focus:ring-primary"
+                      />
+                      <input 
+                        type="number" placeholder="Max" value={maxPrice || ""}
+                        onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold outline-none focus:ring-1 focus:ring-primary"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </FilterAccordion>
 
-              {/* Condition */}
-              <div>
-                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Condition</h3>
-                <div className="flex flex-col gap-2">
+              <FilterAccordion title="Condition">
+                <div className="flex flex-col gap-2 pb-4 pt-2">
                   {["All", "Used", "Refurbished", "Ready Stock"].map(cond => (
                     <label key={cond} className="flex items-center gap-3 cursor-pointer group">
                       <input 
-                        type="radio" 
-                        name="condition" 
-                        checked={selectedCondition === cond}
+                        type="radio" name="condition" checked={selectedCondition === cond}
                         onChange={() => setSelectedCondition(cond)}
                         className="w-4 h-4 text-primary focus:ring-primary border-slate-300" 
                       />
@@ -445,7 +455,7 @@ const Products = () => {
                     </label>
                   ))}
                 </div>
-              </div>
+              </FilterAccordion>
             </div>
           </aside>
 
