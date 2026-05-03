@@ -77,14 +77,14 @@ const Contact = () => {
         <AnimatedGear size={280} />
       </div>
 
-      <div className="flex-1 flex flex-col justify-center py-8 md:py-12 relative z-10">
+      <div className="flex-1 flex flex-col justify-center pt-6 md:pt-8 pb-8 md:pb-10 relative z-10">
         <div className="container-section">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center max-w-2xl mx-auto mb-4">
-          <h1 className="text-3xl md:text-4xl font-display font-extrabold text-heading mb-2 tracking-tight">Get in <span className="text-gradient">Touch</span></h1>
-          <p className="text-muted-foreground text-base">Ready to discuss your heavy equipment needs? Our dedicated team is here to assist you globally.</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center max-w-2xl mx-auto mb-0">
+          <h1 className="text-3xl md:text-4xl font-display font-extrabold text-heading mb-3 tracking-tight">Get in <span className="text-gradient">Touch</span></h1>
+          <p className="text-muted-foreground text-base mt-0">Ready to discuss your heavy equipment needs? Our dedicated team is here to assist you globally.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch mt-6 md:mt-8">
           <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="lg:col-span-5 h-full">
             <div className="card-premium rounded-2xl p-5 md:p-8 border-accent-left relative overflow-hidden h-full flex flex-col justify-between">
                <div className="absolute -right-10 -bottom-10 opacity-5 pointer-events-none"><AnimatedGear size={200} className="[animation-duration:30s]" /></div>
