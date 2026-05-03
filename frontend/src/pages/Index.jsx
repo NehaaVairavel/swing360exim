@@ -38,8 +38,14 @@ const categoriesData = [
   { name: "Rollers", image: rollerImg },
   { name: "Skid Steer", image: skidSteerImg },
   { name: "Buckets", image: bucketsImg },
-  { name: "Material Handlers", image: materialHandlerImg },
-  { name: "Others", image: othersImg },
+];
+
+const SECONDARY_CATEGORIES = [
+  "Mini Excavators", "Crawler Excavators", "Long Reach Excavators",
+  "Bulldozers", "Motor Graders", "Road Rollers", "Vibratory Rollers",
+  "Telehandlers", "Forklifts", "Generators", "Compactors",
+  "Attachments", "Breakers", "Material Handlers", "Crushers",
+  "Screeners", "Used Machinery", "Ready Stock", "Others"
 ];
 
 const markets = [
@@ -335,35 +341,46 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="section-tinted py-6 md:py-8 section-divider-top relative">
+      <section className="section-tinted py-16 md:py-24 section-divider-top relative">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[100px] -z-10 translate-x-1/3 -translate-y-1/3"></div>
         
         <div className="container-section relative z-10">
-          <SectionReveal className="text-center mb-6">
-            <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight">
+          <SectionReveal className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-display font-black text-heading mb-4 heading-decorated tracking-tight">
               Premium <span className="text-gradient drop-shadow-sm">Categories</span>
             </h2>
-            <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">Explore our diverse range of high-quality heavy equipment ready for global export</p>
+            <p className="text-muted-foreground text-base max-w-[600px] mx-auto mt-4 font-semibold leading-relaxed">
+              Discover our world-class inventory of heavy machinery, expertly curated for global construction and industrial requirements.
+            </p>
           </SectionReveal>
           
-          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4">
+          {/* Section 1: Featured Image Cards */}
+          <motion.div 
+            variants={staggerContainer} 
+            initial="hidden" 
+            whileInView="visible" 
+            viewport={{ once: true, margin: "-100px" }} 
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-20"
+          >
             {categoriesData.map((cat) => {
               const count = allProducts.filter(p => p.category === cat.name).length;
               return (
                 <motion.div key={cat.name} variants={staggerItem}>
-                  <Link to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative overflow-hidden rounded-[1.2rem] aspect-[4/3] block card-premium shadow-premium">
-                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-all duration-300 ease-in-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:contrast-[1.05]" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/90 z-10" />
+                  <Link to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative overflow-hidden rounded-[22px] aspect-[4/3] block bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.1)] transition-all duration-500">
+                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-all duration-700 ease-in-out group-hover:scale-110 group-hover:brightness-110" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 z-10" />
+                    
                     <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
-                      <h3 className="font-display font-extrabold text-xl text-white drop-shadow-md transform transition-transform duration-500 group-hover:translate-y-[-4px]">{cat.name}</h3>
-                      <div className="flex items-center gap-2 mt-2 overflow-hidden">
-                        <div className="h-[2px] w-0 bg-primary group-hover:w-8 transition-all duration-500 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-                        <span className="text-white/0 group-hover:text-white/90 text-[10px] font-black uppercase tracking-wider transition-all duration-500 translate-x-[-15px] group-hover:translate-x-0">View Products</span>
+                      <h3 className="font-display font-black text-xl text-white drop-shadow-lg tracking-tight uppercase group-hover:text-primary transition-colors duration-300">{cat.name}</h3>
+                      <div className="flex items-center gap-2 mt-2">
+                        <div className="h-[2px] w-6 bg-primary rounded-full" />
+                        <span className="text-white/80 text-[9px] font-black uppercase tracking-[0.2em]">Explore Hub</span>
                       </div>
                     </div>
+
                     <div className="absolute top-4 right-4 z-30">
-                      <div className="bg-primary/95 backdrop-blur-md text-white px-3 py-1 rounded-full text-[12px] font-black shadow-lg shadow-primary/30 flex items-center justify-center min-w-[32px] border border-white/20">
-                        {count}
+                      <div className="bg-white/90 backdrop-blur-md text-heading px-3 py-1 rounded-lg text-[11px] font-black shadow-lg flex items-center justify-center border border-slate-200/50">
+                        {count} Units
                       </div>
                     </div>
                   </Link>
@@ -371,11 +388,43 @@ const Index = () => {
               );
             })}
           </motion.div>
-          
-          <div className="mt-8 text-center">
-            <Link to="/products" className="btn-secondary-glass inline-flex items-center gap-2 text-sm px-6 py-2.5">
-              Browse All Products <ArrowRight size={18} />
-            </Link>
+
+          {/* Section 2: All Categories Pill Grid */}
+          <div className="pt-16 border-t border-slate-100">
+            <SectionReveal className="text-center mb-10">
+              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">Deep Catalog Discovery</h3>
+              <h2 className="text-2xl md:text-3xl font-display font-black text-heading tracking-tight">All Equipment Categories</h2>
+            </SectionReveal>
+
+            <motion.div 
+              variants={staggerContainer} 
+              initial="hidden" 
+              whileInView="visible" 
+              viewport={{ once: true }}
+              className="flex flex-wrap items-center justify-center gap-3 md:gap-4 max-w-6xl mx-auto"
+            >
+              {SECONDARY_CATEGORIES.map((cat, i) => {
+                const count = allProducts.filter(p => p.category === cat).length;
+                return (
+                  <motion.div key={cat} variants={staggerItem}>
+                    <Link 
+                      to={`/products?category=${encodeURIComponent(cat)}`}
+                      className="px-6 py-3 bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-600 hover:border-primary hover:text-primary hover:bg-orange-50/30 transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-primary/5 flex items-center gap-2 group"
+                    >
+                      {cat}
+                      <span className="text-[10px] font-black text-slate-300 group-hover:text-primary/40 transition-colors">{count}</span>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+
+            <div className="mt-16 text-center">
+              <Link to="/products" className="inline-flex items-center gap-3 px-10 py-4 bg-slate-900 text-white rounded-xl font-display font-black text-[14px] uppercase tracking-widest hover:bg-primary hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 shadow-xl shadow-slate-900/10 group">
+                Browse Full Catalog
+                <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform duration-300" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
