@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { MessageCircle, Clock, MapPin } from 'lucide-react';
+import { MessageCircle, Clock, MapPin, RotateCcw } from 'lucide-react';
 import ProductCarousel from './ProductCarousel';
 import { cleanPrice } from '@/utils/priceFormatter';
 import { useCurrency } from '@/context/CurrencyContext';
