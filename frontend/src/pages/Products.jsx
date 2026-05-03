@@ -28,9 +28,9 @@ const FilterAccordion = ({ title, children, defaultOpen = false }) => {
     <div className="border-b border-slate-50 last:border-none">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 hover:bg-slate-50 transition-colors group"
+        className="w-full flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group"
       >
-        <span className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em]">{title}</span>
+        <span className="text-[10px] font-black text-slate-900 uppercase tracking-[0.25em]">{title}</span>
         <ChevronDown size={14} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
       </button>
       <AnimatePresence>
@@ -342,8 +342,8 @@ const Products = () => {
           >
             {/* 1. COMPACT LUXURY SEARCH BAR (White Card) */}
             <div className="relative group w-full h-[52px] transition-all duration-300">
-              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-[36px] h-[36px] rounded-full bg-slate-50 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
-                <Search className="text-slate-400 group-focus-within:text-primary transition-colors" size={16} />
+              <div className="absolute left-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-slate-50 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
+                <Search className="text-slate-500 group-focus-within:text-primary transition-colors" size={18} />
               </div>
               <input 
                 type="text" 
@@ -402,7 +402,7 @@ const Products = () => {
             <div className="bg-white rounded-[24px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col overflow-hidden">
               
               <FilterAccordion title="Categories" defaultOpen={true}>
-                <div className="flex flex-wrap gap-1.5 pb-4 pt-2">
+                <div className="flex flex-wrap gap-2 pb-6 pt-2">
                   {MASTER_CATEGORIES.filter(c => c !== "All").map(cat => {
                     const isSelected = selectedCategories.includes(cat);
                     return (
@@ -412,7 +412,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/40'}`}
+                        className={`px-4 py-2.5 rounded-xl text-[10px] font-extrabold uppercase tracking-tight transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:border-primary/30 hover:bg-slate-50'}`}
                       >
                         {cat}
                       </button>
@@ -444,7 +444,7 @@ const Products = () => {
               </FilterAccordion>
 
               <FilterAccordion title="Location">
-                <div className="grid grid-cols-2 gap-2 pb-4 pt-2">
+                <div className="grid grid-cols-2 gap-2.5 pb-6 pt-2">
                   {["UAE", "India", "Saudi", "Africa", "USA", "Europe"].map(loc => {
                     const isSelected = selectedLocations.includes(loc);
                     return (
@@ -454,7 +454,7 @@ const Products = () => {
                           const next = isSelected ? selectedLocations.filter(l => l !== loc) : [...selectedLocations, loc];
                           setSelectedLocations(next);
                         }}
-                        className={`px-2 py-2 rounded-lg text-[11px] font-bold border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-md' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/50'}`}
+                        className={`px-2 py-3 rounded-xl text-[10px] font-extrabold uppercase border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:border-primary/30 hover:bg-slate-50'}`}
                       >
                         {loc}
                       </button>
