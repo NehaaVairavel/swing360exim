@@ -192,18 +192,24 @@ const Products = () => {
       return matchesCategory && matchesSearch && matchesBrand && matchesLocation && matchesCondition && matchesHours && matchesPrice;
     }).sort((a, b) => {
       if (activeSort === "Newest") return new Date(b.createdAt) - new Date(a.createdAt);
-      if (activeSort === "Price ↑") {
+      if (activeSort === "Price Low to High") {
         const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
         const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;
         return pA - pB;
       }
-      if (activeSort === "Price ↓") {
+      if (activeSort === "Price High to Low") {
         const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
         const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;
         return pB - pA;
       }
-      if (activeSort === "Hours") {
+      if (activeSort === "Engine Hours") {
         return (parseInt(a.engine_hours) || 0) - (parseInt(b.engine_hours) || 0);
+      }
+      if (activeSort === "Brand A-Z") {
+        return (a.brand || "").localeCompare(b.brand || "");
+      }
+      if (activeSort === "Condition") {
+        return (a.condition || "").localeCompare(b.condition || "");
       }
       return 0;
     });
@@ -270,8 +276,8 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased pt-[72px]">
-      {/* 1. CLONED HERO SECTION TYPOGRAPHY */}
-      <section className="relative pt-5 pb-12 overflow-hidden bg-gradient-to-b from-white to-slate-50/50">
+      {/* 1. PREMIUM HERO SECTION */}
+      <section className="relative pt-14 pb-12 overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-bottom border-slate-100">
         {/* Visual Depth Elements */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -279,7 +285,6 @@ const Products = () => {
         
         {/* Soft blur circles for depth */}
         <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-primary/5 blur-[100px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-primary/5 blur-[100px] rounded-full translate-x-1/2 translate-y-1/2 pointer-events-none" />
         
         <div className="container-section relative z-10 text-center">
           <motion.div 
@@ -309,21 +314,16 @@ const Products = () => {
             </p>
           </motion.div>
         </div>
-
-        {/* Hero Bottom Separation - Soft shadow fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
       </section>
 
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.7 }}
-        className="sticky top-[80px] z-40 transition-all duration-300 mb-8 pt-4 pb-2"
-      >
+      {/* 2. PREMIUM SEARCH & FILTER TOOLBAR WRAPPER */}
+      <section className="bg-[#eef2f7] py-6 sticky top-[80px] z-40">
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
-          <div 
-            className="bg-white/75 backdrop-blur-[12px] rounded-[24px] border border-[#edf2f7] p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1.8fr_1.2fr_auto_auto] items-center gap-4 transition-all"
-            style={{ gridTemplateColumns: window.innerWidth >= 1280 ? '1.8fr 1.2fr auto auto' : undefined }}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className="bg-white rounded-[32px] shadow-xl border border-white/60 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1.8fr_220px_auto_auto] items-center gap-4 transition-all"
           >
             {/* 1. COMPACT LUXURY SEARCH BAR */}
             <div className="relative group w-full h-[58px] transition-all duration-300 hover:-translate-y-[1px]">
@@ -339,28 +339,25 @@ const Products = () => {
               />
             </div>
 
-            {/* 2. PREMIUM SEGMENTED SORT SELECTOR */}
-            <div className="w-full xl:w-[360px] h-[58px] bg-white border border-slate-200 rounded-[18px] p-1.5 flex items-center gap-3 shadow-sm">
-              <span className="pl-3 text-[11px] font-black uppercase tracking-wider text-slate-400 whitespace-nowrap">Sort By</span>
-              <div className="flex-1 flex gap-1 h-full">
-                {["Newest", "Price ↑", "Price ↓", "Hours"].map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => setActiveSort(option)}
-                    className={`flex-1 h-full rounded-lg text-[11px] font-bold transition-all ${
-                      activeSort === option 
-                        ? "bg-primary text-white shadow-md shadow-orange-200" 
-                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
+            {/* 2. PREMIUM DROPDOWN SORT */}
+            <div className="relative group w-full h-[58px]">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col pointer-events-none">
+                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 leading-none mb-1">Sort By</span>
               </div>
+              <select 
+                value={activeSort}
+                onChange={(e) => setActiveSort(e.target.value)}
+                className="w-full pl-4 pr-10 pt-4 h-full bg-white border border-slate-200 rounded-[18px] text-[14px] font-extrabold text-heading appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer shadow-sm group-hover:border-primary/50"
+              >
+                {["Newest", "Price Low to High", "Price High to Low", "Engine Hours", "Brand A-Z", "Condition"].map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
             </div>
 
             {/* 3. CURRENCY TOGGLE */}
-            <div className="h-[58px] px-2 bg-white border border-slate-200 rounded-[18px] flex items-center">
+            <div className="h-[58px] px-2 bg-white border border-slate-200 rounded-[18px] flex items-center shadow-sm">
               <CurrencyToggle variant="compact" />
             </div>
 
@@ -372,9 +369,9 @@ const Products = () => {
               <RotateCcw size={16} />
               <span>Reset</span>
             </button>
-          </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </section>
 
 
 
@@ -600,27 +597,44 @@ const Products = () => {
         </div>
       </div>
 
-      {/* 5. EXTRA CONVERSION SECTION */}
-      <section className="py-24 bg-white relative overflow-hidden border-t border-slate-100">
+      {/* 5. PREMIUM CTA SECTION */}
+      <section className="py-32 bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e293b] relative overflow-hidden rounded-t-[60px] border-t border-white/5">
+        {/* Background Details */}
+        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-orange-500/10 blur-[140px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/10 blur-[140px] rounded-full translate-x-1/2 translate-y-1/2 pointer-events-none" />
+        
         <div className="container-section text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h2 className="text-3xl md:text-5xl font-display font-black text-heading mb-6 tracking-tight">Ready to Upgrade Your Fleet?</h2>
-            <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10">
+            <h2 className="text-4xl md:text-6xl font-display font-black text-white mb-8 tracking-tight">
+              Ready to Upgrade Your <span className="text-primary italic">Fleet?</span>
+            </h2>
+            <p className="text-slate-300 text-lg md:text-xl font-medium max-w-3xl mx-auto mb-12 leading-relaxed">
               Get competitive pricing, global logistics and expert support from Dubai headquarters.
             </p>
-            <button 
-              onClick={() => {
-                setSelectedProduct({ name: "General Marketplace Inquiry" });
-                setEnquiryOpen(true);
-              }}
-              className="px-10 py-4 bg-primary text-white rounded-xl font-black text-[14px] uppercase tracking-widest hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 transition-all shadow-xl shadow-primary/10"
-            >
-              Start Enquiry
-            </button>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <button 
+                onClick={() => {
+                  setSelectedProduct({ name: "General Marketplace Inquiry" });
+                  setEnquiryOpen(true);
+                }}
+                className="h-[58px] px-12 bg-primary text-white rounded-full font-black text-[14px] uppercase tracking-[0.2em] hover:scale-105 hover:shadow-[0_20px_50px_rgba(245,158,11,0.3)] transition-all shadow-xl active:scale-95"
+              >
+                Start Enquiry
+              </button>
+              
+              <button 
+                className="h-[58px] px-10 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full font-black text-[14px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all flex items-center gap-3 active:scale-95"
+              >
+                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                WhatsApp Sales
+              </button>
+            </div>
           </motion.div>
         </div>
       </section>
