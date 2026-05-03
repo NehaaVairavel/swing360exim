@@ -476,6 +476,7 @@ const Products = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
+            </div>
           </div>
         </aside>
 
