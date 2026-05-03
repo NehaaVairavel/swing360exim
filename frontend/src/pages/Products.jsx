@@ -8,7 +8,9 @@ import productService from "@/services/productService";
 import { socket } from "@/socket";
 import EnquiryModal from "@/components/EnquiryModal";
 import AnimatedGear from "@/components/AnimatedGear";
+import SectionReveal from "@/components/SectionReveal";
 import { useCurrency } from "@/context/CurrencyContext";
+import settingsService from "@/services/settingsService";
 import CurrencyToggle from "@/components/CurrencyToggle";
 import ProductCard from "@/components/products/ProductCard";
 import { cleanPrice } from "@/utils/priceFormatter";
@@ -112,6 +114,19 @@ const Products = () => {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [siteSettings, setSiteSettings] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const settings = await settingsService.get();
+        setSiteSettings(settings);
+      } catch (error) {
+        console.error("Error fetching settings", error);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const normalizeAvailability = (value) => {
     const v = (value ?? "").toString().trim().toLowerCase();
@@ -323,31 +338,31 @@ const Products = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="bg-white rounded-[32px] shadow-xl border border-white/60 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1.8fr_220px_auto_auto] items-center gap-4 transition-all"
+            className="bg-white rounded-[24px] shadow-xl border border-white/60 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_280px_140px] items-center gap-4 transition-all"
           >
             {/* 1. COMPACT LUXURY SEARCH BAR */}
-            <div className="relative group w-full h-[58px] transition-all duration-300 hover:-translate-y-[1px]">
-              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
+            <div className="relative group w-full h-[56px] transition-all duration-300">
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full bg-slate-100 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
                 <Search className="text-slate-500 group-focus-within:text-primary transition-colors" size={16} />
               </div>
               <input 
                 type="text" 
-                placeholder="Search excavators, CAT 320D, loaders..." 
+                placeholder="Search excavators, CAT 320D..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-full pl-12 pr-6 bg-gradient-to-b from-white to-[#f8fafc] border border-[#e5e7eb] rounded-[18px] text-[15px] font-medium text-heading placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-[4px] focus:ring-primary/10 transition-all shadow-[0_4px_12px_rgba(15,23,42,0.04)]"
+                className="w-full h-full pl-12 pr-4 bg-white border border-slate-200 rounded-[18px] text-[16px] font-medium text-heading placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
               />
             </div>
 
-            {/* 2. PREMIUM DROPDOWN SORT */}
-            <div className="relative group w-full h-[58px]">
+            {/* 2. ELEGANT COMPACT DROPDOWN SORT */}
+            <div className="relative group w-full h-[56px]">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col pointer-events-none">
-                <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 leading-none mb-1">Sort By</span>
+                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 leading-none mb-0.5">Sort By</span>
               </div>
               <select 
                 value={activeSort}
                 onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full pl-4 pr-10 pt-4 h-full bg-white border border-slate-200 rounded-[18px] text-[14px] font-extrabold text-heading appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer shadow-sm group-hover:border-primary/50"
+                className="w-full pl-4 pr-10 pt-3 h-full bg-white border border-slate-200 rounded-[18px] text-[14px] font-extrabold text-heading appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer shadow-sm group-hover:border-primary/50"
               >
                 {["Newest", "Price Low to High", "Price High to Low", "Engine Hours", "Brand A-Z", "Condition"].map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -356,15 +371,15 @@ const Products = () => {
               <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
             </div>
 
-            {/* 3. CURRENCY TOGGLE */}
-            <div className="h-[58px] px-2 bg-white border border-slate-200 rounded-[18px] flex items-center shadow-sm">
+            {/* 3. CURRENCY TOGGLE (Vertical alignment fix) */}
+            <div className="h-[56px] px-2 bg-white border border-slate-200 rounded-[18px] flex items-center justify-between shadow-sm">
               <CurrencyToggle variant="compact" />
             </div>
 
             {/* 4. RESET BUTTON */}
             <button 
               onClick={handleReset}
-              className="h-[58px] px-8 bg-[#0B1533] text-white rounded-[18px] font-black text-[12px] uppercase tracking-[0.2em] hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
+              className="h-[56px] w-[140px] bg-[#0B1533] text-white rounded-[18px] font-black text-[12px] uppercase tracking-[0.2em] hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 mx-auto xl:mx-0"
             >
               <RotateCcw size={16} />
               <span>Reset</span>
@@ -597,45 +612,25 @@ const Products = () => {
         </div>
       </div>
 
-      {/* 5. PREMIUM CTA SECTION */}
-      <section className="py-32 bg-gradient-to-br from-[#0f172a] via-[#111827] to-[#1e293b] relative overflow-hidden rounded-t-[60px] border-t border-white/5">
-        {/* Background Details */}
-        <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-orange-500/10 blur-[140px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-blue-500/10 blur-[140px] rounded-full translate-x-1/2 translate-y-1/2 pointer-events-none" />
-        
-        <div className="container-section text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <h2 className="text-4xl md:text-6xl font-display font-black text-white mb-8 tracking-tight">
-              Ready to Upgrade Your <span className="text-primary italic">Fleet?</span>
-            </h2>
-            <p className="text-slate-300 text-lg md:text-xl font-medium max-w-3xl mx-auto mb-12 leading-relaxed">
-              Get competitive pricing, global logistics and expert support from Dubai headquarters.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <button 
-                onClick={() => {
-                  setSelectedProduct({ name: "General Marketplace Inquiry" });
-                  setEnquiryOpen(true);
-                }}
-                className="h-[58px] px-12 bg-primary text-white rounded-full font-black text-[14px] uppercase tracking-[0.2em] hover:scale-105 hover:shadow-[0_20px_50px_rgba(245,158,11,0.3)] transition-all shadow-xl active:scale-95"
+      {/* 5. PREMIUM CTA SECTION (Mirrored from Home page) */}
+      <section className="gradient-cta py-5 md:py-7 max-h-[240px] relative overflow-hidden flex items-center rounded-t-[32px] md:rounded-t-[48px]">
+        <div className="container-section text-center relative z-20 w-full">
+          <SectionReveal>
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-display font-black text-white mb-2 drop-shadow-lg tracking-tight">Ready to Upgrade Your Fleet?</h2>
+            <p className="text-white/90 mb-3 max-w-[480px] mx-auto text-sm font-semibold drop-shadow-md">Get competitive pricing, global shipping logistics, and expert consultation from our Dubai headquarters.</p>
+            <div className="flex flex-col items-center justify-center gap-1.5">
+              <a 
+                href={`https://wa.me/${siteSettings?.whatsapp || "971558599045"}`} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-flex items-center gap-2.5 bg-white text-primary px-5 py-2 rounded-xl font-display font-black text-sm hover:scale-[1.03] hover:brightness-105 shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-400 group relative overflow-hidden"
               >
-                Start Enquiry
-              </button>
-              
-              <button 
-                className="h-[58px] px-10 bg-white/5 backdrop-blur-md border border-white/10 text-white rounded-full font-black text-[14px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all flex items-center gap-3 active:scale-95"
-              >
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                WhatsApp Sales
-              </button>
+                <span className="relative z-10 flex items-center gap-2">Start Your Enquiry <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform duration-300" /></span>
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+              </a>
+              <p className="text-white/80 text-[12px] font-semibold tracking-wide text-center">Get instant response from our team</p>
             </div>
-          </motion.div>
+          </SectionReveal>
         </div>
       </section>
 
