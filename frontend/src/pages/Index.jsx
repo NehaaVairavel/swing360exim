@@ -206,6 +206,15 @@ const Index = () => {
   const shapeY2 = useTransform(scrollY, [0, 1000], [0, -150]);
   const gearY = useTransform(scrollY, [0, 1000], [0, 300]);
 
+  // 3D scroll hero interaction
+  const heroTextOpacity = useTransform(scrollY, [0, 380], [1, 0]);
+  const heroTextY = useTransform(scrollY, [0, 380], [0, -44]);
+  const heroImgScrollY = useTransform(scrollY, [0, 700], [0, 90]);
+  const heroImgRotateY = useTransform(scrollY, [0, 700], [0, -7]);
+  const heroImgScale = useTransform(scrollY, [0, 700], [1, 0.9]);
+  const ropeH = useTransform(scrollY, [0, 700], [70, 150]);
+  const ropeOp = useTransform(scrollY, [0, 80, 700], [0, 0.75, 0.1]);
+
   const heroTitle = siteSettings?.hero_text || "Premium Heavy Equipment Trading from Dubai";
 
   return (
@@ -242,7 +251,7 @@ const Index = () => {
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="max-w-[560px]">
+            <motion.div className="max-w-[560px]" style={{ opacity: heroTextOpacity, y: heroTextY }}>
               <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-flex items-center gap-2.5 bg-white/80 backdrop-blur-md border border-primary/20 text-heading px-4 py-1.5 rounded-full text-[9px] font-display font-black uppercase tracking-[0.2em] mb-5 shadow-[0_10px_30px_-10px_rgba(245,158,11,0.2)]">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -290,10 +299,22 @@ const Index = () => {
                   </form>
                 </div>
               </motion.div>
-            </div>
+            </motion.div>
 
-            <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50 }} style={{ x: heroImageX, y: heroImageY }} className="hidden lg:block relative lg:pt-20 lg:pl-10">
-              <div className="relative animate-float-hero hero-image-wrapper max-w-[500px] ml-auto">
+            <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50 }} style={{ x: heroImageX, y: heroImageY, perspective: "1200px" }} className="hidden lg:block relative lg:pt-20 lg:pl-10">
+              {/* Industrial crane cable — stretches on scroll */}
+              <div className="absolute -top-[110px] left-1/2 -translate-x-1/2 pointer-events-none z-30 hidden lg:block">
+                <motion.svg width="22" viewBox="0 0 22 180" fill="none" preserveAspectRatio="none" style={{ height: ropeH, opacity: ropeOp }}>
+                  <line x1="11" y1="0" x2="11" y2="180" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
+                  <path d="M9 6 Q13 14 9 22 Q5 30 9 38 Q13 46 9 54 Q5 62 9 70 Q13 78 9 86 Q5 94 9 102 Q13 110 9 118 Q5 126 9 134 Q13 142 9 150 Q5 158 9 166" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.35" fill="none" />
+                  <circle cx="11" cy="177" r="4" fill="#f59e0b" fillOpacity="0.8" />
+                </motion.svg>
+              </div>
+
+              <motion.div
+                className="relative animate-float-hero hero-image-wrapper max-w-[500px] ml-auto"
+                style={{ y: heroImgScrollY, rotateY: heroImgRotateY, scale: heroImgScale }}
+              >
                 <div className="w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden shadow-hero-image border-[1.5px] border-white/50 relative z-10 bg-white">
                   <img src={excavatorImg} alt="Heavy Equipment" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -310,7 +331,7 @@ const Index = () => {
                   <div className="text-2xl font-display font-black text-primary drop-shadow-sm">Global</div>
                   <div className="text-[11px] text-heading/70 font-bold uppercase tracking-wide mt-1">Export Network</div>
                 </motion.div>
-              </div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
