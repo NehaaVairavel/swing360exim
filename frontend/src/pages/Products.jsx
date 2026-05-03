@@ -55,11 +55,14 @@ const CATEGORY_ICONS = {
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState(searchParams.get("category") || "All");
-  const [activeStatus, setActiveStatus] = useState("All");
+  const [selectedCategories, setSelectedCategories] = useState(searchParams.get("category") ? searchParams.get("category").split(",") : []);
+  const [selectedModels, setSelectedModels] = useState([]);
+  const [modelSearch, setModelSearch] = useState("");
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [selectedHours, setSelectedHours] = useState([]);
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [activeSort, setActiveSort] = useState("Newest");
-  const [priceRange, setPriceRange] = useState("Any Price");
+  const [priceRange, setPriceRange] = useState(1000000); // Max price limit
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -125,21 +128,38 @@ const Products = () => {
   }, [searchParams]);
 
     const filteredProducts = products.filter((product) => {
-      const matchesCategory = activeCategory === "All" || product.category === activeCategory;
+      const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
       const matchesSearch = 
         (product.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (product.brand || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (product.model || "").toLowerCase().includes(searchQuery.toLowerCase());
       
-      let matchesStatus = true;
-      if (activeStatus === "In Stock") {
-        matchesStatus = normalizeAvailability(product.availability) === "in_stock";
-      } else if (activeStatus === "Sold") {
-        matchesStatus = normalizeAvailability(product.availability) === "sold";
+      const matchesModel = selectedModels.length === 0 || selectedModels.includes(product.model);
+      const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(product.location);
+      const matchesPrice = (product.price || 0) <= priceRange;
+      
+      let matchesHours = true;
+      if (selectedHours.length > 0) {
+        const hours = parseInt(product.engine_hours) || 0;
+        matchesHours = selectedHours.some(range => {
+          if (range === "0-2000") return hours <= 2000;
+          if (range === "2000-5000") return hours > 2000 && hours <= 5000;
+          if (range === "5000-8000") return hours > 5000 && hours <= 8000;
+          if (range === "8000+") return hours > 8000;
+          return false;
+        });
       }
       
-      return matchesCategory && matchesSearch && matchesStatus;
+      return matchesCategory && matchesSearch && matchesModel && matchesLocation && matchesHours && matchesPrice;
+    }).sort((a, b) => {
+      if (activeSort === "Newest") return new Date(b.createdAt) - new Date(a.createdAt);
+      if (activeSort === "Price: Low to High") return (a.price || 0) - (b.price || 0);
+      if (activeSort === "Price: High to Low") return (b.price || 0) - (a.price || 0);
+      return 0;
     });
+
+    const uniqueModels = [...new Set(products.filter(p => selectedCategories.length === 0 || selectedCategories.includes(p.category)).map(p => p.model))].filter(Boolean);
+    const filteredUniqueModels = uniqueModels.filter(m => m.toLowerCase().includes(modelSearch.toLowerCase()));
 
   // Main grid should show newly-added products immediately, even if they are "coming_soon".
   // Keep sold items separated in the existing "Previously Sold Units" section.
@@ -153,12 +173,13 @@ const Products = () => {
 
   const handleReset = () => {
     setSearchQuery("");
-    setActiveCategory("All");
-    setActiveStatus("All");
+    setSelectedCategories([]);
+    setSelectedModels([]);
+    setSelectedLocations([]);
+    setSelectedHours([]);
+    setPriceRange(1000000);
     setActiveSort("Newest");
-    setPriceRange("Any Price");
-    const newParams = new URLSearchParams();
-    setSearchParams(newParams);
+    setSearchParams(new URLSearchParams());
   };
 
   const handleCategoryClick = (cat) => {
@@ -234,11 +255,11 @@ const Products = () => {
         className={`products-filter-toolbar ${scrolled ? 'scrolled' : ''} container-section max-w-7xl mx-auto`}
         style={{ transform: 'none', transition: 'none', willChange: 'auto', backfaceVisibility: 'hidden' }}
       >
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
             
-            {/* Search Part */}
-            <div className="relative flex-1 group">
-              <Search className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
+            {/* 1. Search Bar (Largest Width) */}
+            <div className="relative flex-[3] group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
               <input 
                 type="text" 
                 placeholder="Search CAT, JCB, Loader..." 
@@ -248,50 +269,36 @@ const Products = () => {
               />
             </div>
 
-            {/* Controls Part */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              <div className="relative min-w-[130px] group flex-1 sm:flex-none">
-                <select 
-                  value={activeSort}
-                  onChange={(e) => setActiveSort(e.target.value)}
-                  className="w-full h-[48px] pl-4 pr-10 bg-white border border-slate-200 rounded-[12px] text-[12px] font-bold uppercase tracking-wider text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
-                >
-                  <option>Sort ▼</option>
-                  <option value="Newest">Newest</option>
-                  <option value="Price: Low to High">Price: Low to High</option>
-                  <option value="Price: High to Low">Price: High to Low</option>
-                </select>
-                <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-              </div>
-
-              <div className="relative min-w-[130px] group flex-1 sm:flex-none">
-                <select 
-                  value={priceRange}
-                  onChange={(e) => setPriceRange(e.target.value)}
-                  className="w-full h-[48px] pl-4 pr-10 bg-white border border-slate-200 rounded-[12px] text-[12px] font-bold uppercase tracking-wider text-slate-700 outline-none hover:border-slate-300 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 transition-all cursor-pointer appearance-none"
-                >
-                  <option>Price ▼</option>
-                  <option value="Any Price">Any Price</option>
-                  <option value="Under $50k">Under $50k</option>
-                  <option value="$50k - $100k">$50k - $100k</option>
-                  <option value="$100k+">$100k+</option>
-                </select>
-                <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-              </div>
-
-              <div className="h-[48px] flex items-center bg-slate-50 border border-slate-200 rounded-[12px] px-1 group-hover:bg-white transition-colors flex-1 sm:flex-none justify-center">
-                <CurrencyToggle variant="compact" />
-              </div>
-
-              <button 
-                onClick={handleReset}
-                className="h-[48px] px-5 bg-slate-900 hover:bg-slate-800 text-white rounded-[12px] font-bold text-[11px] uppercase tracking-wider transition-all hover:shadow-[0_8px_20px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 flex items-center gap-2"
+            {/* 2. Sort Dropdown */}
+            <div className="relative min-w-[160px] group flex-1">
+              <select 
+                value={activeSort}
+                onChange={(e) => setActiveSort(e.target.value)}
+                className="w-full h-[48px] pl-4 pr-10 bg-white border border-slate-200 rounded-[12px] text-[12px] font-bold uppercase tracking-wider text-slate-700 outline-none hover:border-slate-300 transition-all cursor-pointer appearance-none"
               >
-                <RotateCcw size={16} />
-                <span className="hidden xl:inline">Reset</span>
-              </button>
+                <option value="Newest">Sort: Newest</option>
+                <option value="Price: Low to High">Price: Low to High</option>
+                <option value="Price: High to Low">Price: High to Low</option>
+              </select>
+              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
+
+            {/* 3. Currency Selector */}
+            <div className="h-[48px] flex items-center bg-white border border-slate-200 rounded-[12px] px-3 transition-colors flex-1 justify-center">
+              <CurrencyToggle variant="compact" />
+            </div>
+
+            {/* 4. Reset Button (Small) */}
+            <button 
+              onClick={handleReset}
+              className="h-[48px] px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-[12px] font-bold text-[11px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 shrink-0"
+              title="Reset Filters"
+            >
+              <RotateCcw size={16} />
+              <span className="hidden sm:inline">Reset</span>
+            </button>
           </div>
+      </div>
 
       </div>
 
@@ -323,44 +330,152 @@ const Products = () => {
               </button>
             </div>
 
-            <div className="lg:sticky lg:top-[160px] lg:bg-white lg:border lg:border-[#EEF1F5] lg:rounded-[20px] lg:p-[18px] lg:shadow-[0_8px_24px_rgba(0,0,0,0.04)] flex flex-col gap-5">
+            <div className="lg:sticky lg:top-[160px] lg:bg-white lg:border lg:border-[#EEF1F5] lg:rounded-[24px] lg:p-[20px] lg:shadow-[0_8px_24px_rgba(0,0,0,0.04)] flex flex-col gap-6">
               
-              {/* Categories */}
-              <div style={{ fontFamily: "'Poppins', sans-serif" }}>
-                <style>{"@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&display=swap');"}</style>
-                <h3 style={{ fontSize: "12px", fontWeight: 800, letterSpacing: "1.5px", textTransform: "uppercase" }} className="text-slate-900 mb-2.5">CATEGORIES</h3>
-                <div className="flex flex-col gap-1.5">
-                  {MASTER_CATEGORIES.map((cat) => {
-                    const count = getCategoryCount(cat);
-                    const isActive = activeCategory === cat;
-                    const Icon = CATEGORY_ICONS[cat] || AllIcon;
+              {/* Section 1: Categories */}
+              <div>
+                <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-4 uppercase flex items-center justify-between">
+                  Categories
+                  {selectedCategories.length > 0 && <button onClick={() => setSelectedCategories([])} className="text-[10px] text-primary lowercase hover:underline">Clear</button>}
+                </h3>
+                <div className="flex flex-col gap-2.5">
+                  {MASTER_CATEGORIES.filter(c => c !== "All" && c !== "Material Handlers" && c !== "Others").map((cat) => {
+                    const isChecked = selectedCategories.includes(cat);
                     return (
-                      <button 
-                        key={cat} 
-                        onClick={() => { handleCategoryClick(cat); setIsMobileFiltersOpen(false); }}
-                        style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600, letterSpacing: "0.1px", fontSize: "15px", minHeight: "52px", marginBottom: "6px" }}
-                        className={`w-full flex items-center justify-between gap-[10px] px-[14px] py-[8px] rounded-[14px] transition-all duration-250 cursor-pointer category-btn ${
-                          isActive 
-                            ? 'bg-white shadow-sm border border-slate-200 active' 
-                            : 'bg-slate-50 border border-slate-200 text-slate-700 hover:bg-white hover:border-slate-300 hover:shadow-sm'
-                        }`}
-                      >
-                        <div className="flex items-center gap-[12px] min-w-0 flex-1">
-                          <Icon style={{ width: '18px', height: '18px', flexShrink: 0, fill: 'currentColor', stroke: 'none', color: isActive ? 'white' : '#111827' }} />
-                          <span className="whitespace-normal overflow-hidden leading-[1.2] text-left max-w-[140px]">
-                            {cat}
-                          </span>
+                      <label key={cat} className="flex items-center gap-3 cursor-pointer group">
+                        <div className={`w-5 h-5 rounded border transition-all flex items-center justify-center ${isChecked ? 'bg-primary border-primary shadow-sm shadow-primary/20' : 'border-slate-300 bg-slate-50 group-hover:border-primary/50'}`}>
+                          {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-[1px]" />}
                         </div>
-                        <span className={`ml-auto shrink-0 flex items-center justify-center w-[26px] h-[26px] text-[12px] font-black rounded-full ${isActive ? 'bg-white/20 text-white' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}>
-                          {count}
-                        </span>
-                      </button>
+                        <input 
+                          type="checkbox" 
+                          className="hidden" 
+                          checked={isChecked}
+                          onChange={() => {
+                            const next = isChecked ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
+                            setSelectedCategories(next);
+                          }}
+                        />
+                        <span className={`text-[14px] font-semibold transition-colors ${isChecked ? 'text-heading' : 'text-slate-600 group-hover:text-heading'}`}>{cat}</span>
+                        <span className="ml-auto text-[11px] font-black text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">{getCategoryCount(cat)}</span>
+                      </label>
                     );
                   })}
                 </div>
               </div>
 
-            </div>
+              {/* DYNAMIC FILTERS (Shown when any category is selected) */}
+              <AnimatePresence>
+                {selectedCategories.length > 0 && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex flex-col gap-6 pt-6 border-t border-slate-100 overflow-hidden">
+                    
+                    {/* 1. Model (Searchable Dropdown) */}
+                    <div>
+                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase">Model</h3>
+                      <div className="relative mb-2">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                        <input 
+                          type="text" 
+                          placeholder="Search Models..."
+                          value={modelSearch}
+                          onChange={(e) => setModelSearch(e.target.value)}
+                          className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-medium focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        />
+                      </div>
+                      <div className="max-h-[120px] overflow-y-auto flex flex-col gap-1.5 pr-2 custom-scrollbar">
+                        {filteredUniqueModels.map(model => {
+                          const isSelected = selectedModels.includes(model);
+                          return (
+                            <label key={model} className="flex items-center gap-2 cursor-pointer group">
+                              <input 
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => {
+                                  const next = isSelected ? selectedModels.filter(m => m !== model) : [...selectedModels, model];
+                                  setSelectedModels(next);
+                                }}
+                                className="w-3.5 h-3.5 rounded border-slate-300 text-primary focus:ring-primary"
+                              />
+                              <span className={`text-[12px] font-medium transition-colors ${isSelected ? 'text-heading font-bold' : 'text-slate-500 group-hover:text-heading'}`}>{model}</span>
+                            </label>
+                          );
+                        })}
+                        {filteredUniqueModels.length === 0 && <span className="text-[11px] text-slate-400 italic">No models found</span>}
+                      </div>
+                    </div>
+
+                    {/* 2. Location */}
+                    <div>
+                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase">Location</h3>
+                      <div className="grid grid-cols-2 gap-2">
+                        {["UAE", "India", "Europe", "Africa", "Middle East"].map(loc => {
+                          const isSelected = selectedLocations.includes(loc);
+                          return (
+                            <button 
+                              key={loc}
+                              onClick={() => {
+                                const next = isSelected ? selectedLocations.filter(l => l !== loc) : [...selectedLocations, loc];
+                                setSelectedLocations(next);
+                              }}
+                              className={`px-2 py-1.5 rounded-lg text-[11px] font-bold border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-sm shadow-primary/20' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/50'}`}
+                            >
+                              {loc}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 3. Engine Hours */}
+                    <div>
+                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase">Engine Hours</h3>
+                      <div className="flex flex-col gap-2.5">
+                        {["0-2000", "2000-5000", "5000-8000", "8000+"].map(range => {
+                          const isSelected = selectedHours.includes(range);
+                          return (
+                            <label key={range} className="flex items-center gap-2.5 cursor-pointer group">
+                              <div className={`w-4 h-4 rounded border transition-all flex items-center justify-center ${isSelected ? 'bg-primary border-primary' : 'border-slate-300 bg-slate-50 group-hover:border-primary/50'}`}>
+                                {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-[1px]" />}
+                              </div>
+                              <input 
+                                type="checkbox"
+                                className="hidden"
+                                checked={isSelected}
+                                onChange={() => {
+                                  const next = isSelected ? selectedHours.filter(r => r !== range) : [...selectedHours, range];
+                                  setSelectedHours(next);
+                                }}
+                              />
+                              <span className={`text-[13px] font-semibold ${isSelected ? 'text-heading' : 'text-slate-600'}`}>{range} hrs</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 4. Price Range Slider */}
+                    <div>
+                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase flex justify-between">
+                        Max Price
+                        <span className="text-primary font-black">Up to $1M</span>
+                      </h3>
+                      <input 
+                        type="range"
+                        min="0"
+                        max="1000000"
+                        step="10000"
+                        value={priceRange}
+                        onChange={(e) => setPriceRange(parseInt(e.target.value))}
+                        className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary"
+                      />
+                      <div className="flex justify-between mt-2 text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                        <span>$0</span>
+                        <span>$1,000,000+</span>
+                      </div>
+                    </div>
+
+                  </motion.div>
+                )}
+              </AnimatePresence>
           </div>
         </aside>
 
