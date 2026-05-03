@@ -30,7 +30,7 @@ const FilterAccordion = ({ title, children, defaultOpen = false }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group"
       >
-        <span className="text-[10px] font-black text-slate-900 uppercase tracking-[0.25em]">{title}</span>
+        <span className="font-sora text-[13px] font-bold text-slate-800 uppercase tracking-[0.22em]">{title}</span>
         <ChevronDown size={14} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
       </button>
       <AnimatePresence>
@@ -412,7 +412,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`px-4 py-2.5 rounded-xl text-[10px] font-extrabold uppercase tracking-tight transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:border-primary/30 hover:bg-slate-50'}`}
+                        className={`px-4 py-2.5 rounded-xl font-manrope text-[14px] font-semibold transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:text-primary hover:border-primary/20 hover:bg-slate-50 hover:-translate-y-0.5'}`}
                       >
                         {cat}
                       </button>
@@ -436,7 +436,7 @@ const Products = () => {
                             setSelectedBrands(next);
                           }}
                         />
-                        <span className={`text-[13px] font-semibold transition-colors ${isSelected ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{brand}</span>
+                        <span className={`font-sora text-[14px] font-semibold transition-colors ${isSelected ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{brand}</span>
                       </label>
                     );
                   })}
@@ -454,7 +454,7 @@ const Products = () => {
                           const next = isSelected ? selectedLocations.filter(l => l !== loc) : [...selectedLocations, loc];
                           setSelectedLocations(next);
                         }}
-                        className={`px-2 py-3 rounded-xl text-[10px] font-extrabold uppercase border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:border-primary/30 hover:bg-slate-50'}`}
+                        className={`px-2 py-3 rounded-xl font-sora text-[14px] font-semibold uppercase border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:border-primary/30 hover:bg-slate-50 hover:-translate-y-0.5'}`}
                       >
                         {loc}
                       </button>

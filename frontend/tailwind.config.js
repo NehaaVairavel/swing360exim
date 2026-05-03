@@ -13,6 +13,8 @@ export default {
       fontFamily: {
         display: ["Montserrat", "sans-serif"],
         body: ["Inter", "sans-serif"],
+        sora: ["Sora", "sans-serif"],
+        manrope: ["Manrope", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
