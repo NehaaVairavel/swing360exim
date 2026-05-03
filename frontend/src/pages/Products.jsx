@@ -292,7 +292,7 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased pt-[72px]">
       {/* 1. PREMIUM HERO SECTION */}
-      <section className="relative pt-14 pb-12 overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-bottom border-slate-100">
+      <section className="relative pt-8 md:pt-10 pb-8 overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-bottom border-slate-100">
         {/* Visual Depth Elements */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -306,7 +306,7 @@ const Products = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-full mb-6 shadow-sm"
+            className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-full mb-4 shadow-sm"
           >
             <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Export Hub Catalog</span>
@@ -318,13 +318,13 @@ const Products = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col items-center"
           >
-            <h1 className="text-3xl md:text-4xl font-display font-black text-heading mb-2 heading-decorated tracking-tight relative">
+            <h1 className="text-3xl md:text-4xl font-display font-black text-heading mb-1 heading-decorated tracking-tight relative">
               Our Heavy <span className="text-gradient drop-shadow-sm">Machinery</span> Fleet
               {/* Subtle glow behind heading */}
               <div className="absolute inset-0 bg-primary/5 blur-3xl -z-10 rounded-full" />
             </h1>
             
-            <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">
+            <p className="text-muted-foreground text-[13px] max-w-[520px] mx-auto mt-1 font-semibold">
               Engineered for performance, curated for global markets.
             </p>
           </motion.div>
@@ -332,37 +332,37 @@ const Products = () => {
       </section>
 
       {/* 2. PREMIUM SEARCH & FILTER TOOLBAR WRAPPER */}
-      <section className="bg-[#eef2f7] py-6 sticky top-[80px] z-40">
+      <section className="sticky top-[80px] z-40 py-0 mt-0">
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="bg-white rounded-[24px] shadow-xl border border-white/60 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_280px_140px] items-center gap-4 transition-all"
+            className="bg-gradient-to-br from-[#1e293b] to-[#0f172a] rounded-3xl shadow-xl border border-white/10 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_260px_140px] items-center gap-4 transition-all my-0"
           >
             {/* 1. COMPACT LUXURY SEARCH BAR */}
-            <div className="relative group w-full h-[56px] transition-all duration-300">
-              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full bg-slate-100 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
-                <Search className="text-slate-500 group-focus-within:text-primary transition-colors" size={16} />
+            <div className="relative group w-full h-[50px] transition-all duration-300">
+              <div className="absolute left-2 top-1/2 -translate-y-1/2 w-[30px] h-[30px] rounded-full bg-white/10 flex items-center justify-center pointer-events-none group-focus-within:bg-primary/20 transition-colors">
+                <Search className="text-slate-300 group-focus-within:text-primary transition-colors" size={14} />
               </div>
               <input 
                 type="text" 
                 placeholder="Search excavators, CAT 320D..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-full pl-12 pr-4 bg-white border border-slate-200 rounded-[18px] text-[16px] font-medium text-heading placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all shadow-sm"
+                className="w-full h-full pl-11 pr-4 bg-white/5 border border-white/10 rounded-[16px] text-[15px] font-medium text-white placeholder-slate-400 focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all"
               />
             </div>
 
             {/* 2. ELEGANT COMPACT DROPDOWN SORT */}
-            <div className="relative group w-full h-[56px]">
+            <div className="relative group w-full h-[50px]">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col pointer-events-none">
-                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 leading-none mb-0.5">Sort By</span>
+                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-300 leading-none mb-0.5">Sort By</span>
               </div>
               <select 
                 value={activeSort}
                 onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full pl-4 pr-10 pt-3 h-full bg-white border border-slate-200 rounded-[18px] text-[14px] font-extrabold text-heading appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer shadow-sm group-hover:border-primary/50"
+                className="w-full pl-4 pr-10 pt-2 h-full bg-white border border-slate-200 rounded-[16px] text-[13px] font-extrabold text-heading appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer shadow-sm group-hover:border-primary/50"
               >
                 {["Newest", "Price Low to High", "Price High to Low", "Engine Hours", "Brand A-Z", "Condition"].map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -371,17 +371,17 @@ const Products = () => {
               <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
             </div>
 
-            {/* 3. CURRENCY TOGGLE (Vertical alignment fix) */}
-            <div className="h-[56px] px-2 bg-white border border-slate-200 rounded-[18px] flex items-center justify-between shadow-sm">
+            {/* 3. CURRENCY TOGGLE */}
+            <div className="h-[50px] px-2 bg-white border border-slate-200 rounded-[16px] flex items-center justify-between shadow-sm">
               <CurrencyToggle variant="compact" />
             </div>
 
             {/* 4. RESET BUTTON */}
             <button 
               onClick={handleReset}
-              className="h-[56px] w-[140px] bg-[#0B1533] text-white rounded-[18px] font-black text-[12px] uppercase tracking-[0.2em] hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 mx-auto xl:mx-0"
+              className="h-[50px] w-[140px] bg-primary text-white rounded-[16px] font-black text-[11px] uppercase tracking-[0.2em] hover:bg-primary/90 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 mx-auto xl:mx-0"
             >
-              <RotateCcw size={16} />
+              <RotateCcw size={14} />
               <span>Reset</span>
             </button>
           </motion.div>
