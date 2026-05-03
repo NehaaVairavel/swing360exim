@@ -300,7 +300,7 @@ const Products = () => {
           </div>
       </div>
 
-      </div>
+
 
       <div className="products-layout-container py-6 lg:py-8">
         <div className="products-main-content relative z-10">
