@@ -210,7 +210,7 @@ const Index = () => {
 
   return (
     <div className="overflow-hidden" onMouseMove={handleMouseMove}>
-      <section ref={heroRef} className="relative min-h-[78vh] flex items-center section-base industrial-pattern overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen flex items-center section-base industrial-pattern overflow-hidden">
         <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
           <img src={heroBg} alt="" className="w-full h-full object-cover opacity-[0.06] scale-110 blur-[1px]" />
         </motion.div>
