@@ -337,21 +337,6 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="section-warm industrial-dots py-6 md:py-8 section-divider-top overflow-hidden">
-        <div className="container-section relative z-10">
-          <SectionReveal className="text-center mb-6">
-            <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight">
-              Our Global <span className="text-gradient drop-shadow-sm">Presence</span>
-            </h2>
-            <p className="text-muted-foreground text-base max-w-[520px] mx-auto mt-2 font-semibold">Delivering excellence in heavy equipment trading across global markets</p>
-          </SectionReveal>
-          
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-            {stats.map((s, i) => <StatCard key={i} stat={s} i={i} />)}
-          </div>
-        </div>
-      </section>
-
       <section className="section-tinted py-6 md:py-8 section-divider-top relative">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[100px] -z-10 translate-x-1/3 -translate-y-1/3"></div>
         
@@ -424,6 +409,21 @@ const Index = () => {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      <section className="section-warm industrial-dots py-6 md:py-8 section-divider-top overflow-hidden">
+        <div className="container-section relative z-10">
+          <SectionReveal className="text-center mb-6">
+            <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight">
+              Our Global <span className="text-gradient drop-shadow-sm">Presence</span>
+            </h2>
+            <p className="text-muted-foreground text-base max-w-[520px] mx-auto mt-2 font-semibold">Delivering excellence in heavy equipment trading across global markets</p>
+          </SectionReveal>
+          
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            {stats.map((s, i) => <StatCard key={i} stat={s} i={i} />)}
+          </div>
         </div>
       </section>
 
