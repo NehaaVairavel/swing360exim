@@ -40,14 +40,6 @@ const categoriesData = [
   { name: "Buckets", image: bucketsImg },
 ];
 
-const SECONDARY_CATEGORIES = [
-  "Mini Excavators", "Crawler Excavators", "Long Reach Excavators",
-  "Bulldozers", "Motor Graders", "Road Rollers", "Vibratory Rollers",
-  "Telehandlers", "Forklifts", "Generators", "Compactors",
-  "Attachments", "Breakers", "Material Handlers", "Crushers",
-  "Screeners", "Used Machinery", "Ready Stock", "Others"
-];
-
 const markets = [
   { name: "UAE", code: "ae" },
   { name: "Middle East", code: "sa" },
@@ -388,44 +380,6 @@ const Index = () => {
               );
             })}
           </motion.div>
-
-          {/* Section 2: All Categories Pill Grid */}
-          <div className="pt-16 border-t border-slate-100">
-            <SectionReveal className="text-center mb-10">
-              <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] mb-4">Deep Catalog Discovery</h3>
-              <h2 className="text-2xl md:text-3xl font-display font-black text-heading tracking-tight">All Equipment Categories</h2>
-            </SectionReveal>
-
-            <motion.div 
-              variants={staggerContainer} 
-              initial="hidden" 
-              whileInView="visible" 
-              viewport={{ once: true }}
-              className="flex flex-wrap items-center justify-center gap-3 md:gap-4 max-w-6xl mx-auto"
-            >
-              {SECONDARY_CATEGORIES.map((cat, i) => {
-                const count = allProducts.filter(p => p.category === cat).length;
-                return (
-                  <motion.div key={cat} variants={staggerItem}>
-                    <Link 
-                      to={`/products?category=${encodeURIComponent(cat)}`}
-                      className="px-6 py-3 bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-600 hover:border-primary hover:text-primary hover:bg-orange-50/30 transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-primary/5 flex items-center gap-2 group"
-                    >
-                      {cat}
-                      <span className="text-[10px] font-black text-slate-300 group-hover:text-primary/40 transition-colors">{count}</span>
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            <div className="mt-16 text-center">
-              <Link to="/products" className="inline-flex items-center gap-3 px-10 py-4 bg-slate-900 text-white rounded-xl font-display font-black text-[14px] uppercase tracking-widest hover:bg-primary hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-500 shadow-xl shadow-slate-900/10 group">
-                Browse Full Catalog
-                <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform duration-300" />
-              </Link>
-            </div>
-          </div>
         </div>
       </section>
 
