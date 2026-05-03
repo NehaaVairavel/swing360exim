@@ -23,7 +23,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
             `}
           >
             <span className={`${isCompact ? 'text-[16px]' : 'text-[18px]'} leading-none`}>{curr.flag}</span>
-            <span>{curr.code}</span>
+            <span>{curr.code === 'INR' ? '₹ INR' : curr.code}</span>
             
             {isActive && (
               <motion.div

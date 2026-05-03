@@ -6,6 +6,7 @@ export const currencies = [
   { code: 'USD', symbol: '$', rate: 1, flag: '🇺🇸' },
   { code: 'AED', symbol: 'AED', rate: 3.67, flag: '🇦🇪' },
   { code: 'EUR', symbol: '€', rate: 0.92, flag: '🇪🇺' },
+  { code: 'INR', symbol: '₹', rate: 83.3, flag: '🇮🇳' },
 ];
 
 export const CurrencyProvider = ({ children }) => {
@@ -23,6 +24,10 @@ export const CurrencyProvider = ({ children }) => {
     
     if (currency.code === 'AED') {
       return `AED ${Math.round(converted).toLocaleString()}`;
+    }
+
+    if (currency.code === 'INR') {
+      return `₹ ${Math.round(converted).toLocaleString('en-IN')}`;
     }
     
     return new Intl.NumberFormat('en-US', {
