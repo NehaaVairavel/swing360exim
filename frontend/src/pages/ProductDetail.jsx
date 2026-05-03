@@ -131,14 +131,14 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#FDFDFD] relative pt-16 pb-16 font-jakarta">
+    <div className="min-h-screen bg-[#FDFDFD] relative pt-6 pb-[50px] font-jakarta max-w-[1500px] mx-auto">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-full h-[600px] bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
       <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.04] blur-[100px] pointer-events-none" />
 
       <div className="container-section relative z-10">
         {/* Breadcrumbs & Actions */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-6">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-6">
           <Link to="/products" className="flex items-center gap-3 text-heading/40 hover:text-primary transition-all font-bold uppercase tracking-widest text-[16px] group">
             <div className="w-10 h-10 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
               <ArrowLeft size={18} />
@@ -153,13 +153,13 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[58%_42%] gap-8 lg:gap-[42px] items-start">
+        <div className="grid lg:grid-cols-[56%_44%] gap-8 items-start">
           {/* Left Column: Gallery */}
           <div className="space-y-6">
             <motion.div 
               initial={{ opacity: 0, y: 20 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="relative aspect-[16/11] max-h-[620px] rounded-[28px] overflow-hidden bg-white border border-gray-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] group"
+              className="relative aspect-[16/11] h-[520px] 2xl:h-[480px] rounded-[26px] overflow-hidden bg-white border border-gray-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] group"
             >
               <AnimatePresence initial={false} custom={direction}>
                 <motion.img
@@ -204,13 +204,12 @@ const ProductDetail = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
 
-            {/* Thumbnail Slider */}
-            <div className="grid grid-cols-4 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-4 sm:grid-cols-5 gap-[10px] mt-[14px]">
               {images.map((img, idx) => (
                 <button 
                   key={idx} 
                   onClick={() => { setDirection(idx > activeImage ? 1 : -1); setActiveImage(idx); }} 
-                  className={`aspect-[4/3] h-[88px] rounded-[16px] overflow-hidden border-2 transition-all duration-300 relative group ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-gray-50 opacity-60 hover:opacity-100 hover:border-primary/30'}`}
+                  className={`aspect-[4/3] h-[78px] rounded-[14px] overflow-hidden border-2 transition-all duration-300 relative group ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-gray-50 opacity-60 hover:opacity-100 hover:border-primary/30'}`}
                 >
                   <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
                 </button>
@@ -221,36 +220,36 @@ const ProductDetail = () => {
           {/* Right Column: Info & CTAs */}
           <div className="flex flex-col">
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="bg-primary/10 text-primary px-[14px] py-[8px] rounded-full text-[11px] font-bold uppercase tracking-[2px]">{product.category}</span>
-                <span className="bg-gray-100 text-[#94a3b8] px-[14px] py-[8px] rounded-full text-[11px] font-bold uppercase tracking-[2px] flex items-center gap-2">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="bg-primary/10 text-primary px-[14px] py-[8px] rounded-full text-[10px] font-bold uppercase tracking-[2px]">{product.category}</span>
+                <span className="bg-gray-100 text-[#94a3b8] px-[14px] py-[8px] rounded-full text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2">
                   <Hash size={12} /> Reference No: {refNumber}
                 </span>
               </div>
 
-              <h1 className="text-[28px] lg:text-[40px] font-extrabold text-[#0b1324] mb-4 leading-[1.05] tracking-[-1px]">{product.name}</h1>
+              <h1 className="text-[28px] lg:text-[42px] font-extrabold text-[#0b1324] mb-3 leading-[1.05] tracking-[-1px]">{product.name}</h1>
               
-              <div className="flex items-center gap-4 mb-8">
-                <div className="flex items-center gap-2 text-gray-400 font-bold text-sm">
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex items-center gap-2 text-gray-400 font-bold text-xs">
                   <MapPin size={16} className="text-primary" />
                   {product.location || "Dubai, UAE"}
                 </div>
                 <div className="w-1.5 h-1.5 rounded-full bg-gray-200" />
-                <div className="flex items-center gap-2 text-gray-400 font-bold text-sm">
+                <div className="flex items-center gap-2 text-gray-400 font-bold text-xs">
                   <Clock size={16} className="text-primary" />
                   Ready for Export
                 </div>
               </div>
 
-              <div className="bg-white border border-gray-100 rounded-[2rem] p-8 shadow-sm mb-8 relative overflow-hidden group">
+              <div className="bg-white border border-gray-100 rounded-[2rem] p-6 shadow-sm mb-6 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
                   <AnimatedGear size={160} />
                 </div>
                 
                 <div className="relative z-10">
-                  <span className="text-primary text-[12px] uppercase font-extrabold tracking-[2px] mb-2 block">Premium Export Price</span>
+                  <span className="text-primary text-[10px] uppercase font-extrabold tracking-[2px] mb-2 block">Premium Export Price</span>
                   <div className="flex items-end justify-between gap-4">
-                    <h2 className={`text-[42px] lg:text-[52px] font-black tracking-[-1px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#f59e0b]"}`}>
+                    <h2 className={`text-[42px] lg:text-[54px] font-black tracking-[-1px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#f59e0b]"}`}>
                       {cleanPrice(product.price)}
                     </h2>
                     <div className="flex flex-col items-end pb-1">
@@ -261,15 +260,14 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Technical Grid */}
-              <div className="grid grid-cols-2 gap-3 mb-10">
+              <div className="grid grid-cols-2 gap-[14px] mb-6">
                 {specifications.map((spec, i) => (
-                  <div key={i} className="flex items-center gap-4 bg-white border border-gray-100 rounded-2xl p-[18px] hover:border-primary/20 hover:shadow-md transition-all group">
+                  <div key={i} className="flex items-center gap-4 bg-white border border-gray-100 rounded-[18px] p-[16px_18px] min-h-[92px] hover:border-primary/20 hover:shadow-md transition-all group">
                     <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-primary group-hover:text-white transition-all">
                       <spec.icon size={18} />
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[10px] font-bold uppercase tracking-[1.8px] text-[#94a3b8] mb-0.5">{spec.label}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-[2px] text-[#94a3b8] mb-0.5">{spec.label}</span>
                       <span className="text-[17px] font-bold text-[#111827] leading-none">{spec.value}</span>
                     </div>
                   </div>
@@ -282,14 +280,14 @@ const ProductDetail = () => {
                   <button
                     onClick={() => !isSold && setEnquiryOpen(true)}
                     disabled={isSold}
-                    className={`h-[54px] px-6 flex items-center justify-center gap-3 rounded-2xl font-extrabold uppercase tracking-[1px] text-[14px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-primary text-white shadow-xl shadow-primary/30 hover:-translate-y-1 hover:shadow-2xl"}`}
+                    className={`h-[54px] px-6 flex items-center justify-center gap-3 rounded-[16px] font-extrabold uppercase tracking-[1px] text-[14px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-primary text-white shadow-xl shadow-primary/30 hover:-translate-y-1 hover:shadow-2xl"}`}
                   >
                     <MessageSquare size={20} /> {isSold ? "Machine Sold" : "Enquire Now"}
                   </button>
                   
                   <a 
                     href={`tel:+918778868739`}
-                    className="h-[54px] px-6 flex items-center justify-center gap-3 rounded-2xl bg-white border-2 border-gray-100 font-extrabold uppercase tracking-[1px] text-[14px] text-heading hover:border-primary hover:text-primary hover:-translate-y-1 transition-all"
+                    className="h-[54px] px-6 flex items-center justify-center gap-3 rounded-[16px] bg-white border-2 border-gray-100 font-extrabold uppercase tracking-[1px] text-[14px] text-heading hover:border-primary hover:text-primary hover:-translate-y-1 transition-all"
                   >
                     <Phone size={20} /> Call Now
                   </a>
@@ -299,7 +297,7 @@ const ProductDetail = () => {
                   href={`https://wa.me/918778868739?text=Hi, I am interested in ${product.name} (Ref: ${refNumber})`} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className={`w-full h-14 flex items-center justify-center gap-3 rounded-2xl transition-all duration-300 font-extrabold uppercase tracking-[1px] text-[14px] ${isSold ? "opacity-50 pointer-events-none" : "bg-[#25D366]/10 border border-[#25D366]/20 text-[#1a9e4d] hover:bg-[#25D366] hover:text-white"}`}
+                  className={`w-full h-[56px] flex items-center justify-center gap-3 rounded-[16px] transition-all duration-300 font-extrabold uppercase tracking-[1px] text-[14px] ${isSold ? "opacity-50 pointer-events-none" : "bg-[#25D366]/10 border border-[#25D366]/20 text-[#1a9e4d] hover:bg-[#25D366] hover:text-white"}`}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                   Chat on WhatsApp
@@ -316,14 +314,14 @@ const ProductDetail = () => {
           viewport={{ once: true }}
           className="mt-14"
         >
-          <div className="flex items-center gap-6 mb-8">
-            <h2 className="text-[26px] lg:text-[32px] font-extrabold text-[#0f172a] tracking-tight leading-[1.1] whitespace-nowrap">Technical Description</h2>
+          <div className="flex items-center gap-6 mb-6">
+            <h2 className="text-[26px] lg:text-[34px] font-extrabold text-[#0f172a] tracking-tight leading-[1.1] whitespace-nowrap">Technical Description</h2>
             <div className="h-px w-full bg-gray-100" />
           </div>
           
-          <div className="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-sm">
+          <div className="bg-white border border-gray-100 rounded-[24px] p-7 shadow-sm">
             <div className="prose prose-slate max-w-none">
-              <p className="text-[#475569] font-medium leading-[1.75] text-[16px] whitespace-pre-line">
+              <p className="text-[#475569] font-medium leading-[1.7] text-[16px] whitespace-pre-line">
                 {product.full_description || product.short_description || "Detailed technical specifications for this machine are available upon request. Our team has thoroughly inspected this unit to ensure it meets global export standards."}
               </p>
             </div>
@@ -335,7 +333,7 @@ const ProductDetail = () => {
                 { label: "Payment Options", value: "L/C, T/T, Escrow", icon: Info }
               ].map((item, i) => (
                 <div key={i} className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-[1.8px] text-[10px]">
+                  <div className="flex items-center gap-2 text-primary font-bold uppercase tracking-[2px] text-[10px]">
                     <item.icon size={14} /> {item.label}
                   </div>
                   <div className="text-[#111827] font-bold text-[17px]">{item.value}</div>
@@ -346,18 +344,18 @@ const ProductDetail = () => {
         </motion.div>
 
         {/* trust indicators */}
-        <div className="mt-20 grid md:grid-cols-3 gap-6">
+        <div className="mt-12 grid md:grid-cols-3 gap-6">
           {[
             { icon: Globe, title: "Global Logistics", desc: "Door-to-door delivery across GCC, Africa, and Southeast Asia." },
             { icon: ShieldCheck, title: "Verified Hub", desc: "Every machine passes a rigorous 150-point technical check." },
             { icon: CheckCircle2, title: "Documentation", desc: "We handle all export paperwork and customs clearance." }
           ].map((item, i) => (
-            <div key={i} className="p-8 rounded-[2rem] border border-gray-100 bg-white hover:border-primary/20 hover:shadow-xl transition-all group">
+            <div key={i} className="p-7 rounded-[24px] border border-gray-100 bg-white hover:border-primary/20 hover:shadow-xl transition-all group min-h-[220px]">
               <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-all">
                 <item.icon size={28} />
               </div>
-              <h3 className="text-[30px] font-extrabold leading-[1.2] text-[#111827] mb-3 tracking-tight">{item.title}</h3>
-              <p className="text-gray-400 text-sm font-medium leading-relaxed">{item.desc}</p>
+              <h3 className="text-[24px] font-extrabold text-heading mb-3 tracking-tight">{item.title}</h3>
+              <p className="text-gray-400 text-[15px] font-medium leading-[1.6]">{item.desc}</p>
             </div>
           ))}
         </div>
