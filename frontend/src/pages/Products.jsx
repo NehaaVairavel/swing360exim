@@ -28,7 +28,7 @@ const FilterAccordion = ({ title, children, defaultOpen = false }) => {
     <div className="border-b border-slate-100 last:border-none">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group"
+        className="w-full flex items-center justify-between px-[18px] py-[14px] hover:bg-slate-50 transition-colors group"
       >
         <span className="font-sora text-[13px] font-[800] text-[#0f172a] uppercase tracking-[4px]">{title}</span>
         <ChevronDown size={14} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
@@ -40,7 +40,7 @@ const FilterAccordion = ({ title, children, defaultOpen = false }) => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden px-5 pb-5"
+            className="overflow-hidden px-[18px] pb-4"
           >
             {children}
           </motion.div>
@@ -291,8 +291,8 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased pt-[72px]">
-      {/* 1. PREMIUM HERO SECTION */}
-      <section className="relative pt-[38px] pb-[18px] overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-bottom border-slate-100">
+      {/* 1. COMPACT PREMIUM HERO SECTION */}
+      <section className="relative pt-[26px] pb-[14px] overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-bottom border-slate-100">
         {/* Visual Depth Elements */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -388,8 +388,8 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1700px] mx-auto py-0 mt-4 px-4 md:px-8">
-        <div className="flex flex-col lg:flex-row gap-7 md:gap-9 items-start">
+      <div className="container-section max-w-[1700px] mx-auto pt-[10px] pb-0 mt-[12px] px-4 md:px-8">
+        <div className="flex flex-col lg:flex-row gap-6 items-start">
           
           {/* 3. LEFT SIDEBAR (Premium Floating Sticky) */}
           <motion.aside 
@@ -397,9 +397,9 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-[320px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-130px)] lg:overflow-y-auto hide-scrollbar z-30"
+            className="w-full lg:w-[320px] shrink-0 lg:sticky lg:top-[85px] lg:h-[calc(100vh-100px)] lg:overflow-y-auto hide-scrollbar z-30"
           >
-            <div className="bg-white/92 backdrop-blur-[14px] rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col overflow-hidden products-sidebar">
+            <div className="bg-white/92 backdrop-blur-[14px] rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col overflow-hidden products-sidebar p-[18px]">
               
               <FilterAccordion title="Categories" defaultOpen={true}>
                 <div className="flex flex-wrap gap-2 pt-1">
@@ -412,7 +412,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`px-4 py-2.5 rounded-full font-manrope text-[14px] font-semibold transition-all border ${isSelected ? 'bg-gradient-to-r from-[#ffb100] to-[#ff7a00] border-transparent text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-primary hover:border-primary/20 hover:bg-white hover:-translate-y-0.5 hover:shadow-md'}`}
+                        className={`px-[14px] h-[38px] flex items-center justify-center rounded-full font-manrope text-[14px] font-semibold transition-all border ${isSelected ? 'bg-gradient-to-r from-[#ffb100] to-[#ff7a00] border-transparent text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-primary hover:border-primary/20 hover:bg-white hover:-translate-y-0.5 hover:shadow-md'}`}
                       >
                         {cat}
                       </button>
