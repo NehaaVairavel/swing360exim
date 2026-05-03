@@ -60,6 +60,7 @@ const Products = () => {
   const [modelSearch, setModelSearch] = useState("");
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedHours, setSelectedHours] = useState([]);
+  const [activeStatus, setActiveStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [activeSort, setActiveSort] = useState("Newest");
   const [priceRange, setPriceRange] = useState(1000000); // Max price limit
@@ -177,6 +178,7 @@ const Products = () => {
     setSelectedModels([]);
     setSelectedLocations([]);
     setSelectedHours([]);
+    setActiveStatus("All");
     setPriceRange(1000000);
     setActiveSort("Newest");
     setSearchParams(new URLSearchParams());
@@ -497,7 +499,7 @@ const Products = () => {
               <h3 className="text-2xl font-display font-black text-[#030814] mb-3">No machinery found</h3>
               <p className="text-slate-500 font-medium">We couldn't find any machines matching your current filters or our database is currently offline.</p>
               <button 
-                onClick={() => { setSearchQuery(""); setActiveCategory("All"); setActiveStatus("All"); }}
+                onClick={() => { setSearchQuery(""); setSelectedCategories([]); setActiveStatus("All"); }}
                 className="mt-8 px-8 py-3 bg-slate-900 text-white rounded-xl font-bold text-[13px] uppercase tracking-widest hover:bg-primary transition-all shadow-lg"
               >
                 Clear Filters
