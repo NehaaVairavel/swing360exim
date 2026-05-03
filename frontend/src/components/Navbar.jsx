@@ -35,10 +35,11 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-white/20`}
       style={{
-        backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.7)',
+        backgroundColor: 'rgba(255, 255, 255, 1)',
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
-        boxShadow: scrolled ? '0 6px 20px rgba(0,0,0,.05)' : 'none'
+        boxShadow: scrolled ? '0 10px 30px rgba(0,0,0,0.08)' : '0 1px 3px rgba(0,0,0,0.02)',
+        borderBottom: '1px solid #eef2f7'
       }}
     >
       <div className="w-full max-w-[1520px] mx-auto px-6 md:px-12 flex items-center justify-between h-[72px] transition-all duration-500">

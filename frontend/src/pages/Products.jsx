@@ -271,20 +271,22 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased">
       {/* 1. CLONED HERO SECTION TYPOGRAPHY */}
-      <section className="relative pt-12 pb-8 overflow-hidden bg-white border-b border-slate-50">
+      <section className="relative pt-32 pb-12 overflow-hidden bg-gradient-to-b from-white to-slate-50/50">
+        {/* Visual Depth Elements */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
         </div>
         
-        {/* Subtle light blur effect */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+        {/* Soft blur circles for depth */}
+        <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-primary/5 blur-[100px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-primary/5 blur-[100px] rounded-full translate-x-1/2 translate-y-1/2 pointer-events-none" />
         
         <div className="container-section relative z-10 text-center">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full mb-6"
+            className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-full mb-6 shadow-sm"
           >
             <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Export Hub Catalog</span>
@@ -296,8 +298,10 @@ const Products = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col items-center"
           >
-            <h1 className="text-3xl md:text-4xl font-display font-black text-heading mb-2 heading-decorated tracking-tight">
+            <h1 className="text-3xl md:text-4xl font-display font-black text-heading mb-2 heading-decorated tracking-tight relative">
               Our Heavy <span className="text-gradient drop-shadow-sm">Machinery</span> Fleet
+              {/* Subtle glow behind heading */}
+              <div className="absolute inset-0 bg-primary/5 blur-3xl -z-10 rounded-full" />
             </h1>
             
             <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">
@@ -305,6 +309,9 @@ const Products = () => {
             </p>
           </motion.div>
         </div>
+
+        {/* Hero Bottom Separation - Soft shadow fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
       </section>
 
       {/* 2. SEARCH + FILTER BAR (Premium Glassmorphism Sticky) */}
