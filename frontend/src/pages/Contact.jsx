@@ -150,6 +150,7 @@ const Contact = () => {
               )}
             </div>
           </motion.div>
+          </div>
         </div>
       </div>
     </div>
