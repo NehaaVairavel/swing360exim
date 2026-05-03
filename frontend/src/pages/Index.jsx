@@ -213,7 +213,10 @@ const Index = () => {
   const heroImgRotateY = useTransform(scrollY, [0, 700], [0, -7]);
   const heroImgScale = useTransform(scrollY, [0, 700], [1, 0.9]);
   const ropeH = useTransform(scrollY, [0, 700], [70, 150]);
-  const ropeOp = useTransform(scrollY, [0, 80, 700], [0, 0.75, 0.1]);
+  const ropeOp = useTransform(scrollY, [0, 80, 700], [0.45, 0.88, 0.08]);
+  const imgMouseRotateX = useTransform(mouseY, [-0.5, 0.5], [6, -6]);
+  const shadowX = useTransform(mouseX, [-0.5, 0.5], [-14, 14]);
+  const shadowY = useTransform(mouseY, [-0.5, 0.5], [-6, 6]);
 
   const heroTitle = siteSettings?.hero_text || "Premium Heavy Equipment Trading from Dubai";
 
@@ -302,18 +305,30 @@ const Index = () => {
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 60 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4, type: "spring", stiffness: 50 }} style={{ x: heroImageX, y: heroImageY, perspective: "1200px" }} className="hidden lg:block relative lg:pt-20 lg:pl-10">
-              {/* Industrial crane cable — stretches on scroll */}
-              <div className="absolute -top-[110px] left-1/2 -translate-x-1/2 pointer-events-none z-30 hidden lg:block">
-                <motion.svg width="22" viewBox="0 0 22 180" fill="none" preserveAspectRatio="none" style={{ height: ropeH, opacity: ropeOp }}>
+              {/* Industrial crane assembly — idle sway + scroll stretch */}
+              <motion.div
+                className="absolute -top-[115px] left-1/2 -translate-x-1/2 pointer-events-none z-30 hidden lg:flex flex-col items-center"
+                style={{ transformOrigin: "top center" }}
+                animate={{ rotate: [-1.4, 1.4, -1.4] }}
+                transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
+              >
+                {/* Steel cable */}
+                <motion.svg width="22" viewBox="0 0 22 180" fill="none" preserveAspectRatio="none" style={{ height: ropeH, opacity: ropeOp, display: "block" }}>
                   <line x1="11" y1="0" x2="11" y2="180" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" />
                   <path d="M9 6 Q13 14 9 22 Q5 30 9 38 Q13 46 9 54 Q5 62 9 70 Q13 78 9 86 Q5 94 9 102 Q13 110 9 118 Q5 126 9 134 Q13 142 9 150 Q5 158 9 166" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.35" fill="none" />
-                  <circle cx="11" cy="177" r="4" fill="#f59e0b" fillOpacity="0.8" />
                 </motion.svg>
-              </div>
+                {/* Crane hook */}
+                <motion.svg width="34" height="46" viewBox="0 0 34 46" fill="none" style={{ opacity: ropeOp, marginLeft: "-6px", display: "block" }}>
+                  <rect x="10" y="0" width="14" height="7" rx="2.5" fill="#f59e0b" opacity="0.9" />
+                  <line x1="17" y1="7" x2="17" y2="20" stroke="#f59e0b" strokeWidth="3" strokeLinecap="round" />
+                  <path d="M17 20 Q20 34 12 40 Q5 44 3 38 Q1 31 8 29" stroke="#f59e0b" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M17 20 Q19 31 13 37 Q9 40 8 36" stroke="rgba(255,210,60,0.35)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                </motion.svg>
+              </motion.div>
 
               <motion.div
                 className="relative animate-float-hero hero-image-wrapper max-w-[500px] ml-auto"
-                style={{ y: heroImgScrollY, rotateY: heroImgRotateY, scale: heroImgScale }}
+                style={{ y: heroImgScrollY, rotateY: heroImgRotateY, rotateX: imgMouseRotateX, scale: heroImgScale }}
               >
                 <div className="w-full aspect-[4/3] rounded-[1.5rem] overflow-hidden shadow-hero-image border-[1.5px] border-white/50 relative z-10 bg-white">
                   <img src={excavatorImg} alt="Heavy Equipment" className="w-full h-full object-cover" />
@@ -321,6 +336,8 @@ const Index = () => {
                 </div>
                 <div className="absolute -inset-6 rounded-[2rem] bg-primary/10 blur-[40px] -z-10 animate-glow-breathe" />
                 <div className="absolute -inset-2 rounded-[1.5rem] bg-white/60 blur-[15px] -z-10" />
+                {/* Tilt-responsive ground shadow */}
+                <motion.div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[78%] h-5 rounded-full bg-black/20 blur-[18px] -z-20 pointer-events-none" style={{ x: shadowX, y: shadowY }} />
 
                 <motion.div initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.6 }} className="absolute -bottom-6 -left-6 glass-card rounded-xl px-5 py-4 z-20 shadow-premium border-accent-left">
                   <div className="text-2xl font-display font-black text-primary drop-shadow-sm">200+</div>
