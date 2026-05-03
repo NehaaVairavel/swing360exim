@@ -340,10 +340,13 @@ const Index = () => {
         
         <div className="container-section relative z-10">
           <SectionReveal className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-display font-black text-heading mb-4 tracking-tight uppercase">
-              Premium <span className="text-primary italic">Categories</span>
+            <h2 className="text-4xl md:text-6xl font-display font-black mb-6 tracking-tight flex flex-col items-center">
+              <div>
+                <span className="text-heading">Premium</span> <span className="text-primary">Categories</span>
+              </div>
+              <div className="w-24 h-1 bg-primary mt-4 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.3)]" />
             </h2>
-            <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed">
+            <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed uppercase tracking-wider">
               Explore our diverse range of high-quality heavy equipment ready for global export
             </p>
           </SectionReveal>
@@ -353,7 +356,7 @@ const Index = () => {
             initial="hidden" 
             whileInView="visible" 
             viewport={{ once: true, margin: "-100px" }} 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 md:gap-6 mb-16"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-5 mb-16"
           >
             {categoriesData.map((cat) => {
               const count = allProducts.filter(p => p.category === cat.name).length;
@@ -361,17 +364,17 @@ const Index = () => {
                 <motion.div key={cat.name} variants={staggerItem}>
                   <Link 
                     to={`/products?category=${encodeURIComponent(cat.name)}`} 
-                    className="group relative overflow-hidden rounded-[24px] aspect-[4/3] block bg-white border border-slate-100 shadow-[0_15px_40px_rgb(0,0,0,0.05)] hover:shadow-[0_30px_70px_rgb(0,0,0,0.12)] hover:-translate-y-2 transition-all duration-500"
+                    className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] block bg-white border border-slate-100 shadow-[0_15px_40px_rgb(0,0,0,0.06)] hover:shadow-[0_30px_70px_rgb(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-500"
                   >
                     <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-all duration-1000 ease-out group-hover:scale-110 group-hover:brightness-110" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500 z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500 z-10" />
                     
-                    <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
-                      <h3 className="font-display font-black text-lg md:text-xl text-white drop-shadow-xl tracking-tight uppercase group-hover:text-primary transition-colors duration-300">{cat.name}</h3>
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 z-20">
+                      <h3 className="font-display font-black text-xl md:text-2xl text-white drop-shadow-2xl tracking-tight leading-tight group-hover:text-primary transition-colors duration-300">{cat.name}</h3>
                     </div>
 
-                    <div className="absolute top-4 right-4 z-30">
-                      <div className="bg-gradient-to-br from-primary to-orange-600 text-white w-8 h-8 rounded-full text-[10px] font-black shadow-xl flex items-center justify-center border border-white/20">
+                    <div className="absolute top-5 right-5 z-30">
+                      <div className="bg-gradient-to-br from-[#f59e0b] to-[#ff7b00] text-white w-9 h-9 rounded-full text-[11px] font-black shadow-xl flex items-center justify-center border-2 border-white/30 group-hover:scale-110 transition-transform duration-300">
                         {count}
                       </div>
                     </div>
@@ -384,10 +387,10 @@ const Index = () => {
           <div className="flex justify-center">
             <Link 
               to="/products" 
-              className="px-10 py-4 bg-white border-2 border-slate-900 text-slate-900 rounded-xl font-display font-black text-[14px] uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-500 shadow-xl shadow-slate-900/5 group flex items-center gap-3"
+              className="px-12 py-4 bg-white border-2 border-slate-900 text-slate-900 rounded-full font-display font-black text-[15px] uppercase tracking-[0.1em] hover:bg-primary hover:text-white hover:border-primary transition-all duration-500 shadow-2xl shadow-slate-900/10 group flex items-center gap-4"
             >
               Browse All Products
-              <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform duration-300" />
+              <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform duration-300" />
             </Link>
           </div>
         </div>
