@@ -192,17 +192,17 @@ const Products = () => {
       return matchesCategory && matchesSearch && matchesBrand && matchesLocation && matchesCondition && matchesHours && matchesPrice;
     }).sort((a, b) => {
       if (activeSort === "Newest") return new Date(b.createdAt) - new Date(a.createdAt);
-      if (activeSort === "Price: Low to High") {
+      if (activeSort === "Price ↑") {
         const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
         const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;
         return pA - pB;
       }
-      if (activeSort === "Price: High to Low") {
+      if (activeSort === "Price ↓") {
         const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
         const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;
         return pB - pA;
       }
-      if (activeSort === "Hours: Low to High") {
+      if (activeSort === "Hours") {
         return (parseInt(a.engine_hours) || 0) - (parseInt(b.engine_hours) || 0);
       }
       return 0;
@@ -321,50 +321,55 @@ const Products = () => {
         className="sticky top-[80px] z-40 transition-all duration-300 mb-8 pt-4 pb-2"
       >
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
-          <div className="bg-white/75 backdrop-blur-[12px] rounded-[28px] border border-[#edf2f7] p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_320px_140px] items-center gap-[18px] transition-all">
-            {/* 1. LUXURY SEARCH BAR (Main Focus) */}
-            <div className="relative group w-full h-[68px] transition-all duration-300 hover:-translate-y-[1px]">
-              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-100 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
-                <Search className="text-slate-500 group-focus-within:text-primary transition-colors" size={20} />
+          <div 
+            className="bg-white/75 backdrop-blur-[12px] rounded-[24px] border border-[#edf2f7] p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1.8fr_1.2fr_auto_auto] items-center gap-4 transition-all"
+            style={{ gridTemplateColumns: window.innerWidth >= 1280 ? '1.8fr 1.2fr auto auto' : undefined }}
+          >
+            {/* 1. COMPACT LUXURY SEARCH BAR */}
+            <div className="relative group w-full h-[58px] transition-all duration-300 hover:-translate-y-[1px]">
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
+                <Search className="text-slate-500 group-focus-within:text-primary transition-colors" size={16} />
               </div>
               <input 
                 type="text" 
                 placeholder="Search excavators, CAT 320D, loaders..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-full pl-16 pr-32 bg-gradient-to-b from-white to-[#f8fafc] border border-[#e5e7eb] rounded-[22px] text-[17px] font-medium text-heading placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-[4px] focus:ring-primary/10 transition-all shadow-[0_10px_25px_rgba(15,23,42,0.06)]"
+                className="w-full h-full pl-12 pr-6 bg-gradient-to-b from-white to-[#f8fafc] border border-[#e5e7eb] rounded-[18px] text-[15px] font-medium text-heading placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-[4px] focus:ring-primary/10 transition-all shadow-[0_4px_12px_rgba(15,23,42,0.04)]"
               />
-              <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden md:flex items-center gap-2 px-4 py-2 bg-orange-50 text-primary rounded-full text-sm font-semibold pointer-events-none border border-orange-100">
-                <span className="text-[16px]">⌕</span>
-                <span>Quick Search</span>
+            </div>
+
+            {/* 2. PREMIUM SEGMENTED SORT SELECTOR */}
+            <div className="w-full xl:w-[360px] h-[58px] bg-white border border-slate-200 rounded-[18px] p-1.5 flex items-center gap-3 shadow-sm">
+              <span className="pl-3 text-[11px] font-black uppercase tracking-wider text-slate-400 whitespace-nowrap">Sort By</span>
+              <div className="flex-1 flex gap-1 h-full">
+                {["Newest", "Price ↑", "Price ↓", "Hours"].map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => setActiveSort(option)}
+                    className={`flex-1 h-full rounded-lg text-[11px] font-bold transition-all ${
+                      activeSort === option 
+                        ? "bg-primary text-white shadow-md shadow-orange-200" 
+                        : "text-slate-500 hover:bg-slate-50 hover:text-slate-800"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Sort Dropdown (220px) */}
-            <div className="relative group w-full h-[72px]">
-              <select 
-                value={activeSort}
-                onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full pl-6 pr-12 h-full bg-white border border-slate-200 rounded-[20px] text-[14px] font-bold text-slate-700 appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer"
-              >
-                <option value="Newest">Newest First</option>
-                <option value="Price: Low to High">Price: Low-High</option>
-                <option value="Price: High to Low">Price: High-Low</option>
-              </select>
-              <ChevronDown size={14} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
-            </div>
-
-            {/* Currency Toggle (320px) */}
-            <div className="w-full xl:w-[320px] h-[72px] px-3 bg-white border border-slate-200 rounded-xl flex items-center">
+            {/* 3. CURRENCY TOGGLE */}
+            <div className="h-[58px] px-2 bg-white border border-slate-200 rounded-[18px] flex items-center">
               <CurrencyToggle variant="compact" />
             </div>
 
-            {/* Reset Button (140px) */}
+            {/* 4. RESET BUTTON */}
             <button 
               onClick={handleReset}
-              className="w-full xl:w-[140px] h-[72px] bg-[#0B1533] text-white rounded-[22px] font-black text-[12px] uppercase tracking-[0.2em] hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
+              className="h-[58px] px-8 bg-[#0B1533] text-white rounded-[18px] font-black text-[12px] uppercase tracking-[0.2em] hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
             >
-              <RotateCcw size={18} />
+              <RotateCcw size={16} />
               <span>Reset</span>
             </button>
           </div>
