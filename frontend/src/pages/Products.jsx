@@ -378,7 +378,7 @@ const Products = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
 
 
@@ -529,7 +529,7 @@ const Products = () => {
                 </button>
               </div>
             </div>
-          </aside>
+          </motion.aside>
 
           {/* RIGHT SIDE PRODUCT GRID */}
           <main className="flex-1 min-w-0">
