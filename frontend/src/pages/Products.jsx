@@ -56,14 +56,15 @@ const CATEGORY_ICONS = {
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategories, setSelectedCategories] = useState(searchParams.get("category") ? searchParams.get("category").split(",") : []);
-  const [selectedModels, setSelectedModels] = useState([]);
-  const [modelSearch, setModelSearch] = useState("");
+  const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
-  const [selectedHours, setSelectedHours] = useState([]);
+  const [engineHours, setEngineHours] = useState(15000);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(1000000);
+  const [selectedCondition, setSelectedCondition] = useState("All");
   const [activeStatus, setActiveStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState(searchParams.get("search") || "");
   const [activeSort, setActiveSort] = useState("Newest");
-  const [priceRange, setPriceRange] = useState(1000000); // Max price limit
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -135,27 +136,32 @@ const Products = () => {
         (product.brand || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (product.model || "").toLowerCase().includes(searchQuery.toLowerCase());
       
-      const matchesModel = selectedModels.length === 0 || selectedModels.includes(product.model);
+      const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
       const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(product.location);
-      const matchesPrice = (product.price || 0) <= priceRange;
+      const matchesCondition = selectedCondition === "All" || product.condition === selectedCondition;
       
-      let matchesHours = true;
-      if (selectedHours.length > 0) {
-        const hours = parseInt(product.engine_hours) || 0;
-        matchesHours = selectedHours.some(range => {
-          if (range === "0-2000") return hours <= 2000;
-          if (range === "2000-5000") return hours > 2000 && hours <= 5000;
-          if (range === "5000-8000") return hours > 5000 && hours <= 8000;
-          if (range === "8000+") return hours > 8000;
-          return false;
-        });
-      }
+      const hours = parseInt(product.engine_hours) || 0;
+      const matchesHours = hours <= engineHours;
       
-      return matchesCategory && matchesSearch && matchesModel && matchesLocation && matchesHours && matchesPrice;
+      const price = parseFloat(cleanPrice(product.price).replace(/[^0-9.]/g, '')) || 0;
+      const matchesPrice = price >= minPrice && price <= maxPrice;
+      
+      return matchesCategory && matchesSearch && matchesBrand && matchesLocation && matchesCondition && matchesHours && matchesPrice;
     }).sort((a, b) => {
       if (activeSort === "Newest") return new Date(b.createdAt) - new Date(a.createdAt);
-      if (activeSort === "Price: Low to High") return (a.price || 0) - (b.price || 0);
-      if (activeSort === "Price: High to Low") return (b.price || 0) - (a.price || 0);
+      if (activeSort === "Price: Low to High") {
+        const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
+        const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;
+        return pA - pB;
+      }
+      if (activeSort === "Price: High to Low") {
+        const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
+        const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;
+        return pB - pA;
+      }
+      if (activeSort === "Hours: Low to High") {
+        return (parseInt(a.engine_hours) || 0) - (parseInt(b.engine_hours) || 0);
+      }
       return 0;
     });
 
@@ -175,11 +181,13 @@ const Products = () => {
   const handleReset = () => {
     setSearchQuery("");
     setSelectedCategories([]);
-    setSelectedModels([]);
+    setSelectedBrands([]);
     setSelectedLocations([]);
-    setSelectedHours([]);
+    setEngineHours(15000);
+    setMinPrice(0);
+    setMaxPrice(1000000);
+    setSelectedCondition("All");
     setActiveStatus("All");
-    setPriceRange(1000000);
     setActiveSort("Newest");
     setSearchParams(new URLSearchParams());
   };
@@ -195,347 +203,346 @@ const Products = () => {
     setSearchParams(newParams);
   };
 
-  if (loading) return <div className="pt-40 pb-20 text-center font-display font-bold text-gray-400">Syncing with Dubai Hub...</div>;
+  if (loading) return (
+    <div className="min-h-screen bg-[#F8FAFC] pt-[120px]">
+      <div className="container-section">
+        {/* Skeleton Hero */}
+        <div className="w-full h-[200px] bg-white rounded-[32px] mb-12 animate-pulse" />
+        
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Skeleton Sidebar */}
+          <div className="w-full lg:w-[320px] h-[600px] bg-white rounded-[22px] animate-pulse shrink-0" />
+          
+          {/* Skeleton Grid */}
+          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+              <div key={i} className="h-[450px] bg-white rounded-[22px] animate-pulse" />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-[#f3f6fa] relative font-body antialiased">
-      {/* Hero Section */}
-      <section 
-        className="relative border-b border-slate-200/60 shadow-sm" 
-        style={{ 
-          background: 'linear-gradient(135deg, #eef1f5, #f8fafc, #e9edf2)',
-          paddingTop: 'calc(72px + 8px)', /* Reduced height further by 20% */
-          paddingBottom: '12px',
-          textAlign: 'center',
-          borderRadius: '0 0 16px 16px',
-          overflow: 'hidden'
-        }}
-      >
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E")' }} />
+    <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased">
+      {/* 1. HERO SECTION */}
+      <section className="relative pt-[120px] pb-16 bg-white overflow-hidden">
+        {/* Subtle Industrial Background */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#1E293B_1px,transparent_1px)] [background-size:32px_32px]" />
+        </div>
         
-        <div className="container-section relative z-10 px-4">
-          <div style={{
-            display: 'inline-block',
-            padding: '4px 12px', /* Reduced from 6px 14px */
-            borderRadius: '999px',
-            fontSize: '10px', /* Reduced from 11px */
-            letterSpacing: '2px', /* Reduced from 3px */
-            fontWeight: '700',
-            color: '#d18a00',
-            background: 'rgba(245,158,11,0.12)',
-            border: '1px solid rgba(245,158,11,0.22)',
-            marginBottom: '12px' /* Reduced from 16px */
-          }}>
-            EXPORT HUB CATALOG
-          </div>
+        <div className="container-section relative z-10 text-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary font-black text-[10px] tracking-[0.2em] uppercase mb-6"
+          >
+            <ShieldCheck size={12} />
+            Export Hub Catalog
+          </motion.div>
           
-          <h1 className="font-display" style={{
-            fontSize: 'clamp(28px, 4vw, 54px)', /* Reduced from clamp(32px, 5vw, 64px) */
-            fontWeight: '900',
-            lineHeight: '0.95',
-            letterSpacing: '-1px',
-            color: '#111827'
-          }}>
-            Our Heavy Machinery<br/>
-            <span style={{ color: '#f59e0b' }}>Fleet</span>
+          <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-black text-heading mb-6 tracking-tight">
+            Our Heavy Machinery <span className="text-gradient drop-shadow-sm">Fleet</span>
           </h1>
           
-          <p style={{
-            fontSize: 'clamp(15px, 1.8vw, 18px)', /* Reduced from clamp(16px, 2vw, 20px) */
-            fontStyle: 'italic',
-            color: '#6b7280',
-            fontWeight: '500',
-            marginTop: '8px' /* Reduced from 12px */
-          }}>
+          <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-4 italic">
             "Engineered for performance, curated for global markets."
           </p>
         </div>
       </section>
 
-      {/* Top Functional Bar (Sticky Unified Toolbar) */}
+      {/* 2. SEARCH CONTROL BAR (Sticky) */}
       <div 
-        className={`products-filter-toolbar ${scrolled ? 'scrolled' : ''} container-section max-w-7xl mx-auto`}
-        style={{ transform: 'none', transition: 'none', willChange: 'auto', backfaceVisibility: 'hidden' }}
+        className={`sticky top-[72px] z-[40] transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg py-3' : 'py-6'}`}
       >
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
-            
-            {/* 1. Search Bar (Largest Width) */}
-            <div className="relative flex-[3] group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
+        <div className="container-section max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-3 flex flex-col md:flex-row items-stretch md:items-center gap-4">
+            {/* Search Part */}
+            <div className="flex-1 relative group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
               <input 
                 type="text" 
-                placeholder="Search CAT, JCB, Loader..." 
+                placeholder="Search CAT, JCB, Loader, Excavator..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-6 h-[48px] bg-slate-50/50 border border-slate-200 rounded-[12px] text-[15px] font-medium text-[#0f172a] focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400"
+                className="w-full pl-12 pr-6 h-[52px] bg-slate-50 border-none rounded-xl text-[15px] font-medium text-heading focus:ring-2 focus:ring-primary/20 transition-all placeholder-slate-400"
               />
             </div>
 
-            {/* 2. Sort Dropdown */}
-            <div className="relative min-w-[160px] group flex-1">
-              <select 
-                value={activeSort}
-                onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full h-[48px] pl-4 pr-10 bg-white border border-slate-200 rounded-[12px] text-[12px] font-bold uppercase tracking-wider text-slate-700 outline-none hover:border-slate-300 transition-all cursor-pointer appearance-none"
+            <div className="flex items-center gap-3">
+              {/* Sort */}
+              <div className="relative group">
+                <select 
+                  value={activeSort}
+                  onChange={(e) => setActiveSort(e.target.value)}
+                  className="pl-4 pr-10 h-[52px] bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 appearance-none outline-none focus:border-primary transition-all cursor-pointer"
+                >
+                  <option value="Newest">Newest First</option>
+                  <option value="Price: Low to High">Price: Low to High</option>
+                  <option value="Price: High to Low">Price: High to Low</option>
+                  <option value="Hours: Low to High">Hours: Low to High</option>
+                </select>
+                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+              </div>
+
+              {/* Currency */}
+              <div className="h-[52px] px-3 bg-white border border-slate-200 rounded-xl flex items-center justify-center">
+                <CurrencyToggle variant="compact" />
+              </div>
+
+              {/* Reset */}
+              <button 
+                onClick={handleReset}
+                className="h-[52px] px-5 bg-slate-900 text-white rounded-xl font-bold text-[11px] uppercase tracking-wider hover:bg-primary transition-all flex items-center gap-2"
+                title="Reset Filters"
               >
-                <option value="Newest">Sort: Newest</option>
-                <option value="Price: Low to High">Price: Low to High</option>
-                <option value="Price: High to Low">Price: High to Low</option>
-              </select>
-              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <RotateCcw size={16} />
+                <span className="hidden lg:inline">Reset</span>
+              </button>
             </div>
-
-            {/* 3. Currency Selector */}
-            <div className="h-[48px] flex items-center bg-white border border-slate-200 rounded-[12px] px-3 transition-colors flex-1 justify-center">
-              <CurrencyToggle variant="compact" />
-            </div>
-
-            {/* 4. Reset Button (Small) */}
-            <button 
-              onClick={handleReset}
-              className="h-[48px] px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-[12px] font-bold text-[11px] uppercase tracking-wider transition-all flex items-center justify-center gap-2 shrink-0"
-              title="Reset Filters"
-            >
-              <RotateCcw size={16} />
-              <span className="hidden sm:inline">Reset</span>
-            </button>
           </div>
+        </div>
       </div>
 
 
 
-      <div className="products-layout-container py-6 lg:py-8">
-        <div className="products-main-content relative z-10">
-        
-        {/* Mobile Filters Drawer Overlay */}
-        <AnimatePresence>
-          {isMobileFiltersOpen && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] lg:hidden"
-              onClick={() => setIsMobileFiltersOpen(false)}
-            />
-          )}
-        </AnimatePresence>
-
-        {/* Sidebar Container */}
-        <aside className={`products-sidebar ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-          <div className="h-full overflow-y-auto lg:overflow-visible flex flex-col p-6 lg:p-0">
-            
-            {/* Mobile close button */}
-            <div className="flex justify-between items-center mb-6 lg:hidden">
-              <span className="font-display font-black text-lg">Filters</span>
-              <button onClick={() => setIsMobileFiltersOpen(false)} className="p-2 bg-slate-100 rounded-full text-slate-500">
-                <ChevronLeft size={20} />
-              </button>
-            </div>
-
-            <div className="lg:sticky lg:top-[160px] lg:bg-white lg:border lg:border-[#EEF1F5] lg:rounded-[24px] lg:p-[20px] lg:shadow-[0_8px_24px_rgba(0,0,0,0.04)] flex flex-col gap-6">
+      <div className="container-section py-8 lg:py-12">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          
+          {/* 3. LEFT SIDEBAR (Premium Filters) */}
+          <aside className="w-full lg:w-[320px] shrink-0 sticky top-[160px]">
+            <div className="bg-white rounded-[22px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 p-6 flex flex-col gap-8">
               
-              {/* Section 1: Categories */}
+              {/* Categories */}
               <div>
-                <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-4 uppercase flex items-center justify-between">
-                  Categories
-                  {selectedCategories.length > 0 && <button onClick={() => setSelectedCategories([])} className="text-[10px] text-primary lowercase hover:underline">Clear</button>}
-                </h3>
-                <div className="flex flex-col gap-2.5">
-                  {MASTER_CATEGORIES.filter(c => c !== "All" && c !== "Material Handlers" && c !== "Others").map((cat) => {
-                    const isChecked = selectedCategories.includes(cat);
+                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Categories</h3>
+                <div className="flex flex-wrap gap-2">
+                  {MASTER_CATEGORIES.filter(c => c !== "All" && c !== "Material Handlers" && c !== "Others").map(cat => {
+                    const isSelected = selectedCategories.includes(cat);
                     return (
-                      <label key={cat} className="flex items-center gap-3 cursor-pointer group">
-                        <div className={`w-5 h-5 rounded border transition-all flex items-center justify-center ${isChecked ? 'bg-primary border-primary shadow-sm shadow-primary/20' : 'border-slate-300 bg-slate-50 group-hover:border-primary/50'}`}>
-                          {isChecked && <div className="w-2.5 h-2.5 bg-white rounded-[1px]" />}
-                        </div>
+                      <button 
+                        key={cat}
+                        onClick={() => {
+                          const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
+                          setSelectedCategories(next);
+                        }}
+                        className={`px-3 py-2 rounded-xl text-[12px] font-bold transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/40'}`}
+                      >
+                        {cat}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Brand Filter */}
+              <div>
+                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Top Brands</h3>
+                <div className="flex flex-col gap-2">
+                  {["CAT", "JCB", "Komatsu", "Volvo", "Hyundai"].map(brand => {
+                    const isSelected = selectedBrands.includes(brand);
+                    return (
+                      <label key={brand} className="flex items-center gap-3 cursor-pointer group">
                         <input 
-                          type="checkbox" 
-                          className="hidden" 
-                          checked={isChecked}
+                          type="checkbox"
+                          className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary transition-all"
+                          checked={isSelected}
                           onChange={() => {
-                            const next = isChecked ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
-                            setSelectedCategories(next);
+                            const next = isSelected ? selectedBrands.filter(b => b !== brand) : [...selectedBrands, brand];
+                            setSelectedBrands(next);
                           }}
                         />
-                        <span className={`text-[14px] font-semibold transition-colors ${isChecked ? 'text-heading' : 'text-slate-600 group-hover:text-heading'}`}>{cat}</span>
-                        <span className="ml-auto text-[11px] font-black text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">{getCategoryCount(cat)}</span>
+                        <span className={`text-[14px] font-semibold transition-colors ${isSelected ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{brand}</span>
                       </label>
                     );
                   })}
                 </div>
               </div>
 
-              {/* DYNAMIC FILTERS (Shown when any category is selected) */}
-              <AnimatePresence>
-                {selectedCategories.length > 0 && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="flex flex-col gap-6 pt-6 border-t border-slate-100 overflow-hidden">
-                    
-                    {/* 1. Model (Searchable Dropdown) */}
-                    <div>
-                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase">Model</h3>
-                      <div className="relative mb-2">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
-                        <input 
-                          type="text" 
-                          placeholder="Search Models..."
-                          value={modelSearch}
-                          onChange={(e) => setModelSearch(e.target.value)}
-                          className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-medium focus:outline-none focus:ring-2 focus:ring-primary/20"
-                        />
-                      </div>
-                      <div className="max-h-[120px] overflow-y-auto flex flex-col gap-1.5 pr-2 custom-scrollbar">
-                        {filteredUniqueModels.map(model => {
-                          const isSelected = selectedModels.includes(model);
-                          return (
-                            <label key={model} className="flex items-center gap-2 cursor-pointer group">
-                              <input 
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={() => {
-                                  const next = isSelected ? selectedModels.filter(m => m !== model) : [...selectedModels, model];
-                                  setSelectedModels(next);
-                                }}
-                                className="w-3.5 h-3.5 rounded border-slate-300 text-primary focus:ring-primary"
-                              />
-                              <span className={`text-[12px] font-medium transition-colors ${isSelected ? 'text-heading font-bold' : 'text-slate-500 group-hover:text-heading'}`}>{model}</span>
-                            </label>
-                          );
-                        })}
-                        {filteredUniqueModels.length === 0 && <span className="text-[11px] text-slate-400 italic">No models found</span>}
-                      </div>
-                    </div>
+              {/* Location */}
+              <div>
+                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Location</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {["UAE", "India", "Saudi", "Africa"].map(loc => {
+                    const isSelected = selectedLocations.includes(loc);
+                    return (
+                      <button 
+                        key={loc}
+                        onClick={() => {
+                          const next = isSelected ? selectedLocations.filter(l => l !== loc) : [...selectedLocations, loc];
+                          setSelectedLocations(next);
+                        }}
+                        className={`px-2 py-2 rounded-lg text-[11px] font-bold border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/50'}`}
+                      >
+                        {loc}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
-                    {/* 2. Location */}
-                    <div>
-                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase">Location</h3>
-                      <div className="grid grid-cols-2 gap-2">
-                        {["UAE", "India", "Europe", "Africa", "Middle East"].map(loc => {
-                          const isSelected = selectedLocations.includes(loc);
-                          return (
-                            <button 
-                              key={loc}
-                              onClick={() => {
-                                const next = isSelected ? selectedLocations.filter(l => l !== loc) : [...selectedLocations, loc];
-                                setSelectedLocations(next);
-                              }}
-                              className={`px-2 py-1.5 rounded-lg text-[11px] font-bold border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-sm shadow-primary/20' : 'bg-slate-50 border-slate-200 text-slate-600 hover:border-primary/50'}`}
-                            >
-                              {loc}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+              {/* Engine Hours Slider */}
+              <div>
+                <div className="flex justify-between mb-4">
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Engine Hours</h3>
+                  <span className="text-[11px] font-bold text-primary">{engineHours} hrs</span>
+                </div>
+                <input 
+                  type="range"
+                  min="0"
+                  max="15000"
+                  step="500"
+                  value={engineHours}
+                  onChange={(e) => setEngineHours(parseInt(e.target.value))}
+                  className="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex justify-between mt-2 text-[9px] font-black text-slate-300 uppercase">
+                  <span>0 hrs</span>
+                  <span>15,000+ hrs</span>
+                </div>
+              </div>
 
-                    {/* 3. Engine Hours */}
-                    <div>
-                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase">Engine Hours</h3>
-                      <div className="flex flex-col gap-2.5">
-                        {["0-2000", "2000-5000", "5000-8000", "8000+"].map(range => {
-                          const isSelected = selectedHours.includes(range);
-                          return (
-                            <label key={range} className="flex items-center gap-2.5 cursor-pointer group">
-                              <div className={`w-4 h-4 rounded border transition-all flex items-center justify-center ${isSelected ? 'bg-primary border-primary' : 'border-slate-300 bg-slate-50 group-hover:border-primary/50'}`}>
-                                {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-[1px]" />}
-                              </div>
-                              <input 
-                                type="checkbox"
-                                className="hidden"
-                                checked={isSelected}
-                                onChange={() => {
-                                  const next = isSelected ? selectedHours.filter(r => r !== range) : [...selectedHours, range];
-                                  setSelectedHours(next);
-                                }}
-                              />
-                              <span className={`text-[13px] font-semibold ${isSelected ? 'text-heading' : 'text-slate-600'}`}>{range} hrs</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
+              {/* Price Range */}
+              <div>
+                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Price Range</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  <input 
+                    type="number" 
+                    placeholder="Min"
+                    value={minPrice || ""}
+                    onChange={(e) => setMinPrice(parseInt(e.target.value) || 0)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold focus:ring-1 focus:ring-primary outline-none"
+                  />
+                  <input 
+                    type="number" 
+                    placeholder="Max"
+                    value={maxPrice || ""}
+                    onChange={(e) => setMaxPrice(parseInt(e.target.value) || 0)}
+                    className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold focus:ring-1 focus:ring-primary outline-none"
+                  />
+                </div>
+              </div>
 
-                    {/* 4. Price Range Slider */}
-                    <div>
-                      <h3 className="text-[11px] font-black letter-spacing-[1.5px] text-slate-900 mb-3 uppercase flex justify-between">
-                        Max Price
-                        <span className="text-primary font-black">Up to $1M</span>
-                      </h3>
+              {/* Condition */}
+              <div>
+                <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Condition</h3>
+                <div className="flex flex-col gap-2">
+                  {["All", "Used", "Refurbished", "Ready Stock"].map(cond => (
+                    <label key={cond} className="flex items-center gap-3 cursor-pointer group">
                       <input 
-                        type="range"
-                        min="0"
-                        max="1000000"
-                        step="10000"
-                        value={priceRange}
-                        onChange={(e) => setPriceRange(parseInt(e.target.value))}
-                        className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary"
+                        type="radio" 
+                        name="condition" 
+                        checked={selectedCondition === cond}
+                        onChange={() => setSelectedCondition(cond)}
+                        className="w-4 h-4 text-primary focus:ring-primary border-slate-300" 
                       />
-                      <div className="flex justify-between mt-2 text-[10px] font-black text-slate-400 uppercase tracking-wider">
-                        <span>$0</span>
-                        <span>$1,000,000+</span>
+                      <span className={`text-[14px] font-semibold transition-colors ${selectedCondition === cond ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{cond}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          {/* RIGHT SIDE PRODUCT GRID */}
+          <main className="flex-1 min-w-0">
+            {filteredProducts.length === 0 ? (
+              /* 4. EMPTY STATE */
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white border border-slate-100 rounded-[32px] p-16 text-center shadow-sm"
+              >
+                <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <RotateCcw size={40} className="text-slate-200" />
+                </div>
+                <h3 className="text-2xl font-display font-black text-heading mb-3">No machinery found</h3>
+                <p className="text-slate-500 font-medium max-w-sm mx-auto mb-10">Try adjusting filters or search terms to find the perfect equipment for your needs.</p>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <button 
+                    onClick={handleReset}
+                    className="px-8 py-3.5 bg-slate-900 text-white rounded-xl font-bold text-[13px] uppercase tracking-widest hover:bg-primary transition-all shadow-xl shadow-slate-900/10"
+                  >
+                    Reset Filters
+                  </button>
+                </div>
+              </motion.div>
+            ) : (
+              <div className="space-y-12">
+                {/* Active Inventory Grid */}
+                <motion.div 
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, margin: "-50px" }}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+                >
+                  <AnimatePresence mode="popLayout">
+                    {availableProducts.map((product) => (
+                      <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* Previously Sold Units */}
+                {activeStatus === "All" && availableProducts.length > 0 && soldProducts.length > 0 && (
+                  <div className="relative pt-12">
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-slate-100" />
+                    <div className="relative flex justify-center">
+                      <div className="bg-[#F8FAFC] px-10 py-3 rounded-full border border-slate-100">
+                        <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Previously Sold Units</h2>
                       </div>
                     </div>
+                  </div>
+                )}
 
+                {soldProducts.length > 0 && (
+                  <motion.div 
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 opacity-80"
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {soldProducts.map((product) => (
+                        <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />
+                      ))}
+                    </AnimatePresence>
                   </motion.div>
                 )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </aside>
-
-        {/* Main Grid Area */}
-        <main className="flex-1 min-w-0">
-          <div className="space-y-12">
-          {availableProducts.length === 0 && soldProducts.length > 0 && activeStatus !== "Sold" && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-orange-50/50 border border-primary/20 rounded-[2rem] p-8 text-center max-w-2xl mx-auto mb-10">
-              <p className="text-[#030814] font-display font-medium text-lg">No available machines currently match your selection. <span className="text-primary font-black">Showing sold units.</span></p>
-            </motion.div>
-          )}
-          
-          {filteredProducts.length === 0 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-[#dbe3ee] rounded-[2rem] p-16 text-center max-w-3xl mx-auto my-12 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
-              <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search size={32} className="text-slate-300" />
               </div>
-              <h3 className="text-2xl font-display font-black text-[#030814] mb-3">No machinery found</h3>
-              <p className="text-slate-500 font-medium">We couldn't find any machines matching your current filters or our database is currently offline.</p>
-              <button 
-                onClick={() => { setSearchQuery(""); setSelectedCategories([]); setActiveStatus("All"); }}
-                className="mt-8 px-8 py-3 bg-slate-900 text-white rounded-xl font-bold text-[13px] uppercase tracking-widest hover:bg-primary transition-all shadow-lg"
-              >
-                Clear Filters
-              </button>
-            </motion.div>
-          )}
-
-          {/* Active Inventory Grid */}
-          {availableProducts.length > 0 && activeStatus !== "Sold" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="products-grid">
-              <AnimatePresence mode="popLayout">
-                {availableProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
-              </AnimatePresence>
-            </motion.div>
-          )}
-
-          {activeStatus === "All" && availableProducts.length > 0 && soldProducts.length > 0 && (
-            <div className="relative pt-12 pb-6">
-              <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-slate-200" />
-              <div className="relative flex justify-center">
-                <div className="bg-white border border-slate-200 px-10 py-3 rounded-full shadow-sm"><h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Previously Sold Units</h2></div>
-              </div>
-            </div>
-          )}
-
-          {/* Sold Inventory Grid */}
-          {soldProducts.length > 0 && activeStatus !== "Available" && (
-            <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="products-grid">
-              <AnimatePresence mode="popLayout">
-                {soldProducts.map((product) => <ProductCard key={product.id} product={product} setSelectedProduct={setSelectedProduct} setEnquiryOpen={setEnquiryOpen} />)}
-              </AnimatePresence>
-            </motion.div>
-          )}
-          </div>
-        </main>
+            )}
+          </main>
+        </div>
       </div>
+
+      {/* 5. EXTRA CONVERSION SECTION */}
+      <section className="py-24 bg-white relative overflow-hidden border-t border-slate-100">
+        <div className="container-section text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-5xl font-display font-black text-heading mb-6 tracking-tight">Ready to Upgrade Your Fleet?</h2>
+            <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-10">
+              Get competitive pricing, global logistics and expert support from Dubai headquarters.
+            </p>
+            <button 
+              onClick={() => {
+                setSelectedProduct({ name: "General Marketplace Inquiry" });
+                setEnquiryOpen(true);
+              }}
+              className="px-10 py-4 bg-primary text-white rounded-xl font-black text-[14px] uppercase tracking-widest hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 transition-all shadow-xl shadow-primary/10"
+            >
+              Start Enquiry
+            </button>
+          </motion.div>
+        </div>
+      </section>
     </div>
 
       {/* Pre-Footer CTA */}

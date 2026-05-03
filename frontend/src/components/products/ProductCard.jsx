@@ -34,86 +34,96 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       variants={itemVariant}
       layout
       onClick={handleCardClick}
-      className={`product-card group ${isSold ? "opacity-90" : ""}`}
+      className={`relative bg-white rounded-[22px] overflow-hidden border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.1)] transition-all duration-500 group flex flex-col ${isSold ? "opacity-90" : ""}`}
     >
       {/* 1. Image Section (Top) */}
-      <div className="product-card-image-section">
-        <ProductCarousel 
-          images={product.images} 
-          image={product.image}
-          photo={product.photo}
-          isSold={isSold} 
-          name={product.name} 
-          id={product.id}
-          updatedAt={product.updatedAt}
-        />
+      <div className="relative h-[220px] overflow-hidden shrink-0">
+        <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
+          <ProductCarousel 
+            images={product.images} 
+            image={product.image}
+            photo={product.photo}
+            isSold={isSold} 
+            name={product.name} 
+            id={product.id}
+            updatedAt={product.updatedAt}
+          />
+        </div>
 
-        {/* Top Left Year Badge */}
-        {product.year && (
-          <div className="badge-year">
-            {product.year}
+        {/* Overlay Badges */}
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
+          <div className="px-3 py-1 bg-white/90 backdrop-blur-md text-heading font-black text-[10px] uppercase tracking-widest rounded-lg shadow-sm border border-slate-200/50 flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Verified
           </div>
-        )}
+          <div className="px-3 py-1 bg-primary text-white font-black text-[10px] uppercase tracking-widest rounded-lg shadow-lg shadow-primary/20 border border-primary/20 flex items-center gap-1.5">
+            <RotateCcw size={10} className="rotate-180" />
+            Ready to Ship
+          </div>
+        </div>
 
-        {/* Top Right Badge */}
-        {(isSold || product.featured || product.verified !== false) && (
-          <div className="badge-verified">
-            {isSold ? "SOLD" : product.featured ? "FEATURED" : "VERIFIED"}
+        {isSold && (
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center z-20">
+            <span className="px-6 py-2 bg-white text-slate-900 font-black text-sm tracking-[0.3em] uppercase rounded-full shadow-2xl">Sold</span>
           </div>
         )}
       </div>
       
       {/* 2. Content Section */}
-      <div className="product-card-content">
-        <Link to={`/product/${product.id}`}>
-          <h3 className="product-card-name">
-            {product.name}
-          </h3>
-        </Link>
-
-        {/* Small Specs Row */}
-        <div className="product-card-specs">
-          {product.year && <span>{product.year}</span>}
-          {product.year && product.engine_hours && <span className="separator">•</span>}
-          {product.engine_hours && (
-            <span className="flex items-center gap-1">
-              <Clock size={12} className="text-slate-400" />
-              {product.engine_hours} Hrs
-            </span>
-          )}
-          {(product.year || product.engine_hours) && product.location && <span className="separator">•</span>}
-          {product.location && (
-            <span className="flex items-center gap-1">
-              <MapPin size={12} className="text-slate-400" />
-              {product.location.split(',')[0]}
-            </span>
-          )}
+      <div className="p-6 flex flex-col flex-1">
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-black text-primary uppercase tracking-widest">{product.brand || 'Premium'}</span>
+            <span className="text-[11px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">ID: {refNumber}</span>
+          </div>
+          <Link to={`/product/${product.id}`}>
+            <h3 className="text-xl font-display font-black text-heading leading-tight group-hover:text-primary transition-colors line-clamp-2 uppercase">
+              {product.name}
+            </h3>
+          </Link>
         </div>
 
-        <div className="product-card-middle-section">
-          <div>
-            <div className="product-card-label">
-              EXPORT PRICE
+        {/* Specs Grid */}
+        <div className="grid grid-cols-2 gap-y-3 gap-x-4 mb-6">
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-slate-50 rounded-lg">
+              <Clock size={14} className="text-slate-400" />
             </div>
-            <div className="product-card-price">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Usage</span>
+              <span className="text-[13px] font-bold text-slate-700">{product.engine_hours || '0'} hrs</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-slate-50 rounded-lg">
+              <MapPin size={14} className="text-slate-400" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Location</span>
+              <span className="text-[13px] font-bold text-slate-700 truncate">{product.location?.split(',')[0] || 'Dubai'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-auto pt-6 border-t border-slate-50 flex items-end justify-between">
+          <div>
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Export Price</span>
+            <div className="text-3xl font-display font-black text-primary flex items-baseline gap-1">
               {displayPrice}
             </div>
           </div>
-
-          {/* Ref Box */}
-          <div className="product-card-ref-badge">
-            <span className="product-card-ref-label">REF:</span>
-            {refNumber}
+          <div className="text-[11px] font-black text-slate-900 bg-slate-100 px-3 py-1.5 rounded-xl uppercase tracking-tighter">
+            {product.condition || 'Used'}
           </div>
         </div>
         
-        {/* Bottom Buttons */}
-        <div className="product-card-buttons">
+        {/* Actions */}
+        <div className="grid grid-cols-2 gap-3 mt-6">
           <Link 
             to={`/product/${product.id}`}
-            className="btn-details"
+            className="flex items-center justify-center h-[46px] rounded-xl border border-slate-200 text-slate-900 font-bold text-[12px] uppercase tracking-widest hover:bg-slate-50 transition-all"
           >
-            DETAILS
+            Details
           </Link>
           <button 
             onClick={(e) => { 
@@ -121,10 +131,10 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
               setSelectedProduct(product); 
               setEnquiryOpen(true); 
             }}
-            className="btn-enquire pulse-effect"
+            className="flex items-center justify-center gap-2 h-[46px] rounded-xl bg-primary text-white font-bold text-[12px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] hover:bg-orange-600 transition-all"
           >
-            <MessageCircle size={18} fill="currentColor" fillOpacity={0.2} />
-            ENQUIRE
+            <MessageCircle size={16} />
+            Enquire
           </button>
         </div>
       </div>
