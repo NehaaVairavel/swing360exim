@@ -254,11 +254,11 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-[14px] mb-4 mt-4">
+              <div className="grid grid-cols-2 gap-[10px] mb-3 mt-3.5">
                 {specifications.map((spec, i) => (
-                  <div key={i} className="flex flex-col justify-center items-start gap-0 bg-white border border-gray-100 rounded-[18px] p-[16px_18px] h-[84px] hover:border-primary/20 hover:shadow-md transition-all group">
-                    <span className="text-[11px] font-bold uppercase tracking-[1.4px] text-[#94a3b8] mb-1.5">{spec.label}</span>
-                    <span className="text-[18px] font-bold text-[#111827] leading-none">{spec.value}</span>
+                  <div key={i} className="flex flex-col justify-center items-start gap-0 bg-white border border-gray-100 rounded-[16px] p-[10px_16px] h-[62px] hover:border-primary/20 hover:shadow-md transition-all group">
+                    <span className="text-[10px] font-semibold uppercase tracking-[1.2px] text-[#9aa3b8] mb-1">{spec.label}</span>
+                    <span className="text-[14px] font-bold text-[#111827] leading-[1.2]">{spec.value}</span>
                   </div>
                 ))}
               </div>
