@@ -332,7 +332,7 @@ const Products = () => {
       </section>
 
       {/* 2. PREMIUM SEARCH & FILTER TOOLBAR WRAPPER */}
-      <section className="sticky top-[80px] z-40 py-2 -mt-2 transition-all duration-300">
+      <section className="sticky top-[80px] z-40 pt-2 pb-3 -mt-2 transition-all duration-300">
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
@@ -341,7 +341,7 @@ const Products = () => {
             className="bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 rounded-[32px] shadow-xl border border-orange-300/30 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0"
           >
             {/* 1. COMPACT LUXURY SEARCH BAR (White Card) */}
-            <div className="relative group w-full h-[52px] transition-all duration-300">
+            <div className="relative group w-full h-[48px] transition-all duration-300">
               <div className="absolute left-2 top-1/2 -translate-y-1/2 w-[38px] h-[38px] rounded-full bg-slate-50 flex items-center justify-center pointer-events-none group-focus-within:bg-orange-50 transition-colors">
                 <Search className="text-slate-500 group-focus-within:text-primary transition-colors" size={18} />
               </div>
@@ -355,14 +355,14 @@ const Products = () => {
             </div>
 
             {/* 2. ELEGANT STACKED DROPDOWN SORT (White Card) */}
-            <div className="relative group w-full h-[52px]">
-              <div className="absolute left-4 top-[10px] flex flex-col pointer-events-none z-10">
+            <div className="relative group w-full h-[48px]">
+              <div className="absolute left-4 top-[8px] flex flex-col pointer-events-none z-10">
                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">SORT BY</span>
               </div>
               <select 
                 value={activeSort}
                 onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full pl-4 pr-10 pt-4 h-full bg-white border border-transparent rounded-2xl text-[16px] font-bold text-heading appearance-none outline-none focus:ring-4 focus:ring-white/20 transition-all cursor-pointer shadow-md"
+                className="w-full pl-4 pr-10 pt-3 h-full bg-white border border-transparent rounded-2xl text-[16px] font-bold text-heading appearance-none outline-none focus:ring-4 focus:ring-white/20 transition-all cursor-pointer shadow-md"
               >
                 {["Newest", "Price Low to High", "Price High to Low", "Hours Low to High", "Hours High to Low", "Brand A-Z"].map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -377,7 +377,7 @@ const Products = () => {
             {/* 4. RESET BUTTON (White Card) */}
             <button 
               onClick={handleReset}
-              className="h-[52px] w-[140px] bg-white text-orange-600 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-2 shadow-md active:scale-95 mx-auto xl:mx-0 border border-transparent"
+              className="h-[48px] w-[140px] bg-white text-orange-600 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-2 shadow-md active:scale-95 mx-auto xl:mx-0 border border-transparent"
             >
               <RotateCcw size={14} />
               <span>Reset</span>
@@ -388,8 +388,8 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1700px] mx-auto pt-[10px] pb-0 mt-[12px] px-4 md:px-8">
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+      <div className="container-section max-w-[1700px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-8">
+        <div className="flex flex-col lg:flex-row gap-6 items-start mt-2">
           
           {/* 3. LEFT SIDEBAR (Premium Floating Sticky) */}
           <motion.aside 
