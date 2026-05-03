@@ -11,6 +11,7 @@ import AnimatedGear from "@/components/AnimatedGear";
 import { useCurrency } from "@/context/CurrencyContext";
 import CurrencyToggle from "@/components/CurrencyToggle";
 import ProductCard from "@/components/products/ProductCard";
+import { cleanPrice } from "@/utils/priceFormatter";
 import "@/styles/cards.css";
 import "@/styles/products.css";
 
