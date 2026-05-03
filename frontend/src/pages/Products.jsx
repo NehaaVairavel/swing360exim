@@ -292,7 +292,7 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased pt-[72px]">
       {/* 1. PREMIUM HERO SECTION */}
-      <section className="relative pt-4 md:pt-6 pb-6 overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-bottom border-slate-100">
+      <section className="relative pt-[38px] pb-[18px] overflow-hidden bg-gradient-to-b from-white to-[#F8FAFC] border-bottom border-slate-100">
         {/* Visual Depth Elements */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -324,7 +324,7 @@ const Products = () => {
               <div className="absolute inset-0 bg-primary/5 blur-3xl -z-10 rounded-full" />
             </h1>
             
-            <p className="text-muted-foreground text-[13px] max-w-[520px] mx-auto mt-1 font-semibold">
+            <p className="text-muted-foreground text-[13px] max-w-[520px] mx-auto mt-1 mb-[14px] font-semibold">
               Engineered for performance, curated for global markets.
             </p>
           </motion.div>
@@ -332,7 +332,7 @@ const Products = () => {
       </section>
 
       {/* 2. PREMIUM SEARCH & FILTER TOOLBAR WRAPPER */}
-      <section className="sticky top-[80px] z-40 py-2 mt-0 transition-all duration-300">
+      <section className="sticky top-[80px] z-40 py-2 -mt-2 transition-all duration-300">
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
