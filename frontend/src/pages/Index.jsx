@@ -427,17 +427,17 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="gradient-cta py-8 md:py-10 max-h-[320px] relative overflow-hidden flex items-center">
+      <section className="gradient-cta py-5 md:py-7 max-h-[240px] relative overflow-hidden flex items-center">
         <div className="container-section text-center relative z-20 w-full">
           <SectionReveal>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-display font-black text-white mb-3 drop-shadow-lg tracking-tight">Ready to Upgrade Your Fleet?</h2>
-            <p className="text-white/90 mb-5 max-w-[520px] mx-auto text-sm md:text-base font-semibold drop-shadow-md">Get competitive pricing, global shipping logistics, and expert consultation from our Dubai headquarters.</p>
-            <div className="flex flex-col items-center justify-center gap-2">
-              <a href={`https://wa.me/${siteSettings?.whatsapp || "971558599045"}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 bg-white text-primary px-6 py-2.5 rounded-xl font-display font-black text-sm hover:scale-[1.03] hover:brightness-105 shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-400 group relative overflow-hidden">
-                <span className="relative z-10 flex items-center gap-2">Start Your Enquiry <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform duration-300" /></span>
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-display font-black text-white mb-2 drop-shadow-lg tracking-tight">Ready to Upgrade Your Fleet?</h2>
+            <p className="text-white/90 mb-3 max-w-[480px] mx-auto text-sm font-semibold drop-shadow-md">Get competitive pricing, global shipping logistics, and expert consultation from our Dubai headquarters.</p>
+            <div className="flex flex-col items-center justify-center gap-1.5">
+              <a href={`https://wa.me/${siteSettings?.whatsapp || "971558599045"}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 bg-white text-primary px-5 py-2 rounded-xl font-display font-black text-sm hover:scale-[1.03] hover:brightness-105 shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)] transition-all duration-400 group relative overflow-hidden">
+                <span className="relative z-10 flex items-center gap-2">Start Your Enquiry <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform duration-300" /></span>
                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
               </a>
-              <p className="text-white/80 text-[13px] font-semibold tracking-wide mt-1 text-center">Get instant response from our team</p>
+              <p className="text-white/80 text-[12px] font-semibold tracking-wide text-center">Get instant response from our team</p>
             </div>
           </SectionReveal>
         </div>

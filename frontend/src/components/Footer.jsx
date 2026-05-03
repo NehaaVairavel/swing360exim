@@ -36,43 +36,43 @@ const Footer = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="container-section py-8 md:py-10 relative z-10"
+        className="container-section py-5 md:py-7 relative z-10"
       >
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-4 lg:gap-8">
           
           {/* LEFT: BRAND SECTION */}
           <div className="md:col-span-12 lg:col-span-5">
-            <div className="flex items-center gap-4 mb-4 group cursor-default relative">
+            <div className="flex items-center gap-3 mb-3 group cursor-default relative">
               <img 
                 src={logo} 
                 alt="Swing360 EXIM" 
-                className="h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-[1.02] relative z-10" 
+                className="h-9 w-auto object-contain transition-transform duration-500 group-hover:scale-[1.02] relative z-10" 
               />
-              <div className="h-10 w-[1px] bg-white/20 mx-2 hidden sm:block relative z-10" />
+              <div className="h-8 w-[1px] bg-white/20 mx-1.5 hidden sm:block relative z-10" />
               <div className="flex flex-col relative z-10">
-                 <span className="font-display font-bold text-xl tracking-wide text-[#EAEAEA] leading-none antialiased">Swing360</span>
-                 <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-primary mt-1">Exim Trading</span>
+                 <span className="font-display font-bold text-lg tracking-wide text-[#EAEAEA] leading-none antialiased">Swing360</span>
+                 <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-primary mt-0.5">Exim Trading</span>
               </div>
             </div>
 
             {/* Tagline Improvement */}
-            <div className="relative pl-4 mb-6">
+            <div className="relative pl-3 mb-4">
               <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-primary rounded-full" />
-              <p className="text-[#EAEAEA]/90 text-[13px] leading-relaxed max-w-sm font-normal antialiased">
+              <p className="text-[#EAEAEA]/90 text-[12px] leading-snug max-w-sm font-normal antialiased">
                 Global hub for heavy equipment trading. Delivering certified premium machinery with excellence from Dubai.
               </p>
             </div>
             
             {/* Social Icons */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               {[
                 { Icon: Facebook, url: "#" },
                 { Icon: Instagram, url: "#" },
                 { Icon: Youtube, url: "#" },
                 { Icon: Linkedin, url: "#" }
               ].map(({ Icon, url }, i) => (
-                <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#EAEAEA]/70 hover:text-primary hover:border-primary/50 hover:bg-primary/10 hover:-translate-y-1 transition-all duration-300 group">
-                  <Icon size={17} strokeWidth={1.5} className="group-hover:brightness-110 transition-all duration-300" />
+                <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[#EAEAEA]/70 hover:text-primary hover:border-primary/50 hover:bg-primary/10 hover:-translate-y-1 transition-all duration-300 group">
+                  <Icon size={15} strokeWidth={1.5} className="group-hover:brightness-110 transition-all duration-300" />
                 </a>
               ))}
             </div>
@@ -80,10 +80,10 @@ const Footer = () => {
 
           {/* CENTER: NAVIGATION */}
           <div className="md:col-span-6 lg:col-span-3 lg:col-start-7">
-            <h4 className="font-display font-bold text-[#EAEAEA] mb-5 text-[11px] uppercase tracking-[0.2em] antialiased">
+            <h4 className="font-display font-bold text-[#EAEAEA] mb-3 text-[10px] uppercase tracking-[0.2em] antialiased">
               Quick Links
             </h4>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2.5">
               {[
                 { label: "Home", path: "/" },
                 { label: "Products", path: "/products" },
@@ -108,48 +108,48 @@ const Footer = () => {
 
           {/* RIGHT: CONTACT */}
           <div className="md:col-span-6 lg:col-span-3">
-            <h4 className="font-display font-bold text-[#EAEAEA] mb-5 text-[11px] uppercase tracking-[0.2em] antialiased">
+            <h4 className="font-display font-bold text-[#EAEAEA] mb-3 text-[10px] uppercase tracking-[0.2em] antialiased">
               Connect With Us
             </h4>
             <div className="flex flex-col">
               
               {/* Location */}
-              <div className="flex items-start gap-4 group border-b border-white/5 pb-4 mb-4">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-300">
-                  <MapPin size={16} className="text-primary transition-all duration-300" />
+              <div className="flex items-start gap-3 group border-b border-white/5 pb-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-300">
+                  <MapPin size={14} className="text-primary transition-all duration-300" />
                 </div>
                 <div className="flex flex-col pt-0.5">
-                  <span className="text-[10px] font-semibold text-[#EAEAEA]/60 uppercase tracking-[0.15em] mb-1">Our Location</span>
-                  <span className="text-white text-[14px] font-medium antialiased group-hover:text-primary transition-colors duration-300">
+                  <span className="text-[9px] font-semibold text-[#EAEAEA]/60 uppercase tracking-[0.15em] mb-0.5">Our Location</span>
+                  <span className="text-white text-[13px] font-medium antialiased group-hover:text-primary transition-colors duration-300">
                     Silicon Oasis, Dubai, UAE
                   </span>
                 </div>
               </div>
               
               {/* Phone */}
-              <div className="flex items-start gap-4 group border-b border-white/5 pb-4 mb-4">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-300">
-                  <Phone size={16} className="text-primary transition-all duration-300" />
+              <div className="flex items-start gap-3 group border-b border-white/5 pb-3 mb-3">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-300">
+                  <Phone size={14} className="text-primary transition-all duration-300" />
                 </div>
-                <div className="flex flex-col pt-0.5 gap-1.5">
-                  <span className="text-[10px] font-semibold text-[#EAEAEA]/60 uppercase tracking-[0.15em]">Call Now</span>
-                  <a href="tel:+971558599045" className="text-[#EAEAEA] text-[15px] font-black tracking-wide hover:text-primary transition-colors antialiased">
+                <div className="flex flex-col pt-0.5 gap-1">
+                  <span className="text-[9px] font-semibold text-[#EAEAEA]/60 uppercase tracking-[0.15em]">Call Now</span>
+                  <a href="tel:+971558599045" className="text-[#EAEAEA] text-[13px] font-black tracking-wide hover:text-primary transition-colors antialiased">
                     +971 55 859 9045
                   </a>
-                  <a href="tel:+918778868739" className="text-[#EAEAEA] text-[15px] font-black tracking-wide hover:text-primary transition-colors antialiased">
+                  <a href="tel:+918778868739" className="text-[#EAEAEA] text-[13px] font-black tracking-wide hover:text-primary transition-colors antialiased">
                     +91 87788 68739
                   </a>
                 </div>
               </div>
 
               {/* Email */}
-              <div className="flex items-start gap-4 group">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-300">
-                  <Mail size={16} className="text-primary transition-all duration-300" />
+              <div className="flex items-start gap-3 group">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-all duration-300">
+                  <Mail size={14} className="text-primary transition-all duration-300" />
                 </div>
                 <div className="flex flex-col pt-0.5">
-                  <span className="text-[10px] font-semibold text-[#EAEAEA]/60 uppercase tracking-[0.15em] mb-1">Email Support</span>
-                  <a href="mailto:swing360exim@gmail.com" className="text-[#EAEAEA] text-[14px] font-medium hover:text-primary transition-colors antialiased">
+                  <span className="text-[9px] font-semibold text-[#EAEAEA]/60 uppercase tracking-[0.15em] mb-0.5">Email Support</span>
+                  <a href="mailto:swing360exim@gmail.com" className="text-[#EAEAEA] text-[13px] font-medium hover:text-primary transition-colors antialiased">
                     swing360exim@gmail.com
                   </a>
                 </div>
@@ -160,7 +160,7 @@ const Footer = () => {
         </div>
         
         {/* Bottom Bar: Clean Divider & Minimal Text */}
-        <div className="mt-8 pt-6 relative flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-5 pt-4 relative flex flex-col md:flex-row justify-between items-center gap-3">
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/10" />
           
           <div className="text-[11px] text-[#EAEAEA]/70 font-medium uppercase tracking-[0.1em] antialiased hover:text-[#EAEAEA] transition-colors duration-300">
