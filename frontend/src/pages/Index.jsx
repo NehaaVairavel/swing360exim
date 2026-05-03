@@ -236,29 +236,6 @@ const Index = () => {
 
         <div className="container-section relative z-10 pt-[72px] pb-10 md:pt-[80px] md:pb-12">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }} className="hidden lg:block absolute top-[80px] right-8 z-30 w-[360px]">
-            {/* Crane hook suspending search bar */}
-            <motion.div
-              className="absolute -top-[100px] left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-[-1]"
-              style={{ transformOrigin: "top center" }}
-              animate={{ rotate: [-1.3, 1.3, -1.3] }}
-              transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-            >
-              {/* Braided steel cable */}
-              <svg width="10" height="64" viewBox="0 0 10 64" fill="none" style={{ display: "block" }}>
-                <line x1="5" y1="0" x2="5" y2="64" stroke="#f59e0b" strokeWidth="4.5" strokeLinecap="round" />
-                <line x1="3" y1="0" x2="3" y2="64" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
-                <line x1="7" y1="0" x2="7" y2="64" stroke="rgba(0,0,0,0.18)" strokeWidth="1" />
-                <path d="M5 4 Q7 12 5 20 Q3 28 5 36 Q7 44 5 52 Q3 60 5 64" stroke="rgba(255,200,50,0.25)" strokeWidth="1" fill="none" />
-              </svg>
-              {/* Enlarged crane hook (40% bigger) */}
-              <svg width="48" height="64" viewBox="0 0 34 46" fill="none" style={{ display: "block" }}>
-                <rect x="10" y="0" width="14" height="7" rx="2.5" fill="#f59e0b" opacity="0.95" />
-                <line x1="17" y1="7" x2="17" y2="20" stroke="#f59e0b" strokeWidth="3.5" strokeLinecap="round" />
-                <path d="M17 20 Q20 34 12 40 Q5 44 3 38 Q1 31 8 29" stroke="#f59e0b" strokeWidth="3" fill="rgba(245,158,11,0.12)" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M17 20 Q19 31 13 37 Q9 40 8 36" stroke="rgba(255,220,80,0.4)" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                <path d="M17 7 Q19 11 19 17" stroke="rgba(255,255,255,0.3)" strokeWidth="1" fill="none" strokeLinecap="round" />
-              </svg>
-            </motion.div>
             <form onSubmit={handleSearch} className="bg-white/95 backdrop-blur-md rounded-full p-1.5 shadow-premium flex items-center gap-2 border border-white/60 focus-within:ring-2 focus-within:ring-primary/30 transition-all duration-300">
               <div className="flex-1 flex items-center gap-3 px-5">
                 <Search size={18} className="text-muted-foreground" />
@@ -442,8 +419,10 @@ const Index = () => {
             <p className="text-muted-foreground text-base max-w-[520px] mx-auto mt-2 font-semibold">Delivering excellence in heavy equipment trading across global markets</p>
           </SectionReveal>
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-            {stats.map((s, i) => <StatCard key={i} stat={s} i={i} />)}
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-10">
+              {stats.map((s, i) => <StatCard key={i} stat={s} i={i} />)}
+            </div>
           </div>
         </div>
       </section>
