@@ -346,7 +346,7 @@ const Index = () => {
             <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">Explore our diverse range of high-quality heavy equipment ready for global export</p>
           </SectionReveal>
           
-          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-5">
             {categoriesData.map((cat) => {
               const count = allProducts.filter(p => p.category === cat.name).length;
               return (
