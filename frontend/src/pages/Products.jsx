@@ -338,46 +338,46 @@ const Products = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="bg-white/90 backdrop-blur-md rounded-3xl shadow-xl border border-slate-200 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0"
+            className="bg-white/90 backdrop-blur-md rounded-[32px] shadow-xl border border-slate-100 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0"
           >
             {/* 1. LUXURY ORANGE SEARCH BAR */}
-            <div className="relative group w-full h-[50px] transition-all duration-300">
-              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full bg-black/10 flex items-center justify-center pointer-events-none group-focus-within:bg-white/20 transition-colors">
-                <Search className="text-white/90 group-focus-within:text-white transition-colors" size={16} />
+            <div className="relative group w-full h-[52px] transition-all duration-300">
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-[36px] h-[36px] rounded-full bg-black/10 flex items-center justify-center pointer-events-none group-focus-within:bg-white/20 transition-colors">
+                <Search className="text-white group-focus-within:text-white transition-colors" size={16} />
               </div>
               <input 
                 type="text" 
                 placeholder="Search excavators, CAT 320D..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-full pl-12 pr-4 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 border border-orange-300/20 rounded-2xl text-[15px] font-semibold text-white placeholder-white/75 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all shadow-lg"
+                className="w-full h-full pl-12 pr-4 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 border border-orange-300/20 rounded-2xl text-[15px] font-semibold text-white placeholder-white/80 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all shadow-lg"
               />
             </div>
 
-            {/* 2. ELEGANT STACKED DROPDOWN SORT */}
-            <div className="relative group w-full h-[50px]">
+            {/* 2. ELEGANT STACKED ORANGE DROPDOWN */}
+            <div className="relative group w-full h-[52px]">
               <div className="absolute left-4 top-[10px] flex flex-col pointer-events-none z-10">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 leading-none mb-0.5">SORT BY</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-white/80 leading-none mb-0.5">SORT BY</span>
               </div>
               <select 
                 value={activeSort}
                 onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full pl-4 pr-10 pt-4 h-full bg-white border border-slate-200 rounded-2xl text-[16px] font-bold text-heading appearance-none outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary/30 transition-all cursor-pointer shadow-sm"
+                className="w-full pl-4 pr-10 pt-4 h-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 border border-orange-300/20 rounded-2xl text-[16px] font-bold text-white appearance-none outline-none focus:ring-2 focus:ring-white/30 transition-all cursor-pointer shadow-lg"
               >
                 {["Newest", "Price Low to High", "Price High to Low", "Hours Low to High", "Hours High to Low", "Brand A-Z"].map(opt => (
-                  <option key={opt} value={opt}>{opt}</option>
+                  <option key={opt} value={opt} className="text-heading bg-white">{opt}</option>
                 ))}
               </select>
-              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
+              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-white pointer-events-none group-focus-within:rotate-180 transition-transform" />
             </div>
 
-            {/* 3. CURRENCY TOGGLE (Spacious variant) */}
-            <CurrencyToggle variant="spacious" />
+            {/* 3. CURRENCY TOGGLE (Orange variant) */}
+            <CurrencyToggle variant="orange" />
 
             {/* 4. RESET BUTTON */}
             <button 
               onClick={handleReset}
-              className="h-[50px] w-[140px] bg-[#0B1533] text-white rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 mx-auto xl:mx-0"
+              className="h-[52px] w-[140px] bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 text-white rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] hover:brightness-110 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 mx-auto xl:mx-0 border border-orange-300/20"
             >
               <RotateCcw size={14} />
               <span>Reset</span>

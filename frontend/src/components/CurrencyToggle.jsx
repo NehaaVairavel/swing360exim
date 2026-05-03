@@ -7,6 +7,39 @@ const CurrencyToggle = ({ variant = 'default' }) => {
 
   const isCompact = variant === 'compact';
   const isSpacious = variant === 'spacious';
+  const isOrange = variant === 'orange';
+
+  if (isOrange) {
+    return (
+      <div className="flex items-center gap-2 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 px-3 h-[52px] rounded-2xl shadow-lg border border-orange-300/20 relative shrink-0">
+        {currencies.map((curr) => {
+          const isActive = currency.code === curr.code;
+          return (
+            <button
+              key={curr.code}
+              onClick={() => setCurrency(curr)}
+              className={`
+                relative z-10 min-w-[54px] px-3 h-[38px] flex items-center justify-center gap-1.5 rounded-xl transition-all duration-300
+                text-[12px] font-bold tracking-tight
+                ${isActive ? 'text-orange-600' : 'text-white/75 hover:text-white'}
+              `}
+            >
+              <span className="text-[14px] leading-none">{curr.flag}</span>
+              <span>{curr.code === 'INR' ? '₹ INR' : curr.code}</span>
+              
+              {isActive && (
+                <motion.div
+                  layoutId={`activeCurrency-${variant}`}
+                  className="absolute inset-0 bg-white rounded-xl -z-10 shadow-md"
+                  transition={{ type: 'spring', bounce: 0.1, duration: 0.4 }}
+                />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
 
   if (isSpacious) {
     return (
