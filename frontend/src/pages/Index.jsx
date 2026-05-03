@@ -335,46 +335,34 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="section-tinted py-20 md:py-28 section-divider-top relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-[120px] -z-10 translate-x-1/3 -translate-y-1/3"></div>
+      <section className="section-tinted py-6 md:py-8 section-divider-top relative">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/[0.04] rounded-full blur-[100px] -z-10 translate-x-1/3 -translate-y-1/3"></div>
         
         <div className="container-section relative z-10">
-          <SectionReveal className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-display font-black mb-6 tracking-tight flex flex-col items-center">
-              <div>
-                <span className="text-heading">Premium</span> <span className="text-primary">Categories</span>
-              </div>
-              <div className="w-24 h-1 bg-primary mt-4 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.3)]" />
+          <SectionReveal className="text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-display font-black text-heading mb-2 heading-decorated tracking-tight">
+              Premium <span className="text-gradient drop-shadow-sm">Categories</span>
             </h2>
-            <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed uppercase tracking-wider">
-              Explore our diverse range of high-quality heavy equipment ready for global export
-            </p>
+            <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">Explore our diverse range of high-quality heavy equipment ready for global export</p>
           </SectionReveal>
           
-          <motion.div 
-            variants={staggerContainer} 
-            initial="hidden" 
-            whileInView="visible" 
-            viewport={{ once: true, margin: "-100px" }} 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 md:gap-5 mb-16"
-          >
+          <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {categoriesData.map((cat) => {
               const count = allProducts.filter(p => p.category === cat.name).length;
               return (
                 <motion.div key={cat.name} variants={staggerItem}>
-                  <Link 
-                    to={`/products?category=${encodeURIComponent(cat.name)}`} 
-                    className="group relative overflow-hidden rounded-[2rem] aspect-[4/3] block bg-white border border-slate-100 shadow-[0_15px_40px_rgb(0,0,0,0.06)] hover:shadow-[0_30px_70px_rgb(0,0,0,0.15)] hover:-translate-y-2 transition-all duration-500"
-                  >
-                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-all duration-1000 ease-out group-hover:scale-110 group-hover:brightness-110" loading="lazy" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500 z-10" />
-                    
-                    <div className="absolute inset-0 flex flex-col justify-end p-8 z-20">
-                      <h3 className="font-display font-black text-xl md:text-2xl text-white drop-shadow-2xl tracking-tight leading-tight group-hover:text-primary transition-colors duration-300">{cat.name}</h3>
+                  <Link to={`/products?category=${encodeURIComponent(cat.name)}`} className="group relative overflow-hidden rounded-[1.5rem] aspect-[16/10] block card-premium shadow-premium">
+                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-all duration-300 ease-in-out group-hover:scale-[1.05] group-hover:brightness-110 group-hover:contrast-[1.05]" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:from-black/90 z-10" />
+                    <div className="absolute inset-0 flex flex-col justify-end p-6 z-20">
+                      <h3 className="font-display font-extrabold text-xl text-white drop-shadow-md transform transition-transform duration-500 group-hover:translate-y-[-4px]">{cat.name}</h3>
+                      <div className="flex items-center gap-2 mt-2 overflow-hidden">
+                        <div className="h-[2px] w-0 bg-primary group-hover:w-8 transition-all duration-500 rounded-full shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+                        <span className="text-white/0 group-hover:text-white/90 text-[10px] font-black uppercase tracking-wider transition-all duration-500 translate-x-[-15px] group-hover:translate-x-0">View Products</span>
+                      </div>
                     </div>
-
-                    <div className="absolute top-5 right-5 z-30">
-                      <div className="bg-gradient-to-br from-[#f59e0b] to-[#ff7b00] text-white w-9 h-9 rounded-full text-[11px] font-black shadow-xl flex items-center justify-center border-2 border-white/30 group-hover:scale-110 transition-transform duration-300">
+                    <div className="absolute top-4 right-4 z-30">
+                      <div className="bg-primary/95 backdrop-blur-md text-white px-3 py-1 rounded-full text-[12px] font-black shadow-lg shadow-primary/30 flex items-center justify-center min-w-[32px] border border-white/20">
                         {count}
                       </div>
                     </div>
@@ -383,14 +371,10 @@ const Index = () => {
               );
             })}
           </motion.div>
-
-          <div className="flex justify-center">
-            <Link 
-              to="/products" 
-              className="px-12 py-4 bg-white border-2 border-slate-900 text-slate-900 rounded-full font-display font-black text-[15px] uppercase tracking-[0.1em] hover:bg-primary hover:text-white hover:border-primary transition-all duration-500 shadow-2xl shadow-slate-900/10 group flex items-center gap-4"
-            >
-              Browse All Products
-              <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform duration-300" />
+          
+          <div className="mt-8 text-center">
+            <Link to="/products" className="btn-secondary-glass inline-flex items-center gap-2 text-sm px-6 py-2.5">
+              Browse All Products <ArrowRight size={18} />
             </Link>
           </div>
         </div>
