@@ -77,11 +77,13 @@ const Contact = () => {
         <AnimatedGear size={280} />
       </div>
 
-      <div className="flex-1 flex flex-col justify-center pt-6 md:pt-8 pb-8 md:pb-10 relative z-10">
+      <div className="flex-1 flex flex-col justify-center pt-4 md:pt-6 pb-8 md:pb-10 relative z-10">
         <div className="container-section">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center max-w-2xl mx-auto mb-0">
-          <h1 className="text-3xl md:text-4xl font-display font-extrabold text-heading mb-3 tracking-tight">Get in <span className="text-gradient">Touch</span></h1>
-          <p className="text-muted-foreground text-base mt-0">Ready to discuss your heavy equipment needs? Our dedicated team is here to assist you globally.</p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="text-center max-w-2xl mx-auto mb-6">
+          <h1 className="text-3xl md:text-4xl font-display font-black text-heading mb-2 heading-decorated tracking-tight">
+            Get in <span className="text-gradient drop-shadow-sm">Touch</span>
+          </h1>
+          <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold leading-relaxed">Ready to discuss your heavy equipment needs? Our dedicated team is here to assist you globally.</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch mt-6 md:mt-8">
