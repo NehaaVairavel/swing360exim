@@ -15,6 +15,7 @@ export default {
         body: ["Inter", "sans-serif"],
         sora: ["Sora", "sans-serif"],
         manrope: ["Manrope", "sans-serif"],
+        jakarta: ["Plus Jakarta Sans", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
