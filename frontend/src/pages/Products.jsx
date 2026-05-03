@@ -269,9 +269,9 @@ const Products = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased">
+    <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased pt-[72px]">
       {/* 1. CLONED HERO SECTION TYPOGRAPHY */}
-      <section className="relative pt-32 pb-12 overflow-hidden bg-gradient-to-b from-white to-slate-50/50">
+      <section className="relative pt-5 pb-12 overflow-hidden bg-gradient-to-b from-white to-slate-50/50">
         {/* Visual Depth Elements */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
@@ -314,17 +314,16 @@ const Products = () => {
         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none" />
       </section>
 
-      {/* 2. SEARCH + FILTER BAR (Premium Glassmorphism Sticky) */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.7 }}
-        className="sticky top-[72px] z-[40] transition-all duration-300 py-3"
+        className="sticky top-[80px] z-40 transition-all duration-300 mb-8 pt-4 pb-2"
       >
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
-          <div className="bg-white/72 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-2 flex flex-col lg:flex-row items-stretch lg:items-center gap-4 transition-all hover:shadow-2xl hover:shadow-primary/5">
-            {/* Search Input */}
-            <div className="flex-1 relative group">
+          <div className="bg-white rounded-2xl shadow-md border border-[#eef2f7] p-2 grid grid-cols-1 md:grid-cols-[55%_15%_20%_10%] items-center gap-3 transition-all">
+            {/* Search Input (55%) */}
+            <div className="relative group">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
               <input 
                 type="text" 
@@ -335,35 +334,33 @@ const Products = () => {
               />
             </div>
 
-            <div className="flex items-center gap-3">
-              {/* Sort Dropdown */}
-              <div className="relative group min-w-[180px]">
-                <select 
-                  value={activeSort}
-                  onChange={(e) => setActiveSort(e.target.value)}
-                  className="w-full pl-4 pr-10 h-[52px] bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer"
-                >
-                  <option value="Newest">Newest First</option>
-                  <option value="Price: Low to High">Price: Low to High</option>
-                  <option value="Price: High to Low">Price: High to Low</option>
-                </select>
-                <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
-              </div>
-
-              {/* Currency Toggle */}
-              <div className="h-[52px] px-2 bg-white border border-slate-200 rounded-xl flex items-center">
-                <CurrencyToggle variant="compact" />
-              </div>
-
-              {/* Reset Button */}
-              <button 
-                onClick={handleReset}
-                className="h-[52px] px-6 bg-[#0B1533] text-white rounded-xl font-bold text-[12px] uppercase tracking-widest hover:bg-primary transition-all flex items-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
+            {/* Sort Dropdown (15%) */}
+            <div className="relative group">
+              <select 
+                value={activeSort}
+                onChange={(e) => setActiveSort(e.target.value)}
+                className="w-full pl-4 pr-10 h-[52px] bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer"
               >
-                <RotateCcw size={16} />
-                <span className="hidden md:inline">Reset</span>
-              </button>
+                <option value="Newest">Newest First</option>
+                <option value="Price: Low to High">Price: Low to High</option>
+                <option value="Price: High to Low">Price: High to Low</option>
+              </select>
+              <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
             </div>
+
+            {/* Currency Toggle (20%) */}
+            <div className="h-[52px] px-2 bg-white border border-slate-200 rounded-xl flex items-center justify-center">
+              <CurrencyToggle variant="compact" />
+            </div>
+
+            {/* Reset Button (10%) */}
+            <button 
+              onClick={handleReset}
+              className="h-[52px] w-full bg-[#0B1533] text-white rounded-xl font-bold text-[12px] uppercase tracking-widest hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
+            >
+              <RotateCcw size={16} />
+              <span className="hidden xl:inline">Reset</span>
+            </button>
           </div>
         </div>
       </motion.div>
