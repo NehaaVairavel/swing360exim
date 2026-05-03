@@ -30,7 +30,7 @@ const BrandCarousel = () => {
       <div className="container-section text-center relative z-10 mb-6">
         <SectionReveal>
           {/* Exact heading match to reference */}
-          <h2 className="text-3xl md:text-4xl font-display font-extrabold text-heading mb-3 heading-decorated tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight">
             Top <span className="text-gradient drop-shadow-sm">Heavy Equipment</span> Brands
           </h2>
           <p className="text-muted-foreground text-base max-w-2xl mx-auto mt-2 font-medium">

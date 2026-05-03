@@ -342,7 +342,7 @@ const Index = () => {
         
         <div className="container-section relative z-10">
           <SectionReveal className="text-center mb-6">
-            <h2 className="text-2xl md:text-3xl font-display font-black text-heading mb-2 heading-decorated tracking-tight">
+            <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight">
               Premium <span className="text-gradient drop-shadow-sm">Categories</span>
             </h2>
             <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">Explore our diverse range of high-quality heavy equipment ready for global export</p>
@@ -391,7 +391,7 @@ const Index = () => {
         
         <div className="container-section text-center relative z-10">
           <SectionReveal>
-            <h2 className="text-2xl md:text-3xl font-display font-black text-heading mb-2 heading-decorated tracking-tight flex items-center justify-center gap-3">
+            <h2 className="text-3xl md:text-4xl font-display font-black text-heading mb-3 heading-decorated tracking-tight flex items-center justify-center gap-3">
               <Globe className="text-primary drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]" size={28} />
               Markets We <span className="text-gradient drop-shadow-sm">Serve</span>
             </h2>
