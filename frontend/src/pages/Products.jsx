@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, Eye, Send } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, Eye, Send, LayoutGrid, Tag, MapPin, Clock, DollarSign, CheckCircle2 } from "lucide-react";
 import { AllIcon, ExcavatorIcon, BackhoeIcon, DozerIcon, WheelLoaderIcon, GraderIcon, RollerIcon, SkidSteerIcon, BucketIcon, MaterialHandlerIcon, OtherIcon } from "@/components/products/MachineIcons";
 import productService from "@/services/productService";
 import { socket } from "@/socket";
@@ -22,15 +22,24 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
-const FilterAccordion = ({ title, children, defaultOpen = false }) => {
+const FilterAccordion = ({ title, icon: Icon, children, count = 0, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-slate-100 last:border-none">
+    <div className="mb-3 last:mb-0 px-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-[18px] py-[14px] hover:bg-slate-50 transition-colors group"
+        className={`w-full flex items-center justify-between px-4 py-4 rounded-2xl border transition-all duration-300 group shadow-sm
+          ${isOpen ? 'bg-slate-50 border-slate-200' : 'bg-white border-slate-100 hover:border-orange-200 hover:shadow-md hover:-translate-y-0.5'}`}
       >
-        <span className="font-sora text-[13px] font-[800] text-[#0f172a] uppercase tracking-[4px]">{title}</span>
+        <div className="flex items-center gap-3">
+          {Icon && <Icon size={18} className={`${isOpen ? 'text-primary' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />}
+          <span className={`font-sora text-[12px] font-[800] tracking-[3px] uppercase ${isOpen ? 'text-heading' : 'text-slate-600'}`}>{title}</span>
+          {count > 0 && (
+            <span className="ml-1 bg-orange-50 text-primary text-[10px] font-black px-2 py-0.5 rounded-full border border-orange-100 animate-in zoom-in-50 duration-300">
+              {count}
+            </span>
+          )}
+        </div>
         <ChevronDown size={14} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
       </button>
       <AnimatePresence>
@@ -40,7 +49,7 @@ const FilterAccordion = ({ title, children, defaultOpen = false }) => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden px-[18px] pb-4"
+            className="overflow-hidden px-4 pb-4 pt-4"
           >
             {children}
           </motion.div>
@@ -391,7 +400,6 @@ const Products = () => {
       <div className="container-section max-w-[1700px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-8">
         <div className="flex flex-col lg:flex-row gap-6 items-start mt-2">
           
-          {/* 3. LEFT SIDEBAR (Premium Floating Sticky) */}
           <motion.aside 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -399,9 +407,14 @@ const Products = () => {
             transition={{ duration: 0.6 }}
             className="w-full lg:w-[320px] shrink-0 lg:sticky lg:top-[85px] lg:h-[calc(100vh-100px)] lg:overflow-y-auto hide-scrollbar z-30"
           >
-            <div className="bg-white/92 backdrop-blur-[14px] rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col overflow-hidden products-sidebar p-[18px]">
+            <div className="bg-white/92 backdrop-blur-[14px] rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col overflow-hidden products-sidebar">
               
-              <FilterAccordion title="Categories" defaultOpen={true}>
+              <div className="px-6 py-6 border-b border-slate-100 mb-4 bg-slate-50/50">
+                <div className="text-[10px] font-black text-slate-400 tracking-[4px] uppercase mb-1">FILTERS</div>
+                <h2 className="text-xl font-display font-black text-heading">Refine Search</h2>
+              </div>
+
+              <FilterAccordion title="Categories" icon={LayoutGrid} count={selectedCategories.length} defaultOpen={true}>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {MASTER_CATEGORIES.filter(c => c !== "All").map(cat => {
                     const isSelected = selectedCategories.includes(cat);
@@ -421,7 +434,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Brands">
+              <FilterAccordion title="Brands" icon={Tag} count={selectedBrands.length}>
                 <div className="flex flex-col gap-2.5 pt-1">
                   {["CAT", "JCB", "Komatsu", "Volvo", "Hyundai", "Doosan", "Hitachi", "Sany"].map(brand => {
                     const isSelected = selectedBrands.includes(brand);
@@ -443,7 +456,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Location">
+              <FilterAccordion title="Location" icon={MapPin} count={selectedLocations.length}>
                 <div className="grid grid-cols-2 gap-2.5 pt-1">
                   {["UAE", "India", "Saudi", "Africa", "USA", "Europe"].map(loc => {
                     const isSelected = selectedLocations.includes(loc);
@@ -463,7 +476,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Engine Hours">
+              <FilterAccordion title="Engine Hours" icon={Clock} count={engineHours > 0 ? 1 : 0}>
                 <div className="pb-4 pt-2">
                   <div className="flex justify-between mb-3">
                     <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Max Hours</span>
@@ -481,7 +494,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Price Range">
+              <FilterAccordion title="Price Range" icon={DollarSign} count={(minPrice || maxPrice) ? 1 : 0}>
                 <div className="grid grid-cols-2 gap-2 pb-4 pt-2">
                   <input 
                     type="number" placeholder="Min" value={minPrice || ""}
@@ -496,7 +509,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Condition">
+              <FilterAccordion title="Condition" icon={CheckCircle2}>
                 <div className="flex flex-col gap-2 pb-4 pt-2">
                   {["All", "New", "Used", "Refurbished", "Rental"].map(cond => (
                     <label key={cond} className="flex items-center gap-3 cursor-pointer group">
