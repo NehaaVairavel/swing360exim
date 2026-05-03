@@ -543,22 +543,6 @@ const Products = () => {
           </motion.div>
         </div>
       </section>
-    </div>
-
-      {/* Pre-Footer CTA */}
-      <section className="py-[70px] bg-white relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
-        <div className="container-section text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-black text-slate-900 mb-4 tracking-tight">Need a machine fast?</h2>
-          <p className="text-slate-500 mb-8 max-w-[520px] mx-auto text-base md:text-lg font-semibold">Get a custom quotation with shipping costs to your port in under 10 minutes.</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="https://wa.me/971558599045" target="_blank" rel="noopener noreferrer" className="h-[46px] px-8 bg-[#25D366] text-white rounded-xl font-black text-sm uppercase tracking-widest hover:scale-105 shadow-xl shadow-emerald-500/25 transition-all flex items-center gap-2">
-              <MessageCircle size={18} />
-              WhatsApp Us
-            </a>
-          </div>
-        </div>
-      </section>
 
       <EnquiryModal open={enquiryOpen} onClose={() => setEnquiryOpen(false)} productName={selectedProduct?.name} product={selectedProduct} />
     </div>
