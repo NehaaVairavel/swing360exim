@@ -25,12 +25,12 @@ const staggerContainer = {
 const FilterAccordion = ({ title, children, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-slate-50 last:border-none">
+    <div className="border-b border-slate-100 last:border-none">
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-5 hover:bg-slate-50 transition-colors group"
       >
-        <span className="font-sora text-[13px] font-bold text-slate-800 uppercase tracking-[0.22em]">{title}</span>
+        <span className="font-sora text-[13px] font-[800] text-[#0f172a] uppercase tracking-[4px]">{title}</span>
         <ChevronDown size={14} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
       </button>
       <AnimatePresence>
@@ -40,7 +40,7 @@ const FilterAccordion = ({ title, children, defaultOpen = false }) => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden px-4"
+            className="overflow-hidden px-5 pb-5"
           >
             {children}
           </motion.div>
@@ -388,21 +388,21 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1600px] mx-auto py-8 px-4 md:px-6">
-        <div className="flex flex-col lg:flex-row gap-6 items-start">
+      <div className="container-section max-w-[1700px] mx-auto py-0 mt-4 px-4 md:px-8">
+        <div className="flex flex-col lg:flex-row gap-7 md:gap-9 items-start">
           
-          {/* 3. LEFT SIDEBAR (Premium Accordion Filters) */}
+          {/* 3. LEFT SIDEBAR (Premium Floating Sticky) */}
           <motion.aside 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="w-full lg:w-[280px] shrink-0 lg:sticky lg:top-[140px] lg:max-h-[calc(100vh-180px)] lg:overflow-y-auto hide-scrollbar"
+            className="w-full lg:w-[320px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-130px)] lg:overflow-y-auto hide-scrollbar z-30"
           >
-            <div className="bg-white rounded-[24px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col overflow-hidden">
+            <div className="bg-white/92 backdrop-blur-[14px] rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col overflow-hidden products-sidebar">
               
               <FilterAccordion title="Categories" defaultOpen={true}>
-                <div className="flex flex-wrap gap-2 pb-6 pt-2">
+                <div className="flex flex-wrap gap-2 pt-1">
                   {MASTER_CATEGORIES.filter(c => c !== "All").map(cat => {
                     const isSelected = selectedCategories.includes(cat);
                     return (
@@ -412,7 +412,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`px-4 py-2.5 rounded-xl font-manrope text-[14px] font-semibold transition-all border ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:text-primary hover:border-primary/20 hover:bg-slate-50 hover:-translate-y-0.5'}`}
+                        className={`px-4 py-2.5 rounded-full font-manrope text-[14px] font-semibold transition-all border ${isSelected ? 'bg-gradient-to-r from-[#ffb100] to-[#ff7a00] border-transparent text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-primary hover:border-primary/20 hover:bg-white hover:-translate-y-0.5 hover:shadow-md'}`}
                       >
                         {cat}
                       </button>
@@ -422,7 +422,7 @@ const Products = () => {
               </FilterAccordion>
 
               <FilterAccordion title="Brands">
-                <div className="flex flex-col gap-2 pb-4 pt-2">
+                <div className="flex flex-col gap-2.5 pt-1">
                   {["CAT", "JCB", "Komatsu", "Volvo", "Hyundai", "Doosan", "Hitachi", "Sany"].map(brand => {
                     const isSelected = selectedBrands.includes(brand);
                     return (
@@ -436,7 +436,7 @@ const Products = () => {
                             setSelectedBrands(next);
                           }}
                         />
-                        <span className={`font-sora text-[14px] font-semibold transition-colors ${isSelected ? 'text-heading' : 'text-slate-500 group-hover:text-heading'}`}>{brand}</span>
+                        <span className={`font-sora text-[14px] font-semibold transition-colors ${isSelected ? 'text-primary' : 'text-slate-500 group-hover:text-primary'}`}>{brand}</span>
                       </label>
                     );
                   })}
@@ -444,7 +444,7 @@ const Products = () => {
               </FilterAccordion>
 
               <FilterAccordion title="Location">
-                <div className="grid grid-cols-2 gap-2.5 pb-6 pt-2">
+                <div className="grid grid-cols-2 gap-2.5 pt-1">
                   {["UAE", "India", "Saudi", "Africa", "USA", "Europe"].map(loc => {
                     const isSelected = selectedLocations.includes(loc);
                     return (
@@ -454,7 +454,7 @@ const Products = () => {
                           const next = isSelected ? selectedLocations.filter(l => l !== loc) : [...selectedLocations, loc];
                           setSelectedLocations(next);
                         }}
-                        className={`px-2 py-3 rounded-xl font-sora text-[14px] font-semibold uppercase border transition-all truncate ${isSelected ? 'bg-primary border-primary text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-white border-slate-100 text-slate-500 hover:border-primary/30 hover:bg-slate-50 hover:-translate-y-0.5'}`}
+                        className={`px-2 py-3 rounded-full font-sora text-[12px] font-bold uppercase border transition-all truncate ${isSelected ? 'bg-gradient-to-r from-[#ffb100] to-[#ff7a00] border-transparent text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-primary hover:border-primary/20 hover:bg-white hover:-translate-y-0.5'}`}
                       >
                         {loc}
                       </button>
