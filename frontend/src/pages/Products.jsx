@@ -49,8 +49,21 @@ const FilterAccordion = ({ title, children, defaultOpen = false }) => {
 };
 
 const itemVariant = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+};
+
+const titleVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.3 + (i * 0.1),
+      duration: 0.6,
+      ease: [0.215, 0.610, 0.355, 1.000]
+    }
+  })
 };
 
 
@@ -257,35 +270,66 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased">
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-[120px] pb-16 bg-white overflow-hidden">
-        {/* Subtle Industrial Background */}
+      {/* 1. COMPACT HERO SECTION */}
+      <section className="relative pt-24 pb-12 overflow-hidden bg-white">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#1E293B_1px,transparent_1px)] [background-size:32px_32px]" />
         </div>
         
         <div className="container-section relative z-10 text-center">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary font-black text-[10px] tracking-[0.2em] uppercase mb-6"
+            transition={{ duration: 0.4 }}
+            whileHover={{ scale: 1.05 }}
+            className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 rounded-full shadow-sm mb-4 cursor-default transition-all"
           >
-            <ShieldCheck size={12} />
-            Export Hub Catalog
+            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+            <span className="text-[9px] font-black text-heading uppercase tracking-[0.2em]">Export Hub Catalog</span>
           </motion.div>
-          
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-display font-black text-heading mb-6 tracking-tight">
-            Our Heavy Machinery <span className="text-gradient drop-shadow-sm">Fleet</span>
+
+          <h1 className="text-3xl md:text-5xl font-display font-black text-heading mb-3 leading-[1.1] tracking-tight">
+            {"Our Heavy Machinery".split(" ").map((word, i) => (
+              <motion.span 
+                key={i} 
+                custom={i} 
+                initial="hidden" 
+                animate="visible" 
+                variants={titleVariants} 
+                className="inline-block mr-2 md:mr-3"
+              >
+                {word}
+              </motion.span>
+            ))}
+            <motion.span 
+              custom={4} 
+              initial="hidden" 
+              animate="visible" 
+              variants={titleVariants} 
+              className="text-primary relative inline-block group cursor-default"
+            >
+              Fleet
+              <span className="absolute bottom-0 left-0 w-0 h-1 bg-primary/20 group-hover:w-full transition-all duration-500 rounded-full blur-[2px]" />
+              <span className="absolute inset-0 bg-primary/5 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </motion.span>
           </h1>
-          
-          <p className="text-slate-500 text-lg md:text-xl font-medium max-w-2xl mx-auto mb-4 italic">
+
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="text-slate-500 text-sm md:text-base font-medium max-w-xl mx-auto italic"
+          >
             "Engineered for performance, curated for global markets."
-          </p>
+          </motion.p>
         </div>
       </section>
 
       {/* 2. SEARCH CONTROL BAR (Sticky) */}
-      <div 
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 1 }}
         className={`sticky top-[72px] z-[40] transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg py-2' : 'py-4'}`}
       >
         <div className="container-section max-w-[1600px] mx-auto px-4 md:px-6">
@@ -342,7 +386,13 @@ const Products = () => {
         <div className="flex flex-col lg:flex-row gap-6 items-start">
           
           {/* 3. LEFT SIDEBAR (Premium Accordion Filters) */}
-          <aside className="w-full lg:w-[280px] shrink-0 lg:sticky lg:top-[140px] lg:max-h-[calc(100vh-180px)] lg:overflow-y-auto hide-scrollbar">
+          <motion.aside 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="w-full lg:w-[280px] shrink-0 lg:sticky lg:top-[140px] lg:max-h-[calc(100vh-180px)] lg:overflow-y-auto hide-scrollbar"
+          >
             <div className="bg-white rounded-[24px] shadow-[0_8px_40px_rgb(0,0,0,0.04)] border border-slate-100 flex flex-col overflow-hidden">
               
               <FilterAccordion title="Categories" defaultOpen={true}>
