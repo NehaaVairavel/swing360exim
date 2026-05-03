@@ -270,110 +270,95 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased">
-      {/* 1. COMPACT HERO SECTION */}
-      <section className="relative pt-24 pb-12 overflow-hidden bg-white">
+      {/* 1. COMPACT HERO SECTION REDESIGN */}
+      <section className="relative pt-20 pb-8 overflow-hidden bg-white border-b border-slate-50">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#1E293B_1px,transparent_1px)] [background-size:32px_32px]" />
+          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
         </div>
+        
+        {/* Subtle light blur effect */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
         
         <div className="container-section relative z-10 text-center">
           <motion.div 
-            initial={{ opacity: 0, y: -15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            whileHover={{ scale: 1.05 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 rounded-full shadow-sm mb-4 cursor-default transition-all"
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full mb-4"
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="text-[9px] font-black text-heading uppercase tracking-[0.2em]">Export Hub Catalog</span>
+            <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Export Hub Catalog</span>
           </motion.div>
 
-          <h1 className="text-3xl md:text-5xl font-display font-black text-heading mb-3 leading-[1.1] tracking-tight">
-            {"Our Heavy Machinery".split(" ").map((word, i) => (
-              <motion.span 
-                key={i} 
-                custom={i} 
-                initial="hidden" 
-                animate="visible" 
-                variants={titleVariants} 
-                className="inline-block mr-2 md:mr-3"
-              >
-                {word}
-              </motion.span>
-            ))}
-            <motion.span 
-              custom={4} 
-              initial="hidden" 
-              animate="visible" 
-              variants={titleVariants} 
-              className="text-primary relative inline-block group cursor-default"
-            >
-              Fleet
-              <span className="absolute bottom-0 left-0 w-0 h-1 bg-primary/20 group-hover:w-full transition-all duration-500 rounded-full blur-[2px]" />
-              <span className="absolute inset-0 bg-primary/5 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </motion.span>
-          </h1>
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-4xl lg:text-6xl font-display font-black leading-[1.1] tracking-tight mb-4"
+          >
+            <span className="text-[#0B1533]">Our Heavy Machinery</span>{" "}
+            <span className="text-primary italic">Fleet</span>
+          </motion.h1>
 
           <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="text-slate-500 text-sm md:text-base font-medium max-w-xl mx-auto italic"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="text-slate-500 text-sm md:text-base font-medium max-w-xl mx-auto"
           >
-            "Engineered for performance, curated for global markets."
+            Engineered for performance, curated for global markets.
           </motion.p>
         </div>
       </section>
 
-      {/* 2. SEARCH CONTROL BAR (Sticky) */}
+      {/* 2. SEARCH + FILTER BAR (Premium Glassmorphism Sticky) */}
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 1 }}
-        className={`sticky top-[72px] z-[40] transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-xl shadow-lg py-2' : 'py-4'}`}
+        transition={{ duration: 0.5, delay: 0.7 }}
+        className="sticky top-[72px] z-[40] transition-all duration-300 py-3"
       >
-        <div className="container-section max-w-[1600px] mx-auto px-4 md:px-6">
-          <div className="bg-white rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-1.5 flex flex-col md:flex-row items-stretch md:items-center gap-3">
-            {/* Search Part */}
+        <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
+          <div className="bg-white/72 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-2 flex flex-col lg:flex-row items-stretch lg:items-center gap-4 transition-all hover:shadow-2xl hover:shadow-primary/5">
+            {/* Search Input */}
             <div className="flex-1 relative group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
               <input 
                 type="text" 
                 placeholder="Search machinery..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-6 h-[44px] bg-slate-50 border-none rounded-lg text-[14px] font-medium text-heading focus:ring-2 focus:ring-primary/20 transition-all placeholder-slate-400"
+                className="w-full pl-12 pr-6 h-[52px] bg-slate-50/50 border border-slate-100 rounded-xl text-[15px] font-semibold text-heading focus:ring-4 focus:ring-primary/10 focus:bg-white transition-all placeholder-slate-400"
               />
             </div>
 
-            <div className="flex items-center gap-2">
-              {/* Sort */}
-              <div className="relative group">
+            <div className="flex items-center gap-3">
+              {/* Sort Dropdown */}
+              <div className="relative group min-w-[180px]">
                 <select 
                   value={activeSort}
                   onChange={(e) => setActiveSort(e.target.value)}
-                  className="pl-4 pr-10 h-[44px] bg-white border border-slate-200 rounded-lg text-[12px] font-bold text-slate-700 appearance-none outline-none focus:border-primary transition-all cursor-pointer min-w-[150px]"
+                  className="w-full pl-4 pr-10 h-[52px] bg-white border border-slate-200 rounded-xl text-[13px] font-bold text-slate-700 appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer"
                 >
                   <option value="Newest">Newest First</option>
                   <option value="Price: Low to High">Price: Low to High</option>
                   <option value="Price: High to Low">Price: High to Low</option>
-                  <option value="Hours: Low to High">Hours: Low to High</option>
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
               </div>
 
-              {/* Currency */}
-              <div className="h-[44px] px-2 bg-white border border-slate-200 rounded-lg flex items-center justify-center">
+              {/* Currency Toggle */}
+              <div className="h-[52px] px-2 bg-white border border-slate-200 rounded-xl flex items-center">
                 <CurrencyToggle variant="compact" />
               </div>
 
-              {/* Reset */}
+              {/* Reset Button */}
               <button 
                 onClick={handleReset}
-                className="h-[44px] px-4 bg-slate-900 text-white rounded-lg font-bold text-[10px] uppercase tracking-wider hover:bg-primary transition-all flex items-center gap-2"
+                className="h-[52px] px-6 bg-[#0B1533] text-white rounded-xl font-bold text-[12px] uppercase tracking-widest hover:bg-primary transition-all flex items-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
               >
-                <RotateCcw size={14} />
-                <span>Reset</span>
+                <RotateCcw size={16} />
+                <span className="hidden md:inline">Reset</span>
               </button>
             </div>
           </div>
@@ -562,7 +547,7 @@ const Products = () => {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-50px" }}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
                 >
                   <AnimatePresence mode="popLayout">
                     {availableProducts.map((product) => (
@@ -589,7 +574,7 @@ const Products = () => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6 opacity-80"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 opacity-80"
                   >
                     <AnimatePresence mode="popLayout">
                       {soldProducts.map((product) => (
