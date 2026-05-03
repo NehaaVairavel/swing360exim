@@ -58,6 +58,7 @@ const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategories, setSelectedCategories] = useState(searchParams.get("category") ? searchParams.get("category").split(",") : []);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const [modelSearch, setModelSearch] = useState("");
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [engineHours, setEngineHours] = useState(15000);
   const [minPrice, setMinPrice] = useState(0);
@@ -127,7 +128,7 @@ const Products = () => {
     const search = searchParams.get("search");
     const category = searchParams.get("category");
     if (search !== null) setSearchQuery(search);
-    if (category !== null) setActiveCategory(category);
+    if (category !== null) setSelectedCategories(category.split(","));
   }, [searchParams]);
 
     const filteredProducts = products.filter((product) => {
@@ -183,6 +184,7 @@ const Products = () => {
     setSearchQuery("");
     setSelectedCategories([]);
     setSelectedBrands([]);
+    setModelSearch("");
     setSelectedLocations([]);
     setEngineHours(15000);
     setMinPrice(0);
