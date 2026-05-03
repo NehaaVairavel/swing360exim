@@ -338,19 +338,19 @@ const Products = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="bg-white/90 backdrop-blur-md rounded-3xl shadow-xl border border-slate-200 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_260px_140px] items-center gap-4 transition-all my-0"
+            className="bg-white/90 backdrop-blur-md rounded-3xl shadow-xl border border-slate-200 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0"
           >
-            {/* 1. LUXURY DARK NAVY SEARCH BAR */}
+            {/* 1. LUXURY ORANGE SEARCH BAR */}
             <div className="relative group w-full h-[50px] transition-all duration-300">
-              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full bg-white/10 flex items-center justify-center pointer-events-none group-focus-within:bg-amber-400/20 transition-colors">
-                <Search className="text-white/80 group-focus-within:text-amber-400 transition-colors" size={16} />
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 w-[34px] h-[34px] rounded-full bg-black/10 flex items-center justify-center pointer-events-none group-focus-within:bg-white/20 transition-colors">
+                <Search className="text-white/90 group-focus-within:text-white transition-colors" size={16} />
               </div>
               <input 
                 type="text" 
                 placeholder="Search excavators, CAT 320D..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-full pl-12 pr-4 bg-[#0b132b] border border-white/10 rounded-2xl text-[15px] font-medium text-white placeholder-white/65 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400/30 transition-all shadow-[0_10px_30px_rgba(11,19,43,0.18)]"
+                className="w-full h-full pl-12 pr-4 bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 border border-orange-300/20 rounded-2xl text-[15px] font-semibold text-white placeholder-white/75 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all shadow-lg"
               />
             </div>
 
@@ -371,10 +371,8 @@ const Products = () => {
               <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
             </div>
 
-            {/* 3. CURRENCY TOGGLE */}
-            <div className="h-[50px] px-2 bg-white border border-slate-200 rounded-2xl flex items-center justify-between shadow-sm">
-              <CurrencyToggle variant="compact" />
-            </div>
+            {/* 3. CURRENCY TOGGLE (Spacious variant) */}
+            <CurrencyToggle variant="spacious" />
 
             {/* 4. RESET BUTTON */}
             <button 
