@@ -82,16 +82,16 @@ const StatCard = ({ stat, i }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: i * 0.12 }}
-      className="text-center card-premium rounded-3xl p-4 md:p-6 border-accent-left group"
+      className="text-center card-premium rounded-2xl p-3 md:p-4 border-accent-left group"
     >
-      <div className="icon-container w-12 h-12 rounded-2xl mx-auto mb-3 relative">
+      <div className="icon-container w-9 h-9 rounded-xl mx-auto mb-2 relative">
         <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <IconComp size={24} className="text-primary group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 relative z-10" />
+        <IconComp size={18} className="text-primary group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 relative z-10" />
       </div>
-      <div className="text-3xl md:text-4xl font-display font-black text-shimmer tracking-tight">
+      <div className="text-2xl md:text-3xl font-display font-black text-shimmer tracking-tight">
         {count}{stat.suffix}
       </div>
-      <div className="text-[14px] text-muted-foreground mt-2 font-medium">{stat.label}</div>
+      <div className="text-[12px] text-muted-foreground mt-1.5 font-medium">{stat.label}</div>
     </motion.div>
   );
 };
@@ -346,7 +346,7 @@ const Index = () => {
             <p className="text-muted-foreground text-base max-w-[520px] mx-auto mt-2 font-semibold">Delivering excellence in heavy equipment trading across global markets</p>
           </SectionReveal>
           
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             {stats.map((s, i) => <StatCard key={i} stat={s} i={i} />)}
           </div>
         </div>
