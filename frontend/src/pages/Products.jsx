@@ -321,45 +321,45 @@ const Products = () => {
         className="sticky top-[80px] z-40 transition-all duration-300 mb-8 pt-4 pb-2"
       >
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
-          <div className="bg-white rounded-2xl shadow-md border border-[#edf2f7] p-3 flex flex-col md:flex-row flex-wrap lg:flex-nowrap items-stretch md:items-center gap-4 transition-all">
-            {/* Search Input (55%) */}
-            <div className="flex-[0_0_100%] lg:flex-[0_0_53%] relative group">
-              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={22} />
+          <div className="bg-white/75 backdrop-blur-[12px] rounded-[28px] border border-[#edf2f7] p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_320px_140px] items-center gap-[18px] transition-all">
+            {/* Search Input (minmax 420px) */}
+            <div className="relative group w-full h-[72px]">
+              <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={24} />
               <input 
                 type="text" 
                 placeholder="Search machinery..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-14 pr-6 h-[64px] bg-slate-50/50 border border-slate-100 rounded-[22px] text-[16px] font-semibold text-heading focus:ring-4 focus:ring-primary/10 focus:bg-white transition-all placeholder-slate-400"
+                className="w-full pl-16 pr-6 h-full bg-white border border-slate-200 rounded-[24px] text-[16px] font-bold text-heading focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all placeholder-slate-400 shadow-[0_8px_24px_rgba(15,23,42,0.06)]"
               />
             </div>
 
-            {/* Sort Dropdown (15%) */}
-            <div className="flex-[0_0_48%] md:flex-[0_0_22%] lg:flex-[0_0_14%] relative group">
+            {/* Sort Dropdown (220px) */}
+            <div className="relative group w-full h-[72px]">
               <select 
                 value={activeSort}
                 onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full pl-5 pr-10 h-[64px] bg-white border border-slate-200 rounded-xl text-[14px] font-bold text-slate-700 appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer"
+                className="w-full pl-6 pr-12 h-full bg-white border border-slate-200 rounded-[20px] text-[14px] font-bold text-slate-700 appearance-none outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all cursor-pointer"
               >
                 <option value="Newest">Newest First</option>
                 <option value="Price: Low to High">Price: Low-High</option>
                 <option value="Price: High to Low">Price: High-Low</option>
               </select>
-              <ChevronDown size={14} className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
+              <ChevronDown size={14} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-focus-within:rotate-180 transition-transform" />
             </div>
 
-            {/* Currency Toggle (20%) */}
-            <div className="flex-[0_0_100%] md:flex-[0_0_48%] lg:flex-[0_0_19%] min-w-[280px] h-[64px] px-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between">
+            {/* Currency Toggle (320px) */}
+            <div className="w-full xl:w-[320px] h-[72px] px-3 bg-white border border-slate-200 rounded-xl flex items-center">
               <CurrencyToggle variant="compact" />
             </div>
 
-            {/* Reset Button (10%) */}
+            {/* Reset Button (140px) */}
             <button 
               onClick={handleReset}
-              className="flex-[0_0_100%] md:flex-[0_0_22%] lg:flex-[0_0_9%] min-w-[130px] h-[64px] bg-[#0B1533] text-white rounded-xl font-bold text-[13px] uppercase tracking-widest hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
+              className="w-full xl:w-[140px] h-[72px] bg-[#0B1533] text-white rounded-[22px] font-black text-[12px] uppercase tracking-[0.2em] hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-lg shadow-navy-900/10 active:scale-95"
             >
               <RotateCcw size={18} />
-              <span className="md:inline">Reset</span>
+              <span>Reset</span>
             </button>
           </div>
         </div>

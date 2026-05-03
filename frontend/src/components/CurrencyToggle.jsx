@@ -8,7 +8,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
   const isCompact = variant === 'compact';
 
   return (
-    <div className={`flex items-center bg-slate-100/50 p-1 rounded-full border border-slate-200/50 shadow-inner relative shrink-0 ${isCompact ? 'h-[44px]' : 'h-12'}`}>
+    <div className={`flex items-center w-full bg-slate-100/50 p-1 rounded-full border border-slate-200/50 shadow-inner relative shrink-0 ${isCompact ? 'h-[44px]' : 'h-12'}`}>
       {currencies.map((curr) => {
         const isActive = currency.code === curr.code;
         return (
@@ -16,7 +16,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
             key={curr.code}
             onClick={() => setCurrency(curr)}
             className={`
-              relative z-10 px-5 h-full flex items-center gap-2 rounded-full transition-all duration-300
+              relative z-10 flex-1 h-full flex items-center justify-center gap-2 rounded-full transition-all duration-300
               uppercase tracking-widest font-black
               ${isCompact ? 'text-[10px]' : 'text-[12px]'}
               ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-800'}
