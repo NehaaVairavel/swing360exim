@@ -270,8 +270,8 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] relative font-body antialiased">
-      {/* 1. COMPACT HERO SECTION REDESIGN */}
-      <section className="relative pt-20 pb-8 overflow-hidden bg-white border-b border-slate-50">
+      {/* 1. PREMIUM HERO SECTION REDESIGN */}
+      <section className="relative pt-12 pb-8 overflow-hidden bg-white border-b border-slate-50">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(#0B1533_1px,transparent_1px)] [background-size:24px_24px]" />
         </div>
@@ -284,30 +284,29 @@ const Products = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1 bg-slate-50 border border-slate-100 rounded-full mb-6"
           >
             <div className="w-1 h-1 rounded-full bg-primary animate-pulse" />
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Export Hub Catalog</span>
           </motion.div>
 
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-4xl lg:text-6xl font-display font-black leading-[1.1] tracking-tight mb-4"
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col items-center"
           >
-            <span className="text-[#0B1533]">Our Heavy Machinery</span>{" "}
-            <span className="text-primary italic">Fleet</span>
-          </motion.h1>
-
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-slate-500 text-sm md:text-base font-medium max-w-xl mx-auto"
-          >
-            Engineered for performance, curated for global markets.
-          </motion.p>
+            <h1 className="text-3xl md:text-5xl lg:text-7xl font-display font-black leading-[1.1] tracking-tight flex flex-col items-center">
+              <div>
+                <span className="text-[#0B1533]">Our Heavy Machinery</span> <span className="text-primary">Fleet</span>
+              </div>
+              <div className="w-24 h-1 bg-primary mt-4 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.3)]" />
+            </h1>
+            
+            <p className="text-slate-500 text-lg md:text-xl font-medium tracking-wide max-w-2xl mx-auto mt-8">
+              Engineered for performance, curated for global markets.
+            </p>
+          </motion.div>
         </div>
       </section>
 
