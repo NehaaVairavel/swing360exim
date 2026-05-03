@@ -297,7 +297,7 @@ const Products = () => {
             className="flex flex-col items-center"
           >
             <h1 className="text-3xl md:text-4xl font-display font-black text-heading mb-2 heading-decorated tracking-tight">
-              Our Heavy Machinery <span className="text-gradient drop-shadow-sm">Fleet</span>
+              Our Heavy <span className="text-gradient drop-shadow-sm">Machinery</span> Fleet
             </h1>
             
             <p className="text-muted-foreground text-sm max-w-[520px] mx-auto mt-2 font-semibold">
