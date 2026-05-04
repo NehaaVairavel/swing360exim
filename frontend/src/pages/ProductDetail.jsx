@@ -15,7 +15,11 @@ import {
   Hash,
   Clock,
   Settings,
-  Info
+  Info,
+  Truck,
+  FileText,
+  Lock,
+  Check
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import productService from "@/services/productService";
@@ -79,6 +83,9 @@ const ProductDetail = () => {
   const images = product?.images || [];
   const isSold = product?.availability === "sold";
   const refNumber = product?.reference_number || product?.reference_no || `EXC-000`;
+  const priceStr = cleanPrice(product?.price || "0");
+  const numericValue = parseFloat(priceStr.replace(/[^0-9.]/g, '')) || 0;
+  const displayPrice = formatPrice(numericValue);
 
   const nextImage = () => {
     setDirection(1);
@@ -131,7 +138,7 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="min-h-fit bg-[#FDFDFD] relative pt-9 pb-4 font-jakarta max-w-[1500px] mx-auto">
+    <div className="min-h-fit bg-[#FDFDFD] relative pt-[60px] pb-4 font-jakarta max-w-[1500px] mx-auto">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-full h-[400px] bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
       <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.04] blur-[100px] pointer-events-none" />
@@ -222,65 +229,104 @@ const ProductDetail = () => {
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
               <div className="flex items-center gap-3 mb-2">
                 <span className="bg-primary/10 text-primary px-[14px] py-[8px] rounded-full text-[10px] font-bold uppercase tracking-[2px]">{product.category}</span>
-                <span className="bg-gray-100 text-[#94a3b8] px-[14px] py-[8px] rounded-full text-[10px] font-bold uppercase tracking-[2px] flex items-center gap-2">
-                  <Hash size={12} /> Ref: {refNumber}
+                <span className="bg-[#0F172A] text-white px-[12px] py-[6px] rounded-full text-[9px] font-black uppercase tracking-[1.5px] flex items-center gap-2">
+                   REF: {refNumber}
                 </span>
               </div>
 
-              <h1 className="text-[28px] lg:text-[38px] font-extrabold text-[#0b1324] mb-1 leading-[1.05] tracking-[-1px]">{product.name}</h1>
+              <h1 className="text-[28px] lg:text-[42px] font-extrabold text-[#0F172A] mb-2 leading-none tracking-[-1.5px] uppercase">{product.name}</h1>
               
-              <div className="flex items-center gap-4 mb-2">
-                <div className="flex items-center gap-2 text-gray-400 font-bold text-xs">
-                  <MapPin size={14} className="text-primary" />
-                  {product.location || "Dubai, UAE"}
+              <div className="flex items-center gap-4 mb-4 text-[#6B7280] font-bold text-[12px] uppercase tracking-wide">
+                <div className="flex items-center gap-1.5">
+                   <MapPin size={14} className="text-[#6B7280]" /> {product.location || "India"}
+                </div>
+                <div className="flex items-center gap-1.5">
+                   <Check size={14} className="text-[#6B7280]" /> Ready for Export
+                </div>
+                <div className="flex items-center gap-1.5">
+                   <Check size={14} className="text-[#6B7280]" /> Refurbished
                 </div>
               </div>
 
-              <div className="bg-white border border-gray-100 rounded-[1.5rem] p-4 shadow-sm mb-2 relative overflow-hidden group">
+              <div className="flex flex-wrap gap-2 mb-6">
+                {[
+                  { label: "Refurbished", color: "bg-blue-50 text-blue-600 border-blue-100" },
+                  { label: "Ready Stock", color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
+                  { label: "Export Ready", color: "bg-amber-50 text-amber-600 border-amber-100" },
+                  { label: "Verified Seller", color: "bg-slate-50 text-slate-600 border-slate-100" }
+                ].map((badge, idx) => (
+                  <span key={idx} className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border ${badge.color}`}>
+                    {badge.label}
+                  </span>
+                ))}
+              </div>
+              
+
+
+              <div className="bg-white border border-slate-200 rounded-[20px] p-4 lg:p-5 shadow-sm mb-6 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
-                  <AnimatedGear size={120} />
+                  <AnimatedGear size={100} />
                 </div>
                 
                 <div className="relative z-10">
-                  <span className="text-primary text-[10px] uppercase font-extrabold tracking-[2px] mb-1 block">Premium Export Price</span>
-                  <div className="flex items-end justify-between gap-4">
-                    <h2 className={`text-[36px] lg:text-[46px] font-black tracking-[-1px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#f59e0b]"}`}>
-                      {cleanPrice(product.price)}
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-[#F59E0B] text-[9px] uppercase font-black tracking-[2px]">Premium Export Price</span>
+                    <CurrencyToggle />
+                  </div>
+                  <div className="flex items-baseline gap-2 mb-3">
+                    <h2 className={`text-[32px] lg:text-[42px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#F59E0B]"}`}>
+                      {displayPrice}
                     </h2>
-                    <div className="flex flex-col items-end pb-0.5">
-                      <CurrencyToggle />
-                    </div>
+                    <span className="text-slate-400 font-bold text-[11px] uppercase tracking-wider">Ex-Works Dubai</span>
+                  </div>
+
+                  <div className="space-y-1.5 border-t border-slate-100 pt-3">
+                    {[
+                      { icon: CheckCircle2, text: "Negotiable on Bulk Orders", color: "text-emerald-500" },
+                      { icon: Truck, text: "Ready for Immediate Dispatch", color: "text-blue-500" },
+                      { icon: Clock, text: "Response in 10 mins", color: "text-amber-500" }
+                    ].map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-[11px] font-bold text-[#0F172A]/70 uppercase tracking-wide">
+                        <item.icon size={13} className={item.color} />
+                        {item.text}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-[10px] mb-3 mt-3">
+              <div className="grid grid-cols-2 gap-3 mb-6">
                 {specifications.map((spec, i) => (
-                  <div key={i} className="flex flex-col justify-center items-start gap-0 bg-white border border-gray-100 rounded-[14px] p-[8px_14px] h-[60px] hover:border-primary/20 hover:shadow-md transition-all group">
-                    <span className="text-[9px] font-semibold uppercase tracking-[1.2px] text-[#9aa3b8] mb-0.5">{spec.label}</span>
-                    <span className="text-[13px] font-bold text-[#111827] leading-tight">{spec.value}</span>
+                  <div key={i} className="flex items-center gap-3 bg-white border border-slate-200 rounded-[18px] p-3.5 hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group cursor-default">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
+                      <spec.icon size={18} className="text-slate-400 group-hover:text-primary transition-colors" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-[9px] font-black uppercase tracking-[1.5px] text-slate-400 mb-0.5">{spec.label}</span>
+                      <span className="text-[14px] font-extrabold text-[#0F172A] leading-none truncate">{spec.value}</span>
+                    </div>
                   </div>
                 ))}
               </div>
 
               {/* CTA Buttons */}
-                <div className="grid grid-cols-2 gap-[14px] mt-[18px]">
+                <div className="grid grid-cols-2 gap-3 mt-4">
                   <button
                     onClick={() => !isSold && setEnquiryOpen(true)}
                     disabled={isSold}
-                    className={`h-[52px] px-[18px] flex items-center justify-center gap-2 rounded-[16px] font-bold uppercase tracking-[1px] text-sm transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#f5a000] text-white shadow-xl shadow-[#f5a000]/20 hover:-translate-y-1 hover:shadow-2xl"}`}
+                    className={`h-[42px] px-4 flex items-center justify-center gap-2 rounded-xl font-bold uppercase tracking-wider text-[11px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#f5a000] text-white shadow-lg shadow-[#f5a000]/20 hover:-translate-y-0.5 hover:shadow-xl"}`}
                   >
-                    <MessageSquare size={16} className="shrink-0" /> {isSold ? "Machine Sold" : "Enquire Now"}
+                    <MessageSquare size={14} className="shrink-0" /> {isSold ? "Machine Sold" : "Enquire Now"}
                   </button>
                   
                   <a 
                     href={`https://wa.me/918778868739?text=Hi, I am interested in ${product.name} (Ref: ${refNumber})`} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className={`h-[52px] px-[18px] flex items-center justify-center gap-2 rounded-[16px] transition-all duration-300 font-bold uppercase tracking-[1px] text-sm ${isSold ? "opacity-50 pointer-events-none" : "bg-[#eaf9ef] text-[#1fa855] border border-[#cdeed7] hover:bg-[#1fa855] hover:text-white"}`}
+                    className={`h-[42px] px-4 flex items-center justify-center gap-2 rounded-xl transition-all duration-300 font-bold uppercase tracking-wider text-[11px] ${isSold ? "opacity-50 pointer-events-none" : "bg-[#eaf9ef] text-[#1fa855] border border-[#cdeed7] hover:bg-[#1fa855] hover:text-white"}`}
                   >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                    Chat on WhatsApp
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    WhatsApp
                   </a>
                 </div>
             </motion.div>
@@ -299,11 +345,55 @@ const ProductDetail = () => {
             <div className="h-px w-full bg-gray-100" />
           </div>
           
-          <div className="bg-white border border-gray-100 rounded-[20px] p-5.5 shadow-sm">
-            <div className="max-w-none">
-              <p className="text-[#475569] font-medium leading-[1.55] text-[15px] whitespace-pre-line mb-2">
-                {product.full_description || product.short_description || "Detailed technical specifications for this machine are available upon request. Our team has thoroughly inspected this unit to ensure it meets global export standards."}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white border border-slate-200 rounded-[24px] p-7 shadow-sm">
+              <h3 className="text-[18px] font-black text-[#0F172A] uppercase tracking-wider mb-5 flex items-center gap-3">
+                <Settings size={20} className="text-primary" /> Machine Details
+              </h3>
+              <div className="space-y-4">
+                {[
+                  { label: "Brand", value: product.brand },
+                  { label: "Model", value: product.model },
+                  { label: "Hours", value: product.engine_hours },
+                  { label: "Condition", value: product.condition },
+                  { label: "Year", value: product.year }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center border-b border-slate-50 pb-3">
+                    <span className="text-slate-400 font-bold uppercase text-[11px] tracking-wider">{item.label}</span>
+                    <span className="text-[#0F172A] font-extrabold text-[15px]">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-6 text-slate-500 font-medium leading-relaxed text-[15px] whitespace-pre-line">
+                {product.full_description || product.short_description || "Detailed technical specifications for this machine are available upon request."}
               </p>
+            </div>
+
+            <div className="bg-slate-900 rounded-[24px] p-7 shadow-xl shadow-slate-900/10 text-white relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-8 opacity-[0.05] pointer-events-none">
+                  <Globe size={180} />
+               </div>
+               <h3 className="text-[18px] font-black uppercase tracking-wider mb-5 flex items-center gap-3 relative z-10">
+                <ShieldCheck size={20} className="text-primary" /> Export Benefits
+              </h3>
+              <div className="space-y-5 relative z-10">
+                {[
+                  { icon: Truck, title: "Shipping Worldwide", desc: "Express delivery to GCC, Africa & SE Asia." },
+                  { icon: ShieldCheck, title: "Inspection Passed", desc: "Verified 150-point technical certification." },
+                  { icon: FileText, title: "Documentation Support", desc: "Hassle-free export & customs paperwork." },
+                  { icon: Lock, title: "Secure Payment", desc: "Trusted global transaction protocols." }
+                ].map((benefit, idx) => (
+                  <div key={idx} className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+                      <benefit.icon size={20} className="text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-black uppercase text-[12px] tracking-wider mb-0.5">{benefit.title}</h4>
+                      <p className="text-white/60 text-[13px] font-medium">{benefit.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </motion.div>
@@ -326,12 +416,29 @@ const ProductDetail = () => {
         </div>
       </div>
       
+      
       <EnquiryModal 
         open={enquiryOpen} 
         onClose={() => setEnquiryOpen(false)} 
         productName={product.name} 
         product={product} 
       />
+
+      {/* Mobile Sticky CTA */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-100 p-4 shadow-[0_-10px_30px_rgba(0,0,0,0.1)] flex gap-3">
+        <a 
+          href={`https://wa.me/918778868739?text=Hi, I am interested in ${product.name}`} 
+          className="flex-1 h-12 bg-[#1fa855] text-white rounded-xl flex items-center justify-center gap-2 font-black uppercase text-[11px] tracking-wider"
+        >
+          <Phone size={16} /> WhatsApp
+        </a>
+        <button 
+          onClick={() => !isSold && setEnquiryOpen(true)}
+          className="flex-1 h-12 bg-primary text-white rounded-xl flex items-center justify-center gap-2 font-black uppercase text-[11px] tracking-wider shadow-lg shadow-primary/20"
+        >
+          <MessageSquare size={16} /> Enquire
+        </button>
+      </div>
     </div>
   );
 };
