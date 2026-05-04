@@ -34,11 +34,11 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       variants={itemVariant}
       layout
       onClick={handleCardClick}
-      className={`relative bg-white rounded-[22px] overflow-hidden border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.1)] transition-all duration-500 group flex flex-col h-full ${isSold ? "opacity-90" : ""}`}
+      className={`relative bg-white rounded-[22px] overflow-hidden border border-slate-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-premium hover:-translate-y-2 hover:ring-1 hover:ring-primary/20 transition-all duration-500 group flex flex-col h-full ${isSold ? "opacity-90" : ""}`}
     >
       {/* 1. Image Section */}
       <div className="relative h-[200px] overflow-hidden shrink-0">
-        <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-110">
+        <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.03]">
           <ProductCarousel 
             images={product.images} image={product.image} photo={product.photo}
             isSold={isSold} name={product.name} id={product.id} updatedAt={product.updatedAt}
@@ -68,11 +68,11 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       <div className="p-5 flex flex-col flex-1">
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-black text-primary uppercase tracking-widest">{product.brand || 'Premium'}</span>
+            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{product.brand || 'Premium'}</span>
             <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">#{refNumber}</span>
           </div>
           <Link to={`/product/${product.id}`}>
-            <h3 className="text-lg font-display font-black text-heading leading-tight group-hover:text-primary transition-colors line-clamp-2 uppercase">
+            <h3 className="text-lg font-display font-black text-[#0F172A] leading-tight group-hover:text-primary transition-colors line-clamp-2 uppercase">
               {product.name}
             </h3>
           </Link>
@@ -84,13 +84,13 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             <div className="p-1.5 bg-slate-50 rounded-lg shrink-0">
               <Clock size={12} className="text-slate-400" />
             </div>
-            <span className="text-[12px] font-bold text-slate-600 truncate">{product.engine_hours || '0'} hrs</span>
+            <span className="text-[12px] font-bold text-slate-500 truncate">{product.engine_hours || '0'} hrs</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="p-1.5 bg-slate-50 rounded-lg shrink-0">
               <MapPin size={12} className="text-slate-400" />
             </div>
-            <span className="text-[12px] font-bold text-slate-600 truncate">{product.location?.split(',')[0] || 'Dubai'}</span>
+            <span className="text-[12px] font-bold text-slate-500 truncate">{product.location?.split(',')[0] || 'Dubai'}</span>
           </div>
         </div>
 
@@ -111,7 +111,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
           <div className="grid grid-cols-2 gap-2">
             <Link 
               to={`/product/${product.id}`}
-              className="flex items-center justify-center h-[42px] rounded-xl border border-slate-200 text-slate-900 font-bold text-[11px] uppercase tracking-widest hover:bg-slate-50 transition-all"
+              className="flex items-center justify-center h-[42px] rounded-xl border-2 border-[#0F172A] text-[#0F172A] font-bold text-[11px] uppercase tracking-widest hover:bg-[#0F172A] hover:text-white transition-all"
             >
               Details
             </Link>
