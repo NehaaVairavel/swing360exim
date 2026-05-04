@@ -338,61 +338,79 @@ const ProductDetail = () => {
           initial={{ opacity: 0, y: 30 }} 
           whileInView={{ opacity: 1, y: 0 }} 
           viewport={{ once: true }}
-          className="mt-[20px] !important"
+          className="mt-10"
         >
-          <div className="flex items-center gap-4 mb-3">
-            <h2 className="text-[22px] lg:text-[30px] font-extrabold text-[#0f172a] tracking-tight leading-[1.1] whitespace-nowrap">Technical Description</h2>
-            <div className="h-px w-full bg-gray-100" />
+          <div className="flex items-center gap-4 mb-6">
+            <h2 className="text-[24px] lg:text-[32px] font-black text-[#0F172A] tracking-tight leading-none uppercase">Technical Description</h2>
+            <div className="h-px flex-1 bg-slate-100" />
           </div>
           
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white border border-slate-200 rounded-[24px] p-7 shadow-sm">
-              <h3 className="text-[18px] font-black text-[#0F172A] uppercase tracking-wider mb-5 flex items-center gap-3">
-                <Settings size={20} className="text-primary" /> Machine Details
-              </h3>
-              <div className="space-y-4">
-                {[
-                  { label: "Brand", value: product.brand },
-                  { label: "Model", value: product.model },
-                  { label: "Hours", value: product.engine_hours },
-                  { label: "Condition", value: product.condition },
-                  { label: "Year", value: product.year }
-                ].map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center border-b border-slate-50 pb-3">
-                    <span className="text-slate-400 font-bold uppercase text-[11px] tracking-wider">{item.label}</span>
-                    <span className="text-[#0F172A] font-extrabold text-[15px]">{item.value}</span>
+          <div className="bg-white border border-slate-200 rounded-[32px] p-8 lg:p-12 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)]">
+            <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
+              {/* Left Column: Machine Details */}
+              <div className="space-y-8">
+                <h3 className="text-[18px] font-black text-[#0F172A] uppercase tracking-wider flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Settings size={18} className="text-primary" />
                   </div>
-                ))}
+                  Machine Details
+                </h3>
+                <div className="grid grid-cols-1 gap-5">
+                  {[
+                    { label: "Brand", value: product.brand },
+                    { label: "Model", value: `${product.model} / ${product.year}` },
+                    { label: "Hours", value: product.engine_hours || "N/A" },
+                    { label: "Condition", value: product.condition || "Refurbished" },
+                    { label: "Availability", value: "Ready Stock" },
+                    { label: "Location", value: product.location || "India" }
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex justify-between items-center border-b border-slate-50 pb-4">
+                      <span className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.15em]">{item.label}</span>
+                      <span className="text-[#0F172A] font-extrabold text-[16px]">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-slate-500 font-medium leading-relaxed text-[15px] whitespace-pre-line pt-2">
+                  {product.full_description || product.short_description || "Detailed technical specifications for this machine are available upon request. Our team has thoroughly inspected this unit to ensure it meets global export standards."}
+                </p>
               </div>
-              <p className="mt-6 text-slate-500 font-medium leading-relaxed text-[15px] whitespace-pre-line">
-                {product.full_description || product.short_description || "Detailed technical specifications for this machine are available upon request."}
-              </p>
-            </div>
 
-            <div className="bg-slate-900 rounded-[24px] p-7 shadow-xl shadow-slate-900/10 text-white relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-8 opacity-[0.05] pointer-events-none">
-                  <Globe size={180} />
-               </div>
-               <h3 className="text-[18px] font-black uppercase tracking-wider mb-5 flex items-center gap-3 relative z-10">
-                <ShieldCheck size={20} className="text-primary" /> Export Benefits
-              </h3>
-              <div className="space-y-5 relative z-10">
-                {[
-                  { icon: Truck, title: "Shipping Worldwide", desc: "Express delivery to GCC, Africa & SE Asia." },
-                  { icon: ShieldCheck, title: "Inspection Passed", desc: "Verified 150-point technical certification." },
-                  { icon: FileText, title: "Documentation Support", desc: "Hassle-free export & customs paperwork." },
-                  { icon: Lock, title: "Secure Payment", desc: "Trusted global transaction protocols." }
-                ].map((benefit, idx) => (
-                  <div key={idx} className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
-                      <benefit.icon size={20} className="text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-black uppercase text-[12px] tracking-wider mb-0.5">{benefit.title}</h4>
-                      <p className="text-white/60 text-[13px] font-medium">{benefit.desc}</p>
-                    </div>
+              {/* Right Column: Export Support */}
+              <div className="space-y-8">
+                <h3 className="text-[18px] font-black text-[#0F172A] uppercase tracking-wider flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Globe size={18} className="text-primary" />
                   </div>
-                ))}
+                  Export Support
+                </h3>
+                <div className="grid sm:grid-cols-2 gap-6">
+                  {[
+                    { icon: Truck, title: "Worldwide Shipping" },
+                    { icon: ShieldCheck, title: "Inspection Passed" },
+                    { icon: FileText, title: "Documentation Support" },
+                    { icon: Lock, title: "Secure Payment" },
+                    { icon: Clock, title: "Fast Dispatch" },
+                    { icon: Globe, title: "Dubai HQ Assistance" }
+                  ].map((benefit, idx) => (
+                    <div key={idx} className="flex items-center gap-4 group cursor-default">
+                      <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center shrink-0 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all">
+                        <benefit.icon size={18} className="text-primary" />
+                      </div>
+                      <span className="text-[#0F172A] font-bold text-[14px] leading-tight">{benefit.title}</span>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Visual Accent */}
+                <div className="mt-8 p-6 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-primary shrink-0">
+                     <ShieldCheck size={24} />
+                  </div>
+                  <div>
+                    <h4 className="text-[#0F172A] font-black uppercase text-[12px] tracking-wider mb-0.5">Swing360 Verified</h4>
+                    <p className="text-slate-400 text-[11px] font-bold uppercase tracking-tight">Technical Hub Certification Passed</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
