@@ -240,26 +240,9 @@ const ProductDetail = () => {
                 <div className="flex items-center gap-1.5">
                    <MapPin size={14} className="text-[#6B7280]" /> {product.location || "India"}
                 </div>
-                <div className="flex items-center gap-1.5">
-                   <Check size={14} className="text-[#6B7280]" /> Ready for Export
-                </div>
-                <div className="flex items-center gap-1.5">
-                   <Check size={14} className="text-[#6B7280]" /> Refurbished
-                </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-6">
-                {[
-                  { label: "Refurbished", color: "bg-blue-50 text-blue-600 border-blue-100" },
-                  { label: "Ready Stock", color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
-                  { label: "Export Ready", color: "bg-amber-50 text-amber-600 border-amber-100" },
-                  { label: "Verified Seller", color: "bg-slate-50 text-slate-600 border-slate-100" }
-                ].map((badge, idx) => (
-                  <span key={idx} className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border ${badge.color}`}>
-                    {badge.label}
-                  </span>
-                ))}
-              </div>
+
               
 
 
@@ -360,8 +343,6 @@ const ProductDetail = () => {
                     { label: "Brand", value: product.brand },
                     { label: "Model", value: `${product.model} / ${product.year}` },
                     { label: "Hours", value: product.engine_hours || "N/A" },
-                    { label: "Condition", value: product.condition || "Refurbished" },
-                    { label: "Availability", value: "Ready Stock" },
                     { label: "Location", value: product.location || "India" }
                   ].map((item, idx) => (
                     <div key={idx} className="flex justify-between items-center border-b border-slate-50 pb-4">
