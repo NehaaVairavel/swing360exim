@@ -138,17 +138,17 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="min-h-fit bg-[#FDFDFD] relative pt-[60px] pb-4 font-jakarta max-w-[1500px] mx-auto">
+    <div className="min-h-fit bg-[#FDFDFD] relative pt-[84px] pb-4 font-jakarta max-w-[1500px] mx-auto">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-full h-[400px] bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
       <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.04] blur-[100px] pointer-events-none" />
 
-      <div className="container-section relative z-10 mt-3.5">
+      <div className="container-section relative z-10 mt-8">
         {/* Breadcrumbs & Actions */}
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-6">
-          <Link to="/products" className="flex items-center gap-3 text-heading/40 hover:text-primary transition-all font-bold uppercase tracking-widest text-[16px] group">
-            <div className="w-10 h-10 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
-              <ArrowLeft size={18} />
+        <div className="mb-8 flex flex-wrap items-center justify-between gap-6">
+          <Link to="/products" className="flex items-center gap-3 text-slate-400 hover:text-primary transition-all font-medium uppercase tracking-wider text-[12px] group">
+            <div className="w-9 h-9 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
+              <ArrowLeft size={16} />
             </div>
             Back to Global Inventory
           </Link>
@@ -160,7 +160,7 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-[55%_45%] gap-6 items-start h-auto">
+        <div className="grid lg:grid-cols-[55%_45%] gap-12 items-start h-auto">
           {/* Left Column: Gallery */}
           <div className="space-y-6">
             <motion.div 
@@ -196,10 +196,6 @@ const ProductDetail = () => {
               
               {/* Image Badges */}
               <div className="absolute top-8 left-8 z-20 flex flex-col gap-3">
-                <div className="bg-white/95 backdrop-blur-md px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-xl border border-white/50">
-                  <ShieldCheck className="text-primary" size={20} />
-                  <span className="text-[11px] font-black text-heading uppercase tracking-[0.2em]">Verified Inspection</span>
-                </div>
                 {isSold && (
                   <div className="bg-rose-500 text-white px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-xl font-black uppercase tracking-[0.2em] text-[11px]">
                     Sold Out
