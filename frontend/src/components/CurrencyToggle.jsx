@@ -74,7 +74,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
   }
 
   return (
-    <div className="flex items-center bg-slate-100/80 p-0.5 rounded-full border border-slate-200/60 shadow-inner relative w-fit mx-auto lg:mx-0">
+    <div className="flex items-center bg-slate-100/80 p-1 rounded-full border border-slate-200/60 shadow-inner relative w-fit mx-auto lg:mx-0">
       {currencies.map((curr) => {
         const isActive = currency.code === curr.code;
         return (
@@ -82,18 +82,18 @@ const CurrencyToggle = ({ variant = 'default' }) => {
             key={curr.code}
             onClick={() => setCurrency(curr)}
             className={`
-              relative z-10 w-[55px] h-7 flex items-center justify-center gap-1 rounded-full transition-all duration-500
-              uppercase tracking-tighter font-bold text-[10px]
+              relative z-10 w-[64px] h-9 flex items-center justify-center gap-1.5 rounded-full transition-all duration-500
+              uppercase tracking-tight font-bold text-[11px]
               ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-900'}
             `}
           >
-            <span className="text-xs leading-none opacity-80">{curr.flag}</span>
+            <span className="text-sm leading-none opacity-90">{curr.flag}</span>
             <span>{curr.code}</span>
             
             {isActive && (
               <motion.div
                 layoutId={`activeCurrency-${variant}`}
-                className="absolute inset-0 bg-[#F59E0B] rounded-full -z-10 shadow-sm"
+                className="absolute inset-0 bg-[#F59E0B] rounded-full -z-10 shadow-md"
                 transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
               />
             )}

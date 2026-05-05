@@ -153,10 +153,15 @@ const ProductDetail = () => {
             Back to Global Inventory
           </Link>
           
-          <div className="flex gap-3">
-             <button onClick={handleShareLink} className="h-11 px-5 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
-               {isCopied ? <><CheckCircle2 size={16} className="text-green-500" /> Copied</> : <><Share2 size={16} /> Share Machine</>}
-             </button>
+          <div className="flex items-center gap-6">
+             <div className="flex items-center gap-1.5 text-slate-400 font-medium text-[12px] uppercase tracking-wider">
+               <MapPin size={14} className="text-slate-300" /> {product.location || "India"}
+             </div>
+             <div className="flex gap-3">
+               <button onClick={handleShareLink} className="h-11 px-5 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
+                 {isCopied ? <><CheckCircle2 size={16} className="text-green-500" /> Copied</> : <><Share2 size={16} /> Share Machine</>}
+               </button>
+             </div>
           </div>
         </div>
 
@@ -230,25 +235,23 @@ const ProductDetail = () => {
                 </span>
               </div>
 
-              <div className="flex items-center justify-between mb-4 gap-4">
-                <h1 className="text-[28px] lg:text-[42px] font-extrabold text-[#0F172A] leading-none tracking-[-1.5px] uppercase">{product.name}</h1>
-                <div className="text-slate-400 font-medium text-[14px] uppercase tracking-wide whitespace-nowrap">
-                   {product.location || "India"}
-                </div>
+              <div className="mb-4">
+                <h1 className="text-[24px] lg:text-[36px] font-extrabold text-[#0F172A] leading-tight tracking-[-1px] uppercase">{product.name}</h1>
               </div>
 
 
               
 
 
-              <div className="bg-white border border-slate-200 rounded-[20px] p-4 lg:px-6 lg:py-5 shadow-sm mb-6 relative overflow-hidden group">
+              <div className="bg-white border border-slate-200 rounded-[20px] p-4 lg:px-6 lg:py-4 shadow-sm mb-6 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
-                  <AnimatedGear size={80} />
+                  <AnimatedGear size={70} />
                 </div>
                 
                 <div className="relative z-10 flex items-center justify-between">
-                  <div className="flex items-baseline gap-2">
-                    <h2 className={`text-[32px] lg:text-[42px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#F59E0B]"}`}>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-1">Premium Export Price</span>
+                    <h2 className={`text-[28px] lg:text-[32px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#F59E0B]"}`}>
                       {displayPrice}
                     </h2>
                   </div>
