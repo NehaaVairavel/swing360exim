@@ -138,14 +138,14 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="min-h-fit bg-[#FDFDFD] relative pt-[84px] pb-4 font-jakarta max-w-[1500px] mx-auto">
+    <div className="min-h-fit bg-[#FDFDFD] relative pt-[72px] pb-4 font-jakarta max-w-[1500px] mx-auto">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-full h-[400px] bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
       <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.04] blur-[100px] pointer-events-none" />
 
-      <div className="container-section relative z-10 mt-8">
+      <div className="container-section relative z-10 mt-4">
         {/* Breadcrumbs & Actions */}
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-6">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-6">
           <Link to="/products" className="flex items-center gap-3 text-slate-400 hover:text-primary transition-all font-medium uppercase tracking-wider text-[12px] group">
             <div className="w-9 h-9 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
               <ArrowLeft size={16} />
@@ -230,11 +230,10 @@ const ProductDetail = () => {
                 </span>
               </div>
 
-              <h1 className="text-[28px] lg:text-[42px] font-extrabold text-[#0F172A] mb-2 leading-none tracking-[-1.5px] uppercase">{product.name}</h1>
-              
-              <div className="flex items-center gap-4 mb-4 text-[#6B7280] font-bold text-[12px] uppercase tracking-wide">
-                <div className="flex items-center gap-1.5">
-                   <MapPin size={14} className="text-[#6B7280]" /> {product.location || "India"}
+              <div className="flex items-center justify-between mb-4 gap-4">
+                <h1 className="text-[28px] lg:text-[42px] font-extrabold text-[#0F172A] leading-none tracking-[-1.5px] uppercase">{product.name}</h1>
+                <div className="text-slate-400 font-medium text-[14px] uppercase tracking-wide whitespace-nowrap">
+                   {product.location || "India"}
                 </div>
               </div>
 
@@ -242,35 +241,18 @@ const ProductDetail = () => {
               
 
 
-              <div className="bg-white border border-slate-200 rounded-[20px] p-4 lg:p-5 shadow-sm mb-6 relative overflow-hidden group">
+              <div className="bg-white border border-slate-200 rounded-[20px] p-4 lg:px-6 lg:py-5 shadow-sm mb-6 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
-                  <AnimatedGear size={100} />
+                  <AnimatedGear size={80} />
                 </div>
                 
-                <div className="relative z-10">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-[#F59E0B] text-[9px] uppercase font-black tracking-[2px]">Premium Export Price</span>
-                    <CurrencyToggle />
-                  </div>
-                  <div className="flex items-baseline gap-2 mb-3">
+                <div className="relative z-10 flex items-center justify-between">
+                  <div className="flex items-baseline gap-2">
                     <h2 className={`text-[32px] lg:text-[42px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#F59E0B]"}`}>
                       {displayPrice}
                     </h2>
-                    <span className="text-slate-400 font-bold text-[11px] uppercase tracking-wider">Ex-Works Dubai</span>
                   </div>
-
-                  <div className="space-y-1.5 border-t border-slate-100 pt-3">
-                    {[
-                      { icon: CheckCircle2, text: "Negotiable on Bulk Orders", color: "text-emerald-500" },
-                      { icon: Truck, text: "Ready for Immediate Dispatch", color: "text-blue-500" },
-                      { icon: Clock, text: "Response in 10 mins", color: "text-amber-500" }
-                    ].map((item, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-[11px] font-bold text-[#0F172A]/70 uppercase tracking-wide">
-                        <item.icon size={13} className={item.color} />
-                        {item.text}
-                      </div>
-                    ))}
-                  </div>
+                  <CurrencyToggle />
                 </div>
               </div>
 
