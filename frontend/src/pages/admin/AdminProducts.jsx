@@ -127,6 +127,7 @@ const AdminProducts = () => {
         >
           <Plus size={17} />
           Add New Machine
+        </Link>
       </div>
 
       {/* ── Top Analytics Strip ── */}
