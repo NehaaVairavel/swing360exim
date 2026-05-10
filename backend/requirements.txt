@@ -9,4 +9,5 @@ boto3
 gunicorn
 dnspython
 flask-socketio
-eventlet
+gevent
+gevent-websocket

@@ -54,7 +54,7 @@ app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
 jwt = JWTManager(app)
 
 # ── Real-Time Sync (Socket.IO) ───────────────────────────────────────────
-socketio = SocketIO(app, cors_allowed_origins="*", async_mode='eventlet')
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='gevent')
 
 # ── MongoDB Connection ────────────────────────────────────────────────────
 MONGO_URI    = os.getenv("MONGO_URI")
