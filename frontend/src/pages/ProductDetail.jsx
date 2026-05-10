@@ -225,16 +225,17 @@ const ProductDetail = () => {
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
               {/* Top Metadata Cluster */}
-              <div className="flex items-center gap-3 mb-4">
-                <span className="bg-amber-50 text-amber-900 border border-amber-200/60 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[1.5px] shadow-sm">
+              <div className="inline-flex items-stretch h-[30px] mb-4 bg-white border border-slate-200/80 rounded-[8px] shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+                <div className="flex items-center px-3.5 text-[10px] font-black uppercase tracking-[1.5px] text-amber-700 bg-amber-50/50 rounded-l-[8px]">
                   {product.category}
-                </span>
-                <span className="bg-slate-900 text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2 shadow-md">
-                   REF NO: {refNumber}
-                </span>
-                <div className="h-4 w-px bg-slate-100 mx-1" />
-                <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[11px] uppercase tracking-wider">
-                  <MapPin size={14} className="text-primary/60" /> {product.location || "India"}
+                </div>
+                <div className="w-px bg-slate-100" />
+                <div className="flex items-center px-3.5 text-[10px] font-black uppercase tracking-widest text-slate-800">
+                  <span className="text-slate-400 mr-1.5">REF:</span> {refNumber}
+                </div>
+                <div className="w-px bg-slate-100" />
+                <div className="flex items-center gap-1.5 px-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-600">
+                  <MapPin size={12} className="text-slate-400" /> {product.location || "India"}
                 </div>
               </div>
 
