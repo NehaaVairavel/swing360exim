@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, Eye, Send, LayoutGrid, Tag, MapPin, Clock, DollarSign, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, Eye, Send, LayoutGrid, Tag, MapPin, Clock, DollarSign, CheckCircle2, X } from "lucide-react";
 import { AllIcon, ExcavatorIcon, BackhoeIcon, DozerIcon, WheelLoaderIcon, GraderIcon, RollerIcon, SkidSteerIcon, BucketIcon, MaterialHandlerIcon, OtherIcon } from "@/components/products/MachineIcons";
 import productService from "@/services/productService";
 import { socket } from "@/socket";
@@ -401,7 +401,7 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-6 lg:px-8">
+      <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-6 lg:px-5">
         <div className="flex flex-col lg:flex-row gap-5 items-start mt-4">
           
           <motion.aside 
@@ -409,14 +409,45 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30"
+            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar z-30"
           >
             <div className="products-sidebar flex flex-col overflow-hidden">
               
               <div className="px-5 py-4 border-b border-slate-100 mb-3 bg-slate-50/50">
-                <div className="text-[9px] font-bold text-slate-400 tracking-[3px] uppercase mb-1">FILTERS</div>
+                <div className="flex items-center justify-between mb-1">
+                  <div className="text-[9px] font-bold text-slate-400 tracking-[3px] uppercase">FILTERS</div>
+                  {(selectedCategories.length > 0 || selectedBrands.length > 0 || selectedLocations.length > 0 || engineHours < 15000 || minPrice > 0 || maxPrice < 1000000 || selectedCondition !== "All" || activeStatus !== "All") && (
+                    <button onClick={handleReset} className="text-[10px] font-bold text-primary hover:text-orange-700 transition-colors">Clear All</button>
+                  )}
+                </div>
                 <h2 className="text-[24px] font-display font-[700] text-heading leading-tight">Refine Search</h2>
               </div>
+
+              {/* Active Filters Section */}
+              {(selectedCategories.length > 0 || selectedBrands.length > 0 || selectedLocations.length > 0) && (
+                <div className="px-5 pb-4 mb-3 border-b border-slate-100">
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCategories.map(cat => (
+                      <div key={cat} className="flex items-center gap-1.5 bg-primary/10 text-primary text-[11px] font-bold px-2 py-1 rounded-md">
+                        {cat}
+                        <button onClick={() => setSelectedCategories(selectedCategories.filter(c => c !== cat))} className="hover:text-orange-700"><X size={12} strokeWidth={3} /></button>
+                      </div>
+                    ))}
+                    {selectedBrands.map(brand => (
+                      <div key={brand} className="flex items-center gap-1.5 bg-primary/10 text-primary text-[11px] font-bold px-2 py-1 rounded-md">
+                        {brand}
+                        <button onClick={() => setSelectedBrands(selectedBrands.filter(b => b !== brand))} className="hover:text-orange-700"><X size={12} strokeWidth={3} /></button>
+                      </div>
+                    ))}
+                    {selectedLocations.map(loc => (
+                      <div key={loc} className="flex items-center gap-1.5 bg-primary/10 text-primary text-[11px] font-bold px-2 py-1 rounded-md">
+                        {loc}
+                        <button onClick={() => setSelectedLocations(selectedLocations.filter(l => l !== loc))} className="hover:text-orange-700"><X size={12} strokeWidth={3} /></button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <FilterAccordion title="Categories" badge="10" icon={LayoutGrid} count={selectedCategories.length} defaultOpen={true}>
                 <div className="flex flex-wrap gap-2.5 pt-1">
