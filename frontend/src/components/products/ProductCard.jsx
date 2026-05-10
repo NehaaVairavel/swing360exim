@@ -37,7 +37,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       className={`relative bg-white rounded-[22px] overflow-hidden border border-slate-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-premium hover:-translate-y-2 hover:ring-1 hover:ring-primary/20 transition-all duration-500 group flex flex-col h-full ${isSold ? "opacity-90" : ""}`}
     >
       {/* 1. Image Section */}
-      <div className="relative h-[200px] overflow-hidden shrink-0">
+      <div className="relative h-[160px] overflow-hidden shrink-0">
         <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.03]">
           <ProductCarousel 
             images={product.images} image={product.image} photo={product.photo}
