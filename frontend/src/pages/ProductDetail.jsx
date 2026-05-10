@@ -138,7 +138,7 @@ const ProductDetail = () => {
   ];
 
   return (
-    <div className="min-h-fit bg-[#FDFDFD] relative pt-[72px] pb-4 font-jakarta max-w-[1500px] mx-auto">
+    <div className="min-h-fit bg-[#FAF9F6] relative pt-[72px] pb-4 font-jakarta max-w-[1500px] mx-auto">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-full h-[400px] bg-gradient-to-b from-primary/[0.03] to-transparent pointer-events-none" />
       <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-accent/[0.04] blur-[100px] pointer-events-none" />
@@ -243,8 +243,8 @@ const ProductDetail = () => {
               </div>
 
               <motion.div 
-                whileHover={{ y: -4 }}
-                className="bg-white border border-slate-100 rounded-[22px] p-4 lg:px-6 lg:py-4 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.06)] mb-3 relative overflow-hidden group hover:border-amber-500/20 transition-all"
+                whileHover={{ y: -4, boxShadow: "0 16px 40px -8px rgba(0,0,0,0.08)" }}
+                className="bg-white border border-slate-200/60 rounded-[22px] p-4 lg:px-6 lg:py-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.06)] mb-3 relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300"
               >
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
                   <AnimatedGear size={65} />
@@ -345,7 +345,7 @@ const ProductDetail = () => {
             <div className="h-px flex-1 bg-slate-100" />
           </div>
           
-          <div className="bg-white border border-slate-200 rounded-[32px] p-8 lg:p-12 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)]">
+          <div className="bg-white border border-slate-200/70 rounded-[32px] p-8 lg:p-12 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.06)]">
             <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
               {/* Left Column: Machine Details */}
               <div className="space-y-8">
@@ -421,7 +421,7 @@ const ProductDetail = () => {
             { icon: ShieldCheck, title: "Verified Hub", desc: "Every machine passes a rigorous 150-point technical check." },
             { icon: CheckCircle2, title: "Documentation", desc: "We handle all export paperwork and customs clearance." }
           ].map((item, i) => (
-            <div key={i} className="p-7 rounded-[24px] border border-gray-100 bg-white hover:border-primary/20 hover:shadow-xl transition-all group min-h-[220px]">
+            <div key={i} className="p-7 rounded-[24px] border border-slate-200/60 bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:border-primary/30 hover:shadow-xl transition-all duration-300 group min-h-[220px]">
               <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-all">
                 <item.icon size={28} />
               </div>
