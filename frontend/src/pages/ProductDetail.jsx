@@ -282,7 +282,11 @@ const ProductDetail = () => {
                 className="grid grid-cols-2 gap-3 mb-5"
               >
                 {specifications.map((spec, i) => {
-                  const isSpecial = spec.label === "Condition" || spec.label === "Engine Hours" || spec.label === "Reference No";
+                  const isCondition = spec.label === "Condition";
+                  const isEngineHours = spec.label === "Engine Hours";
+                  const isRef = spec.label === "Reference No";
+                  const isSpecial = isCondition || isEngineHours || isRef;
+
                   return (
                     <motion.div
                       key={i}
@@ -291,31 +295,43 @@ const ProductDetail = () => {
                       transition={{ delay: i * 0.05, duration: 0.35, ease: "easeOut" }}
                       whileHover={{
                         y: -3,
-                        boxShadow: "0 12px 28px -4px rgba(245, 158, 11, 0.15)",
+                        boxShadow: isSpecial 
+                          ? "0 12px 28px -4px rgba(245, 158, 11, 0.15)" 
+                          : "0 12px 28px -4px rgba(15, 23, 42, 0.06)",
                       }}
-                      className={`flex items-center gap-3 rounded-[18px] p-3.5 cursor-default group transition-all duration-300 border ${
+                      className={`flex items-center gap-3 rounded-[18px] p-3.5 cursor-default group transition-all duration-300 bg-white shadow-[0_2px_10px_rgba(15,23,42,0.03)] border ${
                         isSpecial
-                          ? "bg-[#FFFBF0] border-amber-300/50 shadow-[0_2px_8px_rgba(245,158,11,0.06)] hover:border-amber-400/80"
-                          : "bg-white border-slate-200 shadow-[0_2px_8px_rgba(15,23,42,0.05)] hover:border-amber-300/60"
+                          ? "border-slate-200/80 border-l-[3px] border-l-amber-400 hover:border-amber-300/80"
+                          : "border-slate-200/60 hover:border-slate-300"
                       }`}
                     >
                       <div className={`w-9 h-9 rounded-[12px] flex items-center justify-center shrink-0 transition-colors duration-300 ${
                         isSpecial
-                          ? "bg-amber-100 group-hover:bg-amber-200/80"
-                          : "bg-slate-100 group-hover:bg-primary/10"
+                          ? "bg-amber-50 group-hover:bg-amber-100"
+                          : "bg-slate-50 group-hover:bg-slate-100"
                       }`}>
                         <spec.icon
                           size={16}
                           className={`transition-colors duration-300 ${
-                            isSpecial ? "text-amber-700" : "text-slate-500 group-hover:text-primary"
+                            isSpecial ? "text-amber-600" : "text-slate-400 group-hover:text-slate-600"
                           }`}
                         />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="text-[9px] uppercase font-bold tracking-[0.12em] text-slate-400 mb-0.5 leading-none">{spec.label}</span>
-                        <span className={`text-[14px] tracking-tight leading-snug truncate ${
-                          isSpecial ? "font-black text-amber-900" : spec.label === "Location" ? "font-black text-slate-950" : "font-black text-slate-900"
-                        }`}>{spec.value}</span>
+                        <span className={`text-[9px] uppercase font-bold tracking-[0.12em] mb-0.5 leading-none ${isCondition ? "text-amber-700/80" : "text-slate-400"}`}>
+                          {spec.label}
+                        </span>
+                        <span className={`truncate leading-snug ${
+                          isCondition 
+                            ? "font-black text-[14px] text-amber-950 drop-shadow-[0_2px_6px_rgba(245,158,11,0.25)]" 
+                          : isEngineHours 
+                            ? "font-black text-[15px] text-slate-950 tracking-tight font-mono" 
+                          : isRef 
+                            ? "font-extrabold text-[14px] text-slate-900 tracking-widest font-mono" 
+                          : "font-extrabold text-[14px] text-slate-700"
+                        }`}>
+                          {spec.value}
+                        </span>
                       </div>
                     </motion.div>
                   );
