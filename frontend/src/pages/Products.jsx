@@ -25,7 +25,7 @@ const staggerContainer = {
 const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-[#F1F5F9] last:border-0 pb-3 mb-3 last:pb-0 last:mb-0 px-2">
+    <div className="border-b border-[#F1F5F9] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-4 h-[54px] rounded-2xl transition-all duration-300 group
@@ -460,7 +460,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`h-[40px] px-[16px] flex items-center justify-center rounded-full font-manrope text-[14px] transition-all duration-200 border hover:-translate-y-[1px] ${isSelected ? 'bg-[#FFF4D6] border-[#F5B301] text-[#111827] font-semibold' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}
+                        className={`h-[38px] px-[14px] flex items-center justify-center rounded-full font-manrope text-[13px] transition-all duration-200 border hover:-translate-y-[1px] ${isSelected ? 'bg-[linear-gradient(135deg,#FFB800,#FF8A00)] border-transparent text-white font-[600] shadow-md shadow-orange-500/20' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#FFF7ED] hover:border-[#FDBA74]'}`}
                       >
                         {cat}
                       </button>
