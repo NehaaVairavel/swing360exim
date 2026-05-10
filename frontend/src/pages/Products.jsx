@@ -25,11 +25,11 @@ const staggerContainer = {
 const FilterAccordion = ({ title, icon: Icon, children, count = 0, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="mb-3 last:mb-0 px-2">
+    <div className="mb-2 last:mb-0 px-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl border transition-all duration-300 group shadow-sm
-          ${isOpen ? 'bg-slate-50 border-slate-200' : 'bg-white border-slate-100 hover:border-orange-200 hover:shadow-md hover:-translate-y-0.5'}`}
+          ${isOpen ? 'bg-[#F8FAFC] border-slate-200' : 'bg-white border-transparent hover:bg-[#F8FAFC] hover:border-slate-200 hover:shadow-sm'}`}
       >
         <div className="flex items-center gap-3">
           {Icon && <Icon size={18} className={`${isOpen ? 'text-primary' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />}
@@ -411,8 +411,8 @@ const Products = () => {
             <div className="products-sidebar flex flex-col overflow-hidden">
               
               <div className="px-5 py-4 border-b border-slate-100 mb-3 bg-slate-50/50">
-                <div className="text-[10px] font-black text-slate-400 tracking-[4px] uppercase mb-1">FILTERS</div>
-                <h2 className="text-xl font-display font-black text-heading">Refine Search</h2>
+                <div className="text-[9px] font-bold text-slate-400 tracking-[3px] uppercase mb-1">FILTERS</div>
+                <h2 className="text-[24px] font-display font-[700] text-heading leading-tight">Refine Search</h2>
               </div>
 
               <FilterAccordion title="Categories" icon={LayoutGrid} count={selectedCategories.length} defaultOpen={true}>
@@ -426,7 +426,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`px-[14px] h-[38px] flex items-center justify-center rounded-full font-manrope text-[14px] font-semibold transition-all border ${isSelected ? 'bg-gradient-to-r from-[#ffb100] to-[#ff7a00] border-transparent text-white shadow-lg shadow-orange-500/20 -translate-y-0.5' : 'bg-slate-50 border-slate-200 text-slate-500 hover:text-primary hover:border-primary/20 hover:bg-white hover:-translate-y-0.5 hover:shadow-md'}`}
+                        className={`h-[40px] px-[16px] flex items-center justify-center rounded-full font-manrope text-[14px] transition-all duration-200 border hover:-translate-y-[1px] ${isSelected ? 'bg-[#FFF4D6] border-[#F5B301] text-[#111827] font-semibold' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'}`}
                       >
                         {cat}
                       </button>
