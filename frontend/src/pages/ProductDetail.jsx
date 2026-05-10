@@ -261,21 +261,44 @@ const ProductDetail = () => {
                 </div>
               </motion.div>
 
-              <div className="grid grid-cols-2 gap-2.5 mb-5">
+              <div className="grid grid-cols-2 gap-3 mb-5">
                 {specifications.map((spec, i) => {
                   const isSpecial = spec.label === "Condition" || spec.label === "Engine Hours" || spec.label === "Reference No";
                   return (
-                    <motion.div 
-                      key={i} 
-                      whileHover={{ y: -2, shadow: "0 10px 20px rgba(0,0,0,0.04)" }}
-                      className={`flex items-center gap-3 bg-white border border-slate-200/60 rounded-[16px] p-3 transition-all duration-300 group cursor-default shadow-sm ${isSpecial ? 'bg-amber-50/10 border-amber-500/20 shadow-amber-900/5' : 'hover:border-primary/40'}`}
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05, duration: 0.35, ease: "easeOut" }}
+                      whileHover={{
+                        y: -3,
+                        boxShadow: isSpecial
+                          ? "0 8px 24px rgba(245,158,11,0.12)"
+                          : "0 8px 24px rgba(15,23,42,0.08)",
+                      }}
+                      className={`flex items-center gap-3 rounded-[18px] p-3.5 cursor-default group transition-colors duration-300 border ${
+                        isSpecial
+                          ? "bg-[#FFFBF0] border-amber-300/50 shadow-[0_2px_8px_rgba(245,158,11,0.06)]"
+                          : "bg-white border-slate-200 shadow-[0_2px_8px_rgba(15,23,42,0.05)] hover:border-slate-300"
+                      }`}
                     >
-                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${isSpecial ? 'bg-amber-100/40' : 'bg-slate-50 group-hover:bg-primary/5'}`}>
-                        <spec.icon size={16} className={`${isSpecial ? 'text-amber-600' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />
+                      <div className={`w-9 h-9 rounded-[12px] flex items-center justify-center shrink-0 transition-colors duration-300 ${
+                        isSpecial
+                          ? "bg-amber-100 group-hover:bg-amber-200/80"
+                          : "bg-slate-100 group-hover:bg-primary/10"
+                      }`}>
+                        <spec.icon
+                          size={16}
+                          className={`transition-colors duration-300 ${
+                            isSpecial ? "text-amber-700" : "text-slate-500 group-hover:text-primary"
+                          }`}
+                        />
                       </div>
-                      <div className="flex flex-col min-w-0 leading-tight">
-                        <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-0.5">{spec.label}</span>
-                        <span className={`text-[14px] font-black text-slate-900 truncate tracking-tight ${isSpecial ? 'text-slate-950' : ''}`}>{spec.value}</span>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[9px] uppercase font-bold tracking-[0.12em] text-slate-400 mb-0.5 leading-none">{spec.label}</span>
+                        <span className={`text-[14px] font-black tracking-tight leading-snug truncate ${
+                          isSpecial ? "text-amber-900" : "text-slate-900"
+                        }`}>{spec.value}</span>
                       </div>
                     </motion.div>
                   );
