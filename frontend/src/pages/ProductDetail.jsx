@@ -306,11 +306,12 @@ const ProductDetail = () => {
               {/* CTA Buttons */}
               <div className="grid grid-cols-2 gap-3 mt-1">
                 <motion.button
-                  whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(245, 160, 0, 0.25)" }}
+                  whileHover={{ y: -4, boxShadow: "inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 16px 36px rgba(245, 160, 0, 0.25)" }}
                   whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
                   onClick={() => !isSold && setEnquiryOpen(true)}
                   disabled={isSold}
-                  className={`h-[50px] px-6 flex items-center justify-center gap-2 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "enquire-btn-animated text-white shadow-lg shadow-[#f5a000]/20"}`}
+                  className={`h-[50px] px-6 flex items-center justify-center gap-2 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "enquire-btn-animated text-white"}`}
                 >
                   <MessageSquare size={16} className="shrink-0" /> {isSold ? "Machine Sold" : "Enquire Now"}
                 </motion.button>
