@@ -239,10 +239,6 @@ const ProductDetail = () => {
                 <h1 className="text-[24px] lg:text-[36px] font-extrabold text-[#0F172A] leading-tight tracking-[-1px] uppercase">{product.name}</h1>
               </div>
 
-
-              
-
-
               <div className="bg-white border border-slate-200 rounded-[20px] p-4 lg:px-6 lg:py-4 shadow-sm mb-6 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
                   <AnimatedGear size={70} />
@@ -250,8 +246,8 @@ const ProductDetail = () => {
                 
                 <div className="relative z-10 flex items-center justify-between">
                   <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-1">Premium Export Price</span>
-                    <h2 className={`text-[28px] lg:text-[32px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "text-[#F59E0B]"}`}>
+                    <span className="industrial-label text-slate-400 mb-1">Premium Export Price</span>
+                    <h2 className={`text-[28px] lg:text-[32px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "price-cat"}`}>
                       {displayPrice}
                     </h2>
                   </div>
@@ -266,8 +262,8 @@ const ProductDetail = () => {
                       <spec.icon size={18} className="text-slate-400 group-hover:text-primary transition-colors" />
                     </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="text-[9px] font-black uppercase tracking-[1.5px] text-slate-400 mb-0.5">{spec.label}</span>
-                      <span className="text-[14px] font-extrabold text-[#0F172A] leading-none truncate">{spec.value}</span>
+                      <span className="industrial-label mb-0.5">{spec.label}</span>
+                      <span className="industrial-value leading-none truncate">{spec.value}</span>
                     </div>
                   </div>
                 ))}
@@ -327,8 +323,8 @@ const ProductDetail = () => {
                     { label: "Location", value: product.location || "India" }
                   ].map((item, idx) => (
                     <div key={idx} className="flex justify-between items-center border-b border-slate-50 pb-4">
-                      <span className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.15em]">{item.label}</span>
-                      <span className="text-[#0F172A] font-extrabold text-[16px]">{item.value}</span>
+                      <span className="industrial-label">{item.label}</span>
+                      <span className="industrial-value text-[16px]">{item.value}</span>
                     </div>
                   ))}
                 </div>

@@ -88,10 +88,10 @@ const StatCard = ({ stat, i }) => {
         <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <IconComp size={18} className="text-primary group-hover:rotate-12 group-hover:scale-110 transition-all duration-500 relative z-10" />
       </div>
-      <div className="text-2xl md:text-3xl font-display font-black text-shimmer tracking-tight">
+      <div className="text-2xl md:text-3xl industrial-value text-shimmer tracking-tight">
         {count}{stat.suffix}
       </div>
-      <div className="text-[12px] text-muted-foreground mt-1.5 font-medium">{stat.label}</div>
+      <div className="industrial-label mt-1.5">{stat.label}</div>
     </motion.div>
   );
 };
@@ -255,12 +255,12 @@ const Index = () => {
 
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div className="max-w-[560px]" style={{ opacity: heroTextOpacity, y: heroTextY }}>
-              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-flex items-center gap-2.5 bg-white/80 backdrop-blur-md border border-primary/20 text-heading px-4 py-1.5 rounded-full text-[9px] font-display font-black uppercase tracking-[0.2em] mb-5 shadow-[0_10px_30px_-10px_rgba(245,158,11,0.2)]">
+              <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="inline-flex items-center gap-2.5 bg-white/80 backdrop-blur-md border border-primary/20 text-heading px-4 py-1.5 rounded-full mb-5 shadow-[0_10px_30px_-10px_rgba(245,158,11,0.2)]">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                 </span>
-                Global Machinery Export Hub
+                <span className="industrial-label text-heading">Global Machinery Export Hub</span>
               </motion.div>
 
               <div className="text-4xl md:text-5xl lg:text-[72px] font-display font-black text-heading leading-[1.05] mb-5 text-shadow-lg drop-shadow-sm">

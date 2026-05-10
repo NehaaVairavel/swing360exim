@@ -84,21 +84,21 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
             <div className="p-1.5 bg-slate-50 rounded-lg shrink-0">
               <Clock size={12} className="text-slate-400" />
             </div>
-            <span className="text-[12px] font-bold text-slate-500 truncate">{product.engine_hours || '0'} hrs</span>
+            <span className="industrial-value text-[12px] truncate">{product.engine_hours || '0'} hrs</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="p-1.5 bg-slate-50 rounded-lg shrink-0">
               <MapPin size={12} className="text-slate-400" />
             </div>
-            <span className="text-[12px] font-bold text-slate-500 truncate">{product.location?.split(',')[0] || 'Dubai'}</span>
+            <span className="industrial-value text-[12px] truncate">{product.location?.split(',')[0] || 'Dubai'}</span>
           </div>
         </div>
 
         <div className="mt-auto">
           <div className="pt-4 border-t border-slate-50 flex items-end justify-between mb-4">
             <div>
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5 block">Export Price</span>
-              <div className="text-2xl font-display font-black text-primary flex items-baseline gap-1">
+              <span className="industrial-label mb-0.5 block">Export Price</span>
+              <div className="text-2xl font-display font-black price-cat flex items-baseline gap-1">
                 {displayPrice}
               </div>
             </div>

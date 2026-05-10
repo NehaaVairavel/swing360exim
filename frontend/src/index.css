@@ -788,4 +788,17 @@
     background-color: hsl(var(--primary) / 0.2);
     border-radius: 20px;
   }
+
+  /* ── Industrial Luxury Utilities ── */
+  .industrial-label {
+    @apply font-display font-semibold text-slate-500 uppercase tracking-[0.15em] text-[10px];
+  }
+
+  .industrial-value {
+    @apply font-body font-extrabold text-slate-800 text-[15px] tracking-tight;
+  }
+
+  .price-cat {
+    @apply text-[#F59E0B];
+  }
 }
