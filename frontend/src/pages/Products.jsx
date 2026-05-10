@@ -22,10 +22,10 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
 
-const FilterAccordion = ({ title, icon: Icon, children, count = 0, defaultOpen = false }) => {
+const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="mb-2 last:mb-0 px-2">
+    <div className="border-b border-[#F1F5F9] last:border-0 pb-3 mb-3 last:pb-0 last:mb-0 px-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl border transition-all duration-300 group shadow-sm
@@ -33,14 +33,17 @@ const FilterAccordion = ({ title, icon: Icon, children, count = 0, defaultOpen =
       >
         <div className="flex items-center gap-3">
           {Icon && <Icon size={18} className={`${isOpen ? 'text-primary' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />}
-          <span className={`font-sora text-[12px] font-[800] tracking-[3px] uppercase ${isOpen ? 'text-heading' : 'text-slate-600'}`}>{title}</span>
+          <div className="flex items-center">
+            <span className={`font-sora text-[12px] font-[800] tracking-[3px] uppercase ${isOpen ? 'text-heading' : 'text-slate-600'}`}>{title}</span>
+            {badge && <span className="text-slate-400 font-semibold text-[11px] ml-1">({badge})</span>}
+          </div>
           {count > 0 && (
             <span className="ml-1 bg-orange-50 text-primary text-[10px] font-black px-2 py-0.5 rounded-full border border-orange-100 animate-in zoom-in-50 duration-300">
               {count}
             </span>
           )}
         </div>
-        <ChevronDown size={14} className={`text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180 text-primary' : ''}`} />
+        <ChevronDown size={16} strokeWidth={2.5} className={`text-slate-500 transition-transform duration-500 ease-out ${isOpen ? 'rotate-180 text-primary' : ''}`} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -406,7 +409,7 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[100px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30"
+            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30"
           >
             <div className="products-sidebar flex flex-col overflow-hidden">
               
@@ -415,7 +418,7 @@ const Products = () => {
                 <h2 className="text-[24px] font-display font-[700] text-heading leading-tight">Refine Search</h2>
               </div>
 
-              <FilterAccordion title="Categories" icon={LayoutGrid} count={selectedCategories.length} defaultOpen={true}>
+              <FilterAccordion title="Categories" badge="10" icon={LayoutGrid} count={selectedCategories.length} defaultOpen={true}>
                 <div className="flex flex-wrap gap-2.5 pt-1">
                   {MASTER_CATEGORIES.filter(c => c !== "All").map(cat => {
                     const isSelected = selectedCategories.includes(cat);
@@ -435,7 +438,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Brands" icon={Tag} count={selectedBrands.length}>
+              <FilterAccordion title="Brands" badge="8" icon={Tag} count={selectedBrands.length}>
                 <div className="flex flex-col gap-2.5 pt-1">
                   {["CAT", "JCB", "Komatsu", "Volvo", "Hyundai", "Doosan", "Hitachi", "Sany"].map(brand => {
                     const isSelected = selectedBrands.includes(brand);
@@ -457,7 +460,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Location" icon={MapPin} count={selectedLocations.length}>
+              <FilterAccordion title="Location" badge="6" icon={MapPin} count={selectedLocations.length}>
                 <div className="grid grid-cols-2 gap-2.5 pt-1">
                   {["UAE", "India", "Saudi", "Africa", "USA", "Europe"].map(loc => {
                     const isSelected = selectedLocations.includes(loc);
@@ -510,7 +513,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Condition" icon={CheckCircle2}>
+              <FilterAccordion title="Condition" badge="4" icon={CheckCircle2}>
                 <div className="flex flex-col gap-2 pb-4 pt-2">
                   {["All", "New", "Used", "Refurbished", "Rental"].map(cond => (
                     <label key={cond} className="flex items-center gap-3 cursor-pointer group">
@@ -525,7 +528,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <FilterAccordion title="Availability">
+              <FilterAccordion title="Availability" badge="3">
                 <div className="flex flex-col gap-2 pb-4 pt-2">
                   {["All", "Available", "Sold", "Coming Soon"].map(status => (
                     <label key={status} className="flex items-center gap-3 cursor-pointer group">
