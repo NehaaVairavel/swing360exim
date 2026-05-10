@@ -20,15 +20,14 @@
 
 /* Sidebar */
 .products-sidebar {
-  width: 270px;
+  width: 260px;
   flex-shrink: 0;
   position: sticky;
   top: 100px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0,0,0,0.1);
+  background: #FCFCFD;
+  border-radius: 24px;
+  border: 1px solid #EEF2F7;
+  box-shadow: 0 10px 30px rgba(15,23,42,0.04);
   transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
 }
 

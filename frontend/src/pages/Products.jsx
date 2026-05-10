@@ -28,7 +28,7 @@ const FilterAccordion = ({ title, icon: Icon, children, count = 0, defaultOpen =
     <div className="mb-3 last:mb-0 px-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between px-4 py-4 rounded-2xl border transition-all duration-300 group shadow-sm
+        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl border transition-all duration-300 group shadow-sm
           ${isOpen ? 'bg-slate-50 border-slate-200' : 'bg-white border-slate-100 hover:border-orange-200 hover:shadow-md hover:-translate-y-0.5'}`}
       >
         <div className="flex items-center gap-3">
@@ -406,17 +406,17 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[270px] shrink-0 lg:sticky lg:top-[100px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30"
+            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[100px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30"
           >
-            <div className="bg-white/95 backdrop-blur-[16px] rounded-[28px] shadow-[0_25px_60px_rgba(0,0,0,0.1)] border border-white/60 flex flex-col overflow-hidden products-sidebar">
+            <div className="products-sidebar flex flex-col overflow-hidden">
               
-              <div className="px-6 py-6 border-b border-slate-100 mb-4 bg-slate-50/50">
+              <div className="px-5 py-4 border-b border-slate-100 mb-3 bg-slate-50/50">
                 <div className="text-[10px] font-black text-slate-400 tracking-[4px] uppercase mb-1">FILTERS</div>
                 <h2 className="text-xl font-display font-black text-heading">Refine Search</h2>
               </div>
 
               <FilterAccordion title="Categories" icon={LayoutGrid} count={selectedCategories.length} defaultOpen={true}>
-                <div className="flex flex-wrap gap-2 pt-1">
+                <div className="flex flex-wrap gap-2.5 pt-1">
                   {MASTER_CATEGORIES.filter(c => c !== "All").map(cat => {
                     const isSelected = selectedCategories.includes(cat);
                     return (
