@@ -20,7 +20,7 @@
 
 /* Sidebar */
 .products-sidebar {
-  width: 320px;
+  width: 270px;
   flex-shrink: 0;
   position: sticky;
   top: 100px;
@@ -40,20 +40,22 @@
 
 /* Sidebar Hover/Active States */
 .category-btn {
-  border-left: 4px solid transparent !important;
-  transition: all 0.25s ease !important;
+  border-left: 3px solid transparent !important;
+  transition: all 0.2s ease !important;
 }
 
 .category-btn:hover {
-  background: #ffffff !important;
-  border-left: 4px solid #f59e0b !important;
+  background: #FFF8EC !important;
+  border-left: 3px solid #F5B301 !important;
+  color: #111827 !important;
 }
 
 .category-btn.active {
-  background: linear-gradient(135deg, #f59e0b, #ff8a00) !important;
-  color: white !important;
-  box-shadow: 0 10px 20px rgba(245, 158, 11, 0.25) !important;
-  border: none !important;
+  background: #FFF3D6 !important;
+  border-left: 3px solid #F5B301 !important;
+  color: #111827 !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
 }
 
 /* Sticky Toolbar */

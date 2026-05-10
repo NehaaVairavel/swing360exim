@@ -65,8 +65,8 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
       </div>
       
       {/* 2. Content Section */}
-      <div className="p-5 flex flex-col flex-1">
-        <div className="mb-4">
+      <div className="p-4 flex flex-col flex-1">
+        <div className="mb-2">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{product.brand || 'Premium'}</span>
             <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-0.5 rounded-md">#{refNumber}</span>
@@ -79,7 +79,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
         </div>
 
         {/* Specs Grid */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
+        <div className="grid grid-cols-2 gap-2 mb-3">
           <div className="flex items-center gap-2">
             <div className="p-1.5 bg-slate-50 rounded-lg shrink-0">
               <Clock size={12} className="text-slate-400" />
@@ -95,7 +95,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
         </div>
 
         <div className="mt-auto">
-          <div className="pt-4 border-t border-slate-50 flex items-end justify-between mb-4">
+          <div className="pt-3 border-t border-slate-50 flex items-end justify-between mb-3">
             <div>
               <span className="industrial-label mb-0.5 block">Export Price</span>
               <div className="text-2xl font-display font-black price-cat flex items-baseline gap-1">
@@ -111,13 +111,13 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
           <div className="grid grid-cols-2 gap-2">
             <Link 
               to={`/product/${product.id}`}
-              className="flex items-center justify-center h-[42px] rounded-xl border-2 border-[#0F172A] text-[#0F172A] font-bold text-[11px] uppercase tracking-widest hover:bg-[#0F172A] hover:text-white transition-all"
+              className="flex items-center justify-center h-[38px] rounded-xl border-2 border-[#0F172A] text-[#0F172A] font-bold text-[11px] uppercase tracking-widest hover:bg-[#0F172A] hover:text-white transition-all"
             >
               Details
             </Link>
             <button 
               onClick={(e) => { e.stopPropagation(); setSelectedProduct(product); setEnquiryOpen(true); }}
-              className="flex items-center justify-center gap-2 h-[42px] rounded-xl bg-primary text-white font-bold text-[11px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
+              className="flex items-center justify-center gap-2 h-[38px] rounded-xl bg-primary text-white font-bold text-[11px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
             >
               <MessageCircle size={14} />
               Enquire
