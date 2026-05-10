@@ -96,11 +96,13 @@ const AdminLayout = () => {
         }`}
       >
         {/* Logo */}
-        <div className="flex items-center gap-3 px-6 h-20">
-          <img src={logo} alt="Swing360" className="h-10 object-contain" />
-          <div className="flex flex-col">
-            <span className="text-[#0F172A] font-display font-extrabold text-base leading-tight uppercase tracking-wider">Swing360</span>
-            <span className="text-amber-500 text-[9px] font-extrabold uppercase tracking-[0.15em]">Command Center</span>
+        <div className="flex items-center gap-3.5 px-6 h-[68px] border-b border-slate-200/60 shrink-0 mb-4">
+          <div className="w-8 h-8 rounded-xl bg-white shadow-sm border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden">
+            <img src={logo} alt="Swing360" className="h-4 w-auto object-contain scale-110" />
+          </div>
+          <div className="flex flex-col justify-center mt-0.5">
+            <span className="admin-dashboard-title text-[#0F172A] text-[19px] leading-none mb-1">Swing360</span>
+            <span className="text-amber-500 text-[8px] font-black uppercase tracking-[0.25em] leading-none">Command Center</span>
           </div>
         </div>
 
@@ -200,15 +202,16 @@ const AdminLayout = () => {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 pl-3 border-l border-slate-200 ml-1">
+            <div className="flex items-center gap-3 pl-4 border-l border-slate-200 ml-2 cursor-pointer group">
               <div className="hidden lg:flex flex-col items-end mr-1">
-                <span className="text-[12px] font-extrabold text-slate-900 leading-none">{user?.username || "Admin User"}</span>
-                <span className="text-[10px] font-semibold text-slate-400 mt-0.5">Global Manager</span>
+                <span className="text-[13px] font-extrabold text-slate-900 leading-none mb-1">{user?.username || "Admin User"}</span>
+                <span className="px-2 py-0.5 bg-amber-50 border border-amber-200/50 text-amber-600 rounded text-[9px] font-black uppercase tracking-widest shadow-sm">Global Manager</span>
               </div>
-              <div className="flex items-center gap-2 p-1 rounded-xl transition-colors group">
-                <div className="w-9 h-9 rounded-xl bg-[#030814] flex items-center justify-center text-amber-500 text-sm font-extrabold shadow-md">
+              <div className="flex items-center gap-2 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-[#030814] flex items-center justify-center text-amber-500 text-sm font-extrabold shadow-md group-hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] group-hover:-translate-y-0.5 transition-all duration-300 ring-2 ring-transparent group-hover:ring-amber-500/20">
                   {user?.username?.[0]?.toUpperCase() || "A"}
                 </div>
+                <ChevronDown size={14} className="text-slate-400 group-hover:text-amber-500 transition-colors" />
               </div>
             </div>
           </div>
