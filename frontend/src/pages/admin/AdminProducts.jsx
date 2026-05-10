@@ -85,16 +85,6 @@ const AdminProducts = () => {
     }
   };
 
-  const handleFeature = async (id, currentFeatured) => {
-    try {
-      await productService.update(id, { featured: !currentFeatured });
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success(`Machine ${!currentFeatured ? "featured" : "unfeatured"} successfully`);
-    } catch (error) {
-      toast.error("Update failed");
-    }
-  };
-
   const categories = ["All", "Excavators", "Dozers", "Loaders", "Graders"];
 
   if (loading)
@@ -294,7 +284,6 @@ const AdminProducts = () => {
               product={product}
               handleDelete={handleDelete}
               handleMarkSold={handleMarkSold}
-              handleFeature={handleFeature}
             />
           ))}
         </div>

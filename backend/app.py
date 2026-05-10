@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 from flask_socketio import SocketIO, emit
 
 # Import custom utils
-from utils.r2 import upload_file_to_r2
+from utils.r2 import upload_file_to_r2, delete_file_from_r2
 
 
 load_dotenv(override=True)
@@ -481,14 +481,68 @@ def update_product(product_id):
 @app.route("/api/products/<product_id>", methods=["DELETE"])
 @jwt_required()
 def delete_product(product_id):
-    result = products_col.delete_one({"_id": ObjectId(product_id)})
-    if result.deleted_count == 0:
-        return jsonify({"error": "Product not found"}), 404
-    
-    # Broadcast real-time update
-    socketio.emit("products_updated", {"type": "delete", "id": product_id})
-    
-    return jsonify({"message": "Product deleted"}), 200
+    try:
+        # 1. Fetch product to get image keys before deletion
+        product = products_col.find_one({"_id": ObjectId(product_id)})
+        if not product:
+            return jsonify({"error": "Product not found"}), 404
+
+        # 2. Collect all R2 image keys (raw keys stored in DB, not full URLs)
+        R2_PUBLIC_URL = os.getenv("R2_PUBLIC_URL", "").rstrip("/")
+        image_keys = []
+
+        def extract_key(url_or_key):
+            """Strip R2 public URL prefix to get the raw object key."""
+            if not url_or_key or not isinstance(url_or_key, str):
+                return None
+            key = url_or_key.strip()
+            # Remove version param
+            key = key.split("?")[0]
+            # Strip the R2 public base URL if present
+            if R2_PUBLIC_URL and key.startswith(R2_PUBLIC_URL):
+                key = key[len(R2_PUBLIC_URL):].lstrip("/")
+            # Skip external/fallback URLs (Unsplash, blob:, http)
+            if key.startswith("http://") or key.startswith("https://") or key.startswith("blob:"):
+                return None
+            return key if key else None
+
+        for field in ["images", "gallery", "photos", "photo_list"]:
+            if field in product and isinstance(product[field], list):
+                for img in product[field]:
+                    key = extract_key(img)
+                    if key:
+                        image_keys.append(key)
+
+        for field in ["image", "photo", "image_url", "thumbnail"]:
+            if product.get(field):
+                key = extract_key(product[field])
+                if key:
+                    image_keys.append(key)
+
+        # 3. Delete all unique image keys from R2
+        deleted_r2 = 0
+        for key in set(image_keys):
+            success = delete_file_from_r2(key)
+            if success:
+                deleted_r2 += 1
+            else:
+                print(f"[!] Could not delete R2 key: {key}", flush=True)
+
+        print(f"[✓] Deleted {deleted_r2}/{len(set(image_keys))} R2 images for product {product_id}", flush=True)
+
+        # 4. Delete MongoDB document
+        result = products_col.delete_one({"_id": ObjectId(product_id)})
+        if result.deleted_count == 0:
+            return jsonify({"error": "Product not found"}), 404
+
+        # 5. Broadcast real-time update
+        socketio.emit("products_updated", {"type": "delete", "id": product_id})
+
+        return jsonify({"message": "Product and all associated images deleted"}), 200
+
+    except Exception as e:
+        print(f"[✗] Delete product error: {e}", flush=True)
+        return jsonify({"error": str(e)}), 500
 
 
 # ════════════════════════════════════════════════════════════════════

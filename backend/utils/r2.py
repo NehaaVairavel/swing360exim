@@ -33,3 +33,19 @@ def upload_file_to_r2(file_obj, filename):
     except Exception as e:
         print(f"R2 Upload Error: {str(e)}")
         return None
+
+
+def delete_file_from_r2(key):
+    """Delete a single object from R2 by its key. Returns True on success."""
+    try:
+        r2 = get_r2_client()
+        bucket = os.getenv("R2_BUCKET")
+        if not bucket or not key:
+            return False
+        r2.delete_object(Bucket=bucket, Key=key)
+        print(f"[✓] R2 deleted: {key}", flush=True)
+        return True
+    except Exception as e:
+        print(f"[✗] R2 delete error for key '{key}': {str(e)}", flush=True)
+        return False
+

@@ -25,6 +25,7 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
 const AdminProducts = lazy(() => import("./pages/admin/AdminProducts"));
 const AddProduct = lazy(() => import("./pages/admin/AddProduct"));
+const EditProduct = lazy(() => import("./pages/admin/EditProduct"));
 const AdminEnquiries = lazy(() => import("./pages/admin/AdminEnquiries"));
 const AdminGallery = lazy(() => import("./pages/admin/AdminGallery"));
 const Login = lazy(() => import("./pages/admin/Login"));
@@ -77,6 +78,7 @@ const App = () => (
                     <Route index element={<Dashboard />} />
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="add-product" element={<AddProduct />} />
+                    <Route path="edit-product/:id" element={<EditProduct />} />
                     <Route path="parts" element={<PartsComingSoon />} />
                     <Route path="enquiries" element={<AdminEnquiries />} />
                     <Route path="media" element={<AdminGallery />} />

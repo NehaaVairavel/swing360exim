@@ -82,10 +82,10 @@
 
 .product-card-name {
   font-family: 'Sora', sans-serif;
-  font-size: 34px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 1.05;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.025em;
   color: #111827;
   margin: 0 0 6px 0;
   display: -webkit-box;
