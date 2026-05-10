@@ -173,7 +173,7 @@ const ProductDetail = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
-              className="relative h-[420px] rounded-[24px] overflow-hidden bg-white border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] group"
+              className="relative h-[420px] rounded-[24px] overflow-hidden bg-white border border-slate-100 shadow-[0_2px_14px_-2px_rgba(0,0,0,0.05),0_32px_64px_-16px_rgba(0,0,0,0.1)] group"
             >
               <AnimatePresence mode="wait">
                 <motion.img
@@ -237,7 +237,7 @@ const ProductDetail = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
-                className="inline-flex items-stretch h-[30px] mb-4 bg-white border border-slate-200/80 rounded-[8px] shadow-[0_2px_8px_rgba(15,23,42,0.04)] self-start"
+                className="inline-flex items-stretch h-[30px] mb-4 bg-white border border-slate-200/80 rounded-[8px] shadow-[0_2px_10px_rgba(0,0,0,0.02),0_8px_24px_-4px_rgba(0,0,0,0.04)] self-start"
               >
                 <div className="flex items-center px-3.5 text-[10px] font-black uppercase tracking-[1.5px] text-amber-700 bg-amber-50/50 rounded-l-[8px]">
                   {product.category}
@@ -265,8 +265,8 @@ const ProductDetail = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
-                whileHover={{ y: -4, boxShadow: "0 16px 40px -8px rgba(0,0,0,0.08)" }}
-                className="bg-white border border-slate-200/60 rounded-[22px] p-4 lg:px-6 lg:py-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.06)] mb-3 relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300"
+                whileHover={{ y: -4, boxShadow: "0 20px 48px -8px rgba(0,0,0,0.1), 0 2px 10px rgba(0,0,0,0.02)" }}
+                className="bg-white border border-slate-200/60 rounded-[22px] p-4 lg:px-6 lg:py-4 shadow-[0_2px_12px_rgba(0,0,0,0.03),0_12px_32px_-8px_rgba(0,0,0,0.08)] mb-3 relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300"
               >
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
                   <AnimatedGear size={65} />
@@ -379,7 +379,7 @@ const ProductDetail = () => {
             <div className="h-px flex-1 bg-slate-100" />
           </div>
           
-          <div className="bg-white border border-slate-200/70 rounded-[32px] p-8 lg:p-12 shadow-[0_16px_40px_-8px_rgba(0,0,0,0.06)]">
+          <div className="bg-white border border-slate-200/70 rounded-[32px] p-8 lg:p-12 shadow-[0_2px_12px_rgba(0,0,0,0.02),0_16px_48px_-12px_rgba(0,0,0,0.08)]">
             <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
               {/* Left Column: Machine Details */}
               <div className="space-y-8">
@@ -455,7 +455,7 @@ const ProductDetail = () => {
             { icon: ShieldCheck, title: "Verified Hub", desc: "Every machine passes a rigorous 150-point technical check." },
             { icon: CheckCircle2, title: "Documentation", desc: "We handle all export paperwork and customs clearance." }
           ].map((item, i) => (
-            <div key={i} className="p-7 rounded-[24px] border border-slate-200/60 bg-white shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:border-primary/30 hover:shadow-xl transition-all duration-300 group min-h-[220px]">
+            <div key={i} className="p-7 rounded-[24px] border border-slate-200/60 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02),0_8px_24px_-4px_rgba(0,0,0,0.04)] hover:border-primary/30 hover:shadow-[0_2px_14px_rgba(0,0,0,0.03),0_16px_40px_-8px_rgba(0,0,0,0.08)] transition-all duration-300 group min-h-[220px]">
               <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-all">
                 <item.icon size={28} />
               </div>
