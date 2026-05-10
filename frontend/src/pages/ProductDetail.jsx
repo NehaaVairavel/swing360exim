@@ -261,21 +261,21 @@ const ProductDetail = () => {
                 </div>
               </motion.div>
 
-              <div className="grid grid-cols-2 gap-3 mb-5">
+              <div className="grid grid-cols-2 gap-2.5 mb-5">
                 {specifications.map((spec, i) => {
                   const isSpecial = spec.label === "Condition" || spec.label === "Engine Hours" || spec.label === "Reference No";
                   return (
                     <motion.div 
                       key={i} 
-                      whileHover={{ y: -4, shadow: "0 15px 35px rgba(0,0,0,0.06)" }}
-                      className={`flex items-center gap-4 bg-white border border-slate-100 rounded-[24px] p-4 transition-all duration-300 group cursor-default shadow-[0_2px_12px_rgba(0,0,0,0.03)] ${isSpecial ? 'bg-amber-50/15 border-amber-500/20 shadow-sm' : 'hover:border-primary/20 hover:bg-slate-50/30'}`}
+                      whileHover={{ y: -2, shadow: "0 10px 20px rgba(0,0,0,0.04)" }}
+                      className={`flex items-center gap-3 bg-white border border-slate-200/60 rounded-[16px] p-3 transition-all duration-300 group cursor-default shadow-sm ${isSpecial ? 'bg-amber-50/10 border-amber-500/20 shadow-amber-900/5' : 'hover:border-primary/40'}`}
                     >
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isSpecial ? 'bg-amber-100/60 shadow-[0_4px_10px_rgba(245,158,11,0.1)]' : 'bg-slate-50 group-hover:bg-primary/5 group-hover:scale-105'}`}>
-                        <spec.icon size={20} className={`${isSpecial ? 'text-amber-600' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />
+                      <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${isSpecial ? 'bg-amber-100/40' : 'bg-slate-50 group-hover:bg-primary/5'}`}>
+                        <spec.icon size={16} className={`${isSpecial ? 'text-amber-600' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />
                       </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-widest mb-0.5">{spec.label}</span>
-                        <span className={`text-[15px] font-black text-slate-900 leading-tight truncate ${isSpecial ? 'text-slate-950' : ''}`}>{spec.value}</span>
+                      <div className="flex flex-col min-w-0 leading-tight">
+                        <span className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-0.5">{spec.label}</span>
+                        <span className={`text-[14px] font-black text-slate-900 truncate tracking-tight ${isSpecial ? 'text-slate-950' : ''}`}>{spec.value}</span>
                       </div>
                     </motion.div>
                   );
