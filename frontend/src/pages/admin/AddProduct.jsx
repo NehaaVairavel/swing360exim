@@ -119,6 +119,7 @@ const AddProduct = () => {
     name: "",
     brand: "",
     model: "",
+    year: "",
     category: "",
     condition: "Used",
     price: "",
@@ -166,6 +167,7 @@ const AddProduct = () => {
     const requiredFields = [
       "name",
       "category",
+      "year",
       "engine_hours",
       "location",
       "availability",
@@ -311,6 +313,15 @@ const AddProduct = () => {
                 value={formData.model}
                 onChange={handleInputChange}
                 placeholder="320 GC"
+              />
+              <Input
+                label="Year"
+                name="year"
+                type="number"
+                value={formData.year}
+                onChange={handleInputChange}
+                placeholder="Enter manufacturing year"
+                required
               />
               <Select
                 label="Condition"

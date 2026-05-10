@@ -121,6 +121,7 @@ const EditProduct = () => {
     name: "",
     brand: "",
     model: "",
+    year: "",
     category: "",
     condition: "Used",
     price: "",
@@ -143,6 +144,7 @@ const EditProduct = () => {
           name: product.name || "",
           brand: product.brand || "",
           model: product.model || "",
+          year: product.year || "",
           category: product.category || "",
           condition: product.condition || "Used",
           price: product.price || "",
@@ -213,7 +215,7 @@ const EditProduct = () => {
       return toast.error("At least one product image is required.");
     }
 
-    const requiredFields = ["name", "category", "engine_hours", "location", "availability", "price", "currency"];
+    const requiredFields = ["name", "category", "year", "engine_hours", "location", "availability", "price", "currency"];
     const missing = requiredFields.filter((f) => !formData[f]);
     if (missing.length > 0) {
       return toast.error(`Please fill in: ${missing.map((f) => f.replace("_", " ")).join(", ")}`);
@@ -353,6 +355,15 @@ const EditProduct = () => {
                 value={formData.model}
                 onChange={handleInputChange}
                 placeholder="320 GC"
+              />
+              <Input
+                label="Year"
+                name="year"
+                type="number"
+                value={formData.year}
+                onChange={handleInputChange}
+                placeholder="Enter manufacturing year"
+                required
               />
               <Select
                 label="Condition"

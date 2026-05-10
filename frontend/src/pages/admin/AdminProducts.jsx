@@ -85,7 +85,19 @@ const AdminProducts = () => {
     }
   };
 
-  const categories = ["All", "Excavators", "Dozers", "Loaders", "Graders"];
+  const categories = [
+    "All",
+    "Excavators",
+    "Backhoe Loaders",
+    "Dozers",
+    "Wheel Loaders",
+    "Graders",
+    "Rollers",
+    "Skid Steer",
+    "Buckets",
+    "Material Handlers",
+    "Others"
+  ];
 
   if (loading)
     return (
