@@ -13,21 +13,29 @@
 
 .products-main-content {
   display: flex;
-  gap: 28px;
+  gap: 32px;
   align-items: flex-start;
+  padding: 0 24px;
 }
 
 /* Sidebar */
 .products-sidebar {
-  width: 260px;
+  width: 320px;
   flex-shrink: 0;
   position: sticky;
-  top: 160px;
-  background: #ffffff;
-  border-radius: 20px;
-  border: 1px solid #EEF1F5;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
-  transition: all 0.3s ease;
+  top: 100px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0,0,0,0.1);
+  transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  margin-left: 12px;
+}
+
+.products-sidebar:hover {
+  box-shadow: 0 35px 70px -12px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
 }
 
 /* Sidebar Hover/Active States */

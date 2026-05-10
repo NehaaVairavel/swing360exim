@@ -347,7 +347,8 @@ const Products = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 rounded-[32px] shadow-xl border border-orange-300/30 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0"
+            className="bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 rounded-[32px] shadow-xl border border-orange-300/30 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0 mx-auto"
+            style={{ width: 'calc(100% - 48px)', maxWidth: '1650px' }}
           >
             {/* 1. COMPACT LUXURY SEARCH BAR (White Card) */}
             <div className="relative group w-full h-[48px] transition-all duration-300">
@@ -397,17 +398,17 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1700px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-8">
-        <div className="flex flex-col lg:flex-row gap-6 items-start mt-2">
+      <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-8 md:px-12 lg:px-16">
+        <div className="flex flex-col lg:flex-row gap-10 items-start mt-4">
           
           <motion.aside 
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -15 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="w-full lg:w-[320px] shrink-0 lg:sticky lg:top-[85px] lg:h-[calc(100vh-100px)] lg:overflow-y-auto hide-scrollbar z-30"
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="w-full lg:w-[320px] shrink-0 lg:sticky lg:top-[100px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30 pr-2"
           >
-            <div className="bg-white/92 backdrop-blur-[14px] rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-white/50 flex flex-col overflow-hidden products-sidebar">
+            <div className="bg-white/95 backdrop-blur-[16px] rounded-[28px] shadow-[0_25px_60px_rgba(0,0,0,0.1)] border border-white/60 flex flex-col overflow-hidden products-sidebar">
               
               <div className="px-6 py-6 border-b border-slate-100 mb-4 bg-slate-50/50">
                 <div className="text-[10px] font-black text-slate-400 tracking-[4px] uppercase mb-1">FILTERS</div>
