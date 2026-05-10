@@ -211,8 +211,10 @@ const ProductDetail = () => {
 
             <div className="grid grid-cols-5 gap-2.5 mt-2.5">
               {images.map((img, idx) => (
-                <button 
+                <motion.button 
                   key={idx} 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => { setDirection(idx > activeImage ? 1 : -1); setActiveImage(idx); }} 
                   className={`aspect-[4/3] h-[72px] rounded-xl overflow-hidden border-2 transition-all duration-300 relative group thumbnail-zoom ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-slate-50 opacity-60 hover:opacity-100 hover:border-primary/20'}`}
                 >
