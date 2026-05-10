@@ -801,4 +801,27 @@
   .price-cat {
     @apply text-[#F59E0B];
   }
+
+  /* ── Premium Enterprise Styles ── */
+  .premium-badge-amber {
+    @apply bg-amber-50/80 backdrop-blur-sm text-amber-900 border border-amber-200/50 px-3.5 py-1.5 rounded-full text-[10px] font-semibold uppercase tracking-wider shadow-sm;
+  }
+
+  .card-lift-premium {
+    @apply transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-amber-500/30 hover:bg-amber-50/5;
+  }
+
+  .whatsapp-pulse:hover {
+    animation: whatsapp-pulse-anim 2s infinite;
+  }
+
+  @keyframes whatsapp-pulse-anim {
+    0% { box-shadow: 0 0 0 0 rgba(31, 168, 85, 0.4); }
+    70% { box-shadow: 0 0 0 15px rgba(31, 168, 85, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(31, 168, 85, 0); }
+  }
+
+  .thumbnail-zoom:hover img {
+    @apply scale-110;
+  }
 }

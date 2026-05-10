@@ -145,21 +145,21 @@ const ProductDetail = () => {
 
       <div className="container-section relative z-10 mt-4">
         {/* Breadcrumbs & Actions */}
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-6">
-          <Link to="/products" className="flex items-center gap-3 text-slate-400 hover:text-primary transition-all font-medium uppercase tracking-wider text-[12px] group">
-            <div className="w-9 h-9 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
-              <ArrowLeft size={16} />
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
+          <Link to="/products" className="flex items-center gap-2.5 text-slate-400 hover:text-primary transition-all font-medium uppercase tracking-wider text-[11px] group">
+            <div className="w-8 h-8 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
+              <ArrowLeft size={14} />
             </div>
             Back to Global Inventory
           </Link>
           
-          <div className="flex items-center gap-6">
-             <div className="flex items-center gap-1.5 text-slate-400 font-medium text-[12px] uppercase tracking-wider">
-               <MapPin size={14} className="text-slate-300" /> {product.location || "India"}
+          <div className="flex items-center gap-5">
+             <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[11px] uppercase tracking-wider">
+               <MapPin size={14} className="text-primary/60" /> {product.location || "India"}
              </div>
-             <div className="flex gap-3">
-               <button onClick={handleShareLink} className="h-11 px-5 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
-                 {isCopied ? <><CheckCircle2 size={16} className="text-green-500" /> Copied</> : <><Share2 size={16} /> Share Machine</>}
+             <div className="flex gap-2">
+               <button onClick={handleShareLink} className="h-9 px-4 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[9px]">
+                 {isCopied ? <><CheckCircle2 size={14} className="text-green-500" /> Copied</> : <><Share2 size={14} /> Share</>}
                </button>
              </div>
           </div>
@@ -167,128 +167,144 @@ const ProductDetail = () => {
 
         <div className="grid lg:grid-cols-[55%_45%] gap-12 items-start h-auto">
           {/* Left Column: Gallery */}
-          <div className="space-y-6">
+          <div className="space-y-4">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }} 
+              initial={{ opacity: 0, y: 15 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className="relative h-[420px] !important rounded-[22px] overflow-hidden bg-white border border-gray-100 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.12)] group"
+              className="relative h-[420px] rounded-[24px] overflow-hidden bg-white border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] group"
             >
               <AnimatePresence initial={false} custom={direction}>
                 <motion.img
                   key={activeImage}
                   src={images[activeImage] || "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=1200"}
                   custom={direction}
-                  initial={{ opacity: 0, scale: 1.1 }}
+                  initial={{ opacity: 0, scale: 1.02 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-[2s]"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3s]"
                 />
               </AnimatePresence>
 
               {/* Navigation Arrows */}
               {images.length > 1 && (
-                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 flex justify-between z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button onClick={(e) => { e.stopPropagation(); prevImage(); }} className="w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto active:scale-95">
-                    <ChevronLeft size={24} />
+                <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-5 flex justify-between z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <button onClick={(e) => { e.stopPropagation(); prevImage(); }} className="w-11 h-11 rounded-full bg-white/95 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto active:scale-95">
+                    <ChevronLeft size={22} />
                   </button>
-                  <button onClick={(e) => { e.stopPropagation(); nextImage(); }} className="w-12 h-12 rounded-full bg-white/95 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto active:scale-95">
-                    <ChevronRight size={24} />
+                  <button onClick={(e) => { e.stopPropagation(); nextImage(); }} className="w-11 h-11 rounded-full bg-white/95 backdrop-blur shadow-xl flex items-center justify-center text-heading hover:bg-primary hover:text-white transition-all pointer-events-auto active:scale-95">
+                    <ChevronRight size={22} />
                   </button>
                 </div>
               )}
               
-              {/* Image Badges */}
-              <div className="absolute top-8 left-8 z-20 flex flex-col gap-3">
+              <div className="absolute top-6 left-6 z-20 flex flex-col gap-2">
                 {isSold && (
-                  <div className="bg-rose-500 text-white px-5 py-2.5 rounded-2xl flex items-center gap-3 shadow-xl font-black uppercase tracking-[0.2em] text-[11px]">
+                  <div className="bg-rose-500 text-white px-4 py-2 rounded-xl flex items-center gap-2 shadow-xl font-black uppercase tracking-[0.15em] text-[10px]">
                     Sold Out
                   </div>
                 )}
               </div>
-
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
 
-            <div className="grid grid-cols-4 sm:grid-cols-5 gap-[10px] mt-[10px]">
+            <div className="grid grid-cols-5 gap-2.5 mt-2.5">
               {images.map((img, idx) => (
                 <button 
                   key={idx} 
                   onClick={() => { setDirection(idx > activeImage ? 1 : -1); setActiveImage(idx); }} 
-                  className={`aspect-[4/3] h-[70px] rounded-[12px] overflow-hidden border-2 transition-all duration-300 relative group ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-gray-50 opacity-60 hover:opacity-100 hover:border-primary/30'}`}
+                  className={`aspect-[4/3] h-[72px] rounded-xl overflow-hidden border-2 transition-all duration-300 relative group thumbnail-zoom ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-slate-50 opacity-60 hover:opacity-100 hover:border-primary/20'}`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
-                </button>
+                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover transition-transform duration-500" />
+                </motion.button>
               ))}
             </div>
           </div>
 
           {/* Right Column: Info & CTAs */}
           <div className="flex flex-col">
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}>
-              <div className="flex items-center gap-3 mb-2">
-                <span className="bg-primary/10 text-primary px-[14px] py-[8px] rounded-full text-[10px] font-bold uppercase tracking-[2px]">{product.category}</span>
-                <span className="bg-[#0F172A] text-white px-[12px] py-[6px] rounded-full text-[9px] font-black uppercase tracking-[1.5px] flex items-center gap-2">
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+            >
+              {/* Category + Ref Badge Row */}
+              <div className="flex items-center gap-3 mb-3">
+                <span className="premium-badge-amber">{product.category}</span>
+                <span className="bg-[#0F172A] text-white px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[1.5px] flex items-center gap-2 shadow-sm">
                    REF: {refNumber}
                 </span>
               </div>
 
-              <div className="mb-4">
-                <h1 className="text-[24px] lg:text-[36px] font-extrabold text-[#0F172A] leading-tight tracking-[-1px] uppercase">{product.name}</h1>
+              <div className="mb-3">
+                <h1 className="text-[26px] lg:text-[38px] font-extrabold text-[#0F172A] leading-[1.1] tracking-[-0.03em] uppercase">{product.name}</h1>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-[20px] p-4 lg:px-6 lg:py-4 shadow-sm mb-6 relative overflow-hidden group">
+              <motion.div 
+                whileHover={{ y: -4 }}
+                className="bg-white border border-slate-100 rounded-[22px] p-4 lg:px-6 lg:py-4 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.06)] mb-3 relative overflow-hidden group hover:border-amber-500/20 transition-all"
+              >
                 <div className="absolute top-0 right-0 p-4 opacity-[0.03] rotate-12 pointer-events-none group-hover:rotate-45 transition-transform duration-1000">
-                  <AnimatedGear size={70} />
+                  <AnimatedGear size={65} />
                 </div>
                 
                 <div className="relative z-10 flex items-center justify-between">
                   <div className="flex flex-col">
-                    <span className="industrial-label text-slate-400 mb-1">Premium Export Price</span>
-                    <h2 className={`text-[28px] lg:text-[32px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "price-cat"}`}>
+                    <span className="industrial-label text-slate-400 mb-0.5">Premium Export Price</span>
+                    <h2 className={`text-[28px] lg:text-[34px] font-black tracking-[-1.5px] leading-none transition-all duration-300 ${isSold ? "text-gray-300 line-through" : "price-cat"}`}>
                       {displayPrice}
                     </h2>
                   </div>
                   <CurrencyToggle />
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="grid grid-cols-2 gap-3 mb-6">
-                {specifications.map((spec, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-white border border-slate-200 rounded-[18px] p-3.5 hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group cursor-default">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
-                      <spec.icon size={18} className="text-slate-400 group-hover:text-primary transition-colors" />
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <span className="industrial-label mb-0.5">{spec.label}</span>
-                      <span className="industrial-value leading-none truncate">{spec.value}</span>
-                    </div>
-                  </div>
-                ))}
+              <div className="grid grid-cols-2 gap-2.5 mb-4">
+                {specifications.map((spec, i) => {
+                   const isSpecial = spec.label === "Condition" || spec.label === "Engine Hours";
+                   return (
+                    <motion.div 
+                      key={i} 
+                      whileHover={{ y: -3 }}
+                      className={`flex items-center gap-3 bg-white border border-slate-100 rounded-[20px] p-3.5 transition-all duration-300 group cursor-default ${isSpecial ? 'bg-amber-50/15 border-amber-500/10 shadow-sm' : 'hover:border-primary/20 hover:shadow-md'}`}
+                    >
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${isSpecial ? 'bg-amber-100/50' : 'bg-slate-50 group-hover:bg-primary/5'}`}>
+                        <spec.icon size={18} className={`${isSpecial ? 'text-amber-600' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="industrial-label mb-0.5">{spec.label}</span>
+                        <span className={`industrial-value leading-none truncate ${isSpecial ? 'text-slate-900' : ''}`}>{spec.value}</span>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
 
               {/* CTA Buttons */}
-                <div className="grid grid-cols-2 gap-3 mt-4">
-                  <button
-                    onClick={() => !isSold && setEnquiryOpen(true)}
-                    disabled={isSold}
-                    className={`h-[42px] px-4 flex items-center justify-center gap-2 rounded-xl font-bold uppercase tracking-wider text-[11px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#f5a000] text-white shadow-lg shadow-[#f5a000]/20 hover:-translate-y-0.5 hover:shadow-xl"}`}
-                  >
-                    <MessageSquare size={14} className="shrink-0" /> {isSold ? "Machine Sold" : "Enquire Now"}
-                  </button>
-                  
-                  <a 
-                    href={`https://wa.me/918778868739?text=Hi, I am interested in ${product.name} (Ref: ${refNumber})`} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className={`h-[42px] px-4 flex items-center justify-center gap-2 rounded-xl transition-all duration-300 font-bold uppercase tracking-wider text-[11px] ${isSold ? "opacity-50 pointer-events-none" : "bg-[#eaf9ef] text-[#1fa855] border border-[#cdeed7] hover:bg-[#1fa855] hover:text-white"}`}
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                    WhatsApp
-                  </a>
-                </div>
+              <div className="grid grid-cols-2 gap-3 mt-1">
+                <motion.button
+                  whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(245, 160, 0, 0.2)" }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => !isSold && setEnquiryOpen(true)}
+                  disabled={isSold}
+                  className={`h-[50px] px-6 flex items-center justify-center gap-2 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#f5a000] text-white shadow-lg shadow-[#f5a000]/15"}`}
+                >
+                  <MessageSquare size={16} className="shrink-0" /> {isSold ? "Machine Sold" : "Enquire Now"}
+                </motion.button>
+                
+                <motion.a 
+                  href={`https://wa.me/918778868739?text=Hi, I am interested in ${product.name} (Ref: ${refNumber})`} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`h-[50px] px-6 flex items-center justify-center gap-2 rounded-xl transition-all duration-300 font-black uppercase tracking-widest text-[11px] whatsapp-pulse ${isSold ? "opacity-50 pointer-events-none" : "bg-[#eaf9ef] text-[#1fa855] border border-[#cdeed7] hover:bg-[#1fa855] hover:text-white"}`}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="shrink-0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                  WhatsApp
+                </motion.a>
+              </div>
             </motion.div>
           </div>
         </div>
