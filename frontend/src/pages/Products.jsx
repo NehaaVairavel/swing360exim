@@ -28,14 +28,14 @@ const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaul
     <div className="border-b border-[#F1F5F9] last:border-0 pb-3 mb-3 last:pb-0 last:mb-0 px-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl border transition-all duration-300 group shadow-sm
-          ${isOpen ? 'bg-[#F8FAFC] border-slate-200' : 'bg-white border-transparent hover:bg-[#F8FAFC] hover:border-slate-200 hover:shadow-sm'}`}
+        className={`w-full flex items-center justify-between px-4 h-[54px] rounded-2xl transition-all duration-300 group
+          ${isOpen ? 'bg-[#FFF9F0] border-[1.5px] border-[#F59E0B] shadow-[0_8px_20px_rgba(245,158,11,0.12)]' : 'bg-white border-[1.5px] border-transparent hover:bg-[#F8FAFC] hover:border-slate-200 hover:shadow-sm'}`}
       >
         <div className="flex items-center gap-3">
-          {Icon && <Icon size={18} className={`${isOpen ? 'text-primary' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />}
+          {Icon && <Icon size={18} className={`${isOpen ? 'text-[#F59E0B]' : 'text-slate-400 group-hover:text-[#F59E0B]'} transition-colors`} />}
           <div className="flex items-center">
-            <span className={`font-sora text-[12px] font-[800] tracking-[3px] uppercase ${isOpen ? 'text-heading' : 'text-slate-600'}`}>{title}</span>
-            {badge && <span className="text-slate-400 font-semibold text-[11px] ml-1">({badge})</span>}
+            <span className={`font-sora text-[12px] font-[800] tracking-[0.12em] uppercase ${isOpen ? 'text-heading' : 'text-slate-600'}`}>{title}</span>
+            {badge && <span className={`font-semibold text-[11px] ml-1.5 ${isOpen ? 'text-orange-600/80' : 'text-slate-400'}`}>({badge})</span>}
           </div>
           {count > 0 && (
             <span className="ml-1 bg-orange-50 text-primary text-[10px] font-black px-2 py-0.5 rounded-full border border-orange-100 animate-in zoom-in-50 duration-300">
@@ -43,7 +43,7 @@ const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaul
             </span>
           )}
         </div>
-        <ChevronDown size={16} strokeWidth={2.5} className={`text-slate-500 transition-transform duration-500 ease-out ${isOpen ? 'rotate-180 text-primary' : ''}`} />
+        <ChevronDown size={16} strokeWidth={2.5} className={`text-slate-500 transition-transform duration-500 ease-out ${isOpen ? 'rotate-180 text-[#F59E0B]' : ''}`} />
       </button>
       <AnimatePresence>
         {isOpen && (
@@ -409,7 +409,7 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar z-30"
+            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar z-30 transition-[top] duration-200 ease-in-out"
           >
             <div className="products-sidebar flex flex-col overflow-hidden">
               
