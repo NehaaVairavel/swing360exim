@@ -355,80 +355,76 @@ const ProductDetail = () => {
         <motion.div 
           initial={{ opacity: 0, y: 30 }} 
           whileInView={{ opacity: 1, y: 0 }} 
-          viewport={{ once: true }}
-          className="mt-10"
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
+          className="mt-12"
         >
           <div className="flex items-center gap-4 mb-6">
-            <h2 className="text-[24px] lg:text-[32px] font-black text-[#0F172A] tracking-tight leading-none uppercase">Technical Description</h2>
-            <div className="h-px flex-1 bg-slate-100" />
+            <h2 className="text-[20px] lg:text-[24px] font-black text-[#0F172A] tracking-wider leading-none uppercase">Technical Overview</h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-amber-500/50 to-transparent" />
           </div>
           
-          <div className="bg-white border border-slate-200/70 rounded-[32px] p-8 lg:p-12 shadow-[0_2px_12px_rgba(0,0,0,0.02),0_16px_48px_-12px_rgba(0,0,0,0.08)]">
-            <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
-              {/* Left Column: Machine Details */}
-              <div className="space-y-8">
-                <h3 className="text-[18px] font-black text-[#0F172A] uppercase tracking-wider flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Settings size={18} className="text-primary" />
-                  </div>
-                  Machine Details
-                </h3>
-                <div className="grid grid-cols-1 gap-5">
-                  {[
-                    { label: "Brand", value: product.brand },
-                    { label: "Model", value: `${product.model} / ${product.year}` },
-                    { label: "Hours", value: product.engine_hours || "N/A" },
-                    { label: "Location", value: product.location || "India" }
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex justify-between items-center border-b border-slate-50 pb-4">
-                      <span className="industrial-label">{item.label}</span>
-                      <span className="industrial-value text-[16px]">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-                <p className="text-slate-500 font-medium leading-relaxed text-[15px] whitespace-pre-line pt-2">
-                  {product.full_description || product.short_description || "Detailed technical specifications for this machine are available upon request. Our team has thoroughly inspected this unit to ensure it meets global export standards."}
-                </p>
-              </div>
-
-              {/* Right Column: Export Support */}
-              <div className="space-y-8">
-                <h3 className="text-[18px] font-black text-[#0F172A] uppercase tracking-wider flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Globe size={18} className="text-primary" />
-                  </div>
-                  Export Support
-                </h3>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  {[
-                    { icon: Truck, title: "Worldwide Shipping" },
-                    { icon: ShieldCheck, title: "Inspection Passed" },
-                    { icon: FileText, title: "Documentation Support" },
-                    { icon: Lock, title: "Secure Payment" },
-                    { icon: Clock, title: "Fast Dispatch" },
-                    { icon: Globe, title: "Dubai HQ Assistance" }
-                  ].map((benefit, idx) => (
-                    <div key={idx} className="flex items-center gap-4 group cursor-default">
-                      <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center shrink-0 group-hover:border-primary/30 group-hover:bg-primary/5 transition-all">
-                        <benefit.icon size={18} className="text-primary" />
-                      </div>
-                      <span className="text-[#0F172A] font-bold text-[14px] leading-tight">{benefit.title}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                {/* Visual Accent */}
-                <div className="mt-8 p-6 rounded-2xl bg-slate-50 border border-slate-100 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center text-primary shrink-0">
-                     <ShieldCheck size={24} />
-                  </div>
-                  <div>
-                    <h4 className="text-[#0F172A] font-black uppercase text-[12px] tracking-wider mb-0.5">Swing360 Verified</h4>
-                    <p className="text-slate-400 text-[11px] font-bold uppercase tracking-tight">Technical Hub Certification Passed</p>
-                  </div>
-                </div>
+          <div className="bg-white border border-slate-200/70 rounded-[24px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.02),0_16px_48px_-12px_rgba(0,0,0,0.08)]">
+            
+            {/* Machine Overview Box */}
+            <div className="p-8 lg:p-10 border-b border-slate-100 bg-slate-50/50">
+              <h3 className="text-[13px] font-black text-amber-900 uppercase tracking-widest flex items-center gap-3 mb-4">
+                <div className="w-1.5 h-4 rounded-full bg-amber-500" />
+                Executive Summary
+              </h3>
+              <p className="text-slate-600 font-medium leading-[1.8] text-[15px] max-w-4xl">
+                This {product.year} {product.brand} {product.model} has been thoroughly inspected and verified by our technical hub. It is in excellent operational condition, with all core hydraulic and engine components passing standard export stress tests. The unit is fully documented, cleaned, and structurally sound for immediate global deployment.
+              </p>
+              
+              <div className="flex flex-wrap gap-3 mt-6">
+                 <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md border border-slate-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
+                   <ShieldCheck size={14} className="text-amber-500" />
+                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">Export Ready</span>
+                 </div>
+                 <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md border border-slate-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
+                   <CheckCircle2 size={14} className="text-green-500" />
+                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">Hub Verified</span>
+                 </div>
+                 <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md border border-slate-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
+                   <Settings size={14} className="text-blue-500" />
+                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">Operational</span>
+                 </div>
               </div>
             </div>
+
+            {/* Technical Specs Grid */}
+            <div className="p-8 lg:p-10">
+               <h3 className="text-[13px] font-black text-[#0F172A] uppercase tracking-widest flex items-center gap-3 mb-6">
+                <Settings size={16} className="text-slate-400" />
+                Technical Specifications
+              </h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
+                {[
+                  { label: "Brand", value: product.brand },
+                  { label: "Model Number", value: product.model },
+                  { label: "Manufacturing Year", value: product.year },
+                  { label: "Operating Hours", value: product.engine_hours || "N/A" },
+                  { label: "Current Location", value: product.location || "India" },
+                  { label: "Equipment Condition", value: product.condition || "Used - Good" },
+                  { label: "Export Availability", value: isSold ? "Sold Out" : "Ready for Dispatch" },
+                  { label: "Working Status", value: "Fully Operational" }
+                ].map((item, idx) => (
+                  <motion.div 
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: idx * 0.05, duration: 0.4 }}
+                    key={idx} 
+                    className="flex justify-between items-center border-b border-slate-100 py-4 group hover:bg-amber-50/30 hover:border-amber-200/50 transition-colors px-3 -mx-3 rounded-lg"
+                  >
+                    <span className="text-[10.5px] font-bold uppercase tracking-[0.15em] text-slate-400 group-hover:text-amber-700 transition-colors">{item.label}</span>
+                    <span className="text-[15px] font-extrabold text-slate-900 tracking-tight">{item.value}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
           </div>
         </motion.div>
 
