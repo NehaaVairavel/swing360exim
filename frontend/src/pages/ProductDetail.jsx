@@ -158,8 +158,8 @@ const ProductDetail = () => {
                <MapPin size={14} className="text-primary/60" /> {product.location || "India"}
              </div>
              <div className="flex gap-2">
-               <button onClick={handleShareLink} className="h-9 px-4 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[9px]">
-                 {isCopied ? <><CheckCircle2 size={14} className="text-green-500" /> Copied</> : <><Share2 size={14} /> Share</>}
+               <button onClick={handleShareLink} className="h-11 px-5 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
+                 {isCopied ? <><CheckCircle2 size={16} className="text-green-500" /> Copied</> : <><Share2 size={16} /> Share Machine</>}
                </button>
              </div>
           </div>
@@ -231,11 +231,12 @@ const ProductDetail = () => {
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
-              {/* Category + Ref Badge Row */}
-              <div className="flex items-center gap-3 mb-3">
-                <span className="premium-badge-amber">{product.category}</span>
-                <span className="bg-[#0F172A] text-white px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[1.5px] flex items-center gap-2 shadow-sm">
-                   REF: {refNumber}
+              <div className="flex items-center gap-2.5 mb-3">
+                <span className="bg-amber-50 text-amber-900 border border-amber-200/60 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[1.5px] shadow-sm">
+                  {product.category}
+                </span>
+                <span className="bg-slate-900 text-white px-3.5 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2 shadow-md">
+                   REF NO: {refNumber}
                 </span>
               </div>
 
@@ -268,10 +269,10 @@ const ProductDetail = () => {
                    return (
                     <motion.div 
                       key={i} 
-                      whileHover={{ y: -3 }}
-                      className={`flex items-center gap-3 bg-white border border-slate-100 rounded-[20px] p-3.5 transition-all duration-300 group cursor-default ${isSpecial ? 'bg-amber-50/15 border-amber-500/10 shadow-sm' : 'hover:border-primary/20 hover:shadow-md'}`}
+                      whileHover={{ y: -4, shadow: "0 12px 24px rgba(0,0,0,0.06)" }}
+                      className={`flex items-center gap-3 bg-white border border-slate-200/60 rounded-[22px] p-4 transition-all duration-300 group cursor-default shadow-[0_2px_8px_rgba(0,0,0,0.02)] ${isSpecial ? 'bg-amber-50/20 border-amber-500/20 shadow-amber-900/5' : 'hover:border-primary/30 hover:shadow-xl'}`}
                     >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${isSpecial ? 'bg-amber-100/50' : 'bg-slate-50 group-hover:bg-primary/5'}`}>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${isSpecial ? 'bg-amber-100/60' : 'bg-slate-50 group-hover:bg-primary/5'}`}>
                         <spec.icon size={18} className={`${isSpecial ? 'text-amber-600' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />
                       </div>
                       <div className="flex flex-col min-w-0">
