@@ -25,6 +25,12 @@ const Navbar = () => {
 
   useEffect(() => setMenuOpen(false), [location]);
   
+  const isNavActive = (linkPath, currentPath) => {
+    if (linkPath === "/") return currentPath === "/";
+    if (linkPath === "/products" && currentPath.startsWith("/product/")) return true;
+    return currentPath === linkPath;
+  };
+
   const handleHomeClick = (e) => {
     if (location.pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -69,18 +75,18 @@ const Navbar = () => {
                 to={link.path}
                 onClick={link.path === "/" ? handleHomeClick : undefined}
                 className={`relative font-display text-[14px] font-extrabold transition-all duration-500 py-2 group ${
-                  location.pathname === link.path
+                  isNavActive(link.path, location.pathname)
                     ? "text-primary drop-shadow-[0_2px_8px_rgba(245,160,0,0.3)]"
                     : "text-slate-600 hover:text-primary hover:drop-shadow-[0_2px_8px_rgba(245,160,0,0.15)]"
                 }`}
               >
                 {link.label}
                 {/* Hover Underline for Inactive Links */}
-                {location.pathname !== link.path && (
+                {!isNavActive(link.path, location.pathname) && (
                   <div className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-primary/40 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 )}
                 {/* Active Underline */}
-                {location.pathname === link.path && (
+                {isNavActive(link.path, location.pathname) && (
                   <motion.div
                     layoutId="navbar-underline"
                     className="absolute -bottom-0.5 left-0 right-0 h-[2.5px] rounded-full"
@@ -131,7 +137,7 @@ const Navbar = () => {
                     to={link.path}
                     onClick={link.path === "/" ? handleHomeClick : undefined}
                     className={`font-display text-lg font-extrabold py-3.5 px-6 rounded-xl transition-all duration-300 block ${
-                      location.pathname === link.path
+                      isNavActive(link.path, location.pathname)
                         ? "text-primary bg-primary/10 shadow-[inner_0_0_0_1px_rgba(245,158,11,0.2)]"
                         : "text-heading hover:bg-muted/50 hover:text-primary"
                     }`}
