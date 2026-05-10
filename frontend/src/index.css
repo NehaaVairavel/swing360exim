@@ -665,25 +665,7 @@
     border-radius: 32px;
   }
 
-  .sidebar-active-premium {
-    background: linear-gradient(90deg, #030814, #071426) !important;
-    color: white !important;
-    box-shadow: 0 10px 25px rgba(3, 8, 20, 0.25) !important;
-  }
-
-  .btn-quick-add-premium {
-    background: linear-gradient(135deg, #030814, #071426);
-    color: white;
-    box-shadow: 0 10px 25px rgba(3, 8, 20, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-  }
-
-  .btn-quick-add-premium:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(3, 8, 20, 0.45);
-    filter: brightness(1.1);
-  }
+  /* sidebar-active-premium and btn-quick-add-premium are defined in admin.css */
 
   .btn-orange-glow {
     @apply bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold transition-all duration-300;

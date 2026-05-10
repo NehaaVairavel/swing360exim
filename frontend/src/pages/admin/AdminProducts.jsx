@@ -1,19 +1,20 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { socket } from "@/socket";
 import { Link } from "react-router-dom";
 import productService from "@/services/productService";
-import { 
-  Search, 
-  Plus, 
-  Eye, 
-  Edit, 
+import {
+  Search,
+  Plus,
+  Eye,
+  Edit,
   Trash2,
   Image as ImageIcon,
   LayoutGrid,
   List,
   Filter,
-  CheckCircle
+  CheckCircle,
+  SlidersHorizontal,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
@@ -23,14 +24,18 @@ import "@/styles/cards.css";
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
-  const { data: products = [], isLoading: loading, refetch } = useQuery({
+  const {
+    data: products = [],
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["products", "admin"],
     queryFn: () => productService.getAll({ all: true }),
     staleTime: 5_000,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   });
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeStatus, setActiveStatus] = useState("All");
@@ -39,7 +44,6 @@ const AdminProducts = () => {
 
   useEffect(() => {
     socket.on("products_updated", () => {
-      console.log("Real-time admin update received...");
       refetch();
     });
     return () => socket.off("products_updated");
@@ -47,12 +51,14 @@ const AdminProducts = () => {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      const matchesSearch = 
+      const matchesSearch =
         (product.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (product.brand || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (product.model || "").toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = activeCategory === "All" || product.category === activeCategory;
-      const matchesStatus = activeStatus === "All" || product.availability === activeStatus;
+      const matchesCategory =
+        activeCategory === "All" || product.category === activeCategory;
+      const matchesStatus =
+        activeStatus === "All" || product.availability === activeStatus;
       return matchesSearch && matchesCategory && matchesStatus;
     });
   }, [searchQuery, activeCategory, activeStatus, products]);
@@ -82,7 +88,7 @@ const AdminProducts = () => {
     try {
       await productService.update(id, { featured: !currentFeatured });
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success(`Machine ${!currentFeatured ? 'featured' : 'unfeatured'} successfully`);
+      toast.success(`Machine ${!currentFeatured ? "featured" : "unfeatured"} successfully`);
     } catch (error) {
       toast.error("Update failed");
     }
@@ -90,91 +96,136 @@ const AdminProducts = () => {
 
   const categories = ["All", "Excavators", "Dozers", "Loaders", "Graders"];
 
-  if (loading) return <div className="p-12 text-center text-slate-500 font-bold">Loading Fleet...</div>;
+  if (loading)
+    return (
+      <div className="admin-loading">
+        <span>Loading Fleet...</span>
+      </div>
+    );
 
   return (
-    <div className="admin-page-bg -m-6 p-6 animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8">
-      {/* Page Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div
+      style={{ animation: "fadeIn 0.5s ease" }}
+    >
+      {/* ── Page Header ── */}
+      <div className="admin-page-header">
         <div>
-          <h1 className="admin-dashboard-title text-3xl text-[#0F172A]">Products Management</h1>
-          <p className="text-slate-500 font-medium mt-1">Total Products: <span className="font-bold text-amber-500">{products.length}</span></p>
+          <h1 className="admin-page-title">Products Management</h1>
+          <p className="admin-page-subtitle">
+            Total inventory:{" "}
+            <span style={{ color: "#F5B301", fontWeight: 700 }}>
+              {products.length}
+            </span>{" "}
+            machines
+          </p>
         </div>
-        <Link 
-          to="/admin/add-product" 
-          className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded-2xl admin-btn transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
+        <Link
+          to="/admin/add-product"
+          className="btn-primary"
+          style={{ textDecoration: "none" }}
         >
-          <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
-          <span>Add New Machine</span>
+          <Plus size={17} />
+          Add New Machine
         </Link>
       </div>
 
-      {/* Advanced Filter Bar */}
-      <div className="bg-white p-4 rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-slate-200 flex flex-col xl:flex-row justify-between gap-4">
-        <div className="flex flex-1 flex-wrap items-center gap-4">
-          <div className="relative flex-1 min-w-[280px] max-w-md">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-            <input 
-              type="text"
-              placeholder="Search by name or model..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm font-medium"
-            />
-          </div>
-
-          <div className="h-10 w-px bg-slate-200 hidden xl:block mx-2" />
-
-          <div className="flex items-center gap-3">
-             <Filter size={16} className="text-slate-400 ml-2" />
-             <select 
-                value={activeCategory}
-                onChange={(e) => setActiveCategory(e.target.value)}
-                className="bg-transparent text-sm font-bold text-slate-700 focus:outline-none cursor-pointer hover:text-amber-500 transition-colors"
-             >
-                {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-             </select>
-
-             <select
-                value={activeStatus}
-                onChange={(e) => setActiveStatus(e.target.value)}
-                className="bg-transparent text-sm font-bold text-slate-700 focus:outline-none cursor-pointer hover:text-amber-500 transition-colors ml-4"
-             >
-                <option value="All">All Status</option>
-                <option value="in_stock">In Stock</option>
-                <option value="sold">Sold</option>
-             </select>
-          </div>
+      {/* ── Filter Bar ── */}
+      <div className="admin-filter-bar">
+        {/* Search */}
+        <div className="relative flex-1" style={{ minWidth: "240px", maxWidth: "360px" }}>
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2"
+            size={15}
+            style={{ color: "#94A3B8" }}
+          />
+          <input
+            type="text"
+            placeholder="Search by name or model..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="admin-input"
+            style={{ paddingLeft: "40px" }}
+          />
         </div>
 
+        {/* Vertical separator */}
+        <div className="hidden xl:block w-px h-8" style={{ background: "#EAECEF" }} />
+
+        {/* Filters */}
         <div className="flex items-center gap-3">
-          <div className="flex bg-slate-100 p-1.5 rounded-xl shrink-0">
+          <SlidersHorizontal size={15} style={{ color: "#94A3B8" }} />
+          <select
+            value={activeCategory}
+            onChange={(e) => setActiveCategory(e.target.value)}
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "13px",
+              fontWeight: 600,
+              color: "#374151",
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              cursor: "pointer",
+            }}
+          >
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+
+          <div className="w-px h-5" style={{ background: "#EAECEF" }} />
+
+          <select
+            value={activeStatus}
+            onChange={(e) => setActiveStatus(e.target.value)}
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "13px",
+              fontWeight: 600,
+              color: "#374151",
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              cursor: "pointer",
+            }}
+          >
+            <option value="All">All Status</option>
+            <option value="in_stock">In Stock</option>
+            <option value="sold">Sold</option>
+          </select>
+        </div>
+
+        {/* Push view toggle right */}
+        <div style={{ marginLeft: "auto" }}>
+          <div className="view-toggle">
             <button
-              onClick={() => setViewMode('grid')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${viewMode === 'grid' ? 'bg-white text-[#0F172A] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              onClick={() => setViewMode("grid")}
+              className={`view-toggle-btn ${viewMode === "grid" ? "active" : ""}`}
             >
-              <LayoutGrid size={16} />
+              <LayoutGrid size={15} />
               <span className="hidden sm:inline">Grid</span>
             </button>
             <button
-              onClick={() => setViewMode('table')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all ${viewMode === 'table' ? 'bg-white text-[#0F172A] shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              onClick={() => setViewMode("table")}
+              className={`view-toggle-btn ${viewMode === "table" ? "active" : ""}`}
             >
-              <List size={16} />
+              <List size={15} />
               <span className="hidden sm:inline">Table</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* Grid View */}
-      {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] justify-items-center">
-          {filteredProducts.map(product => (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
-              handleDelete={handleDelete} 
+      {/* ── Grid View ── */}
+      {viewMode === "grid" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 justify-items-center">
+          {filteredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              handleDelete={handleDelete}
               handleMarkSold={handleMarkSold}
               handleFeature={handleFeature}
             />
@@ -182,15 +233,157 @@ const AdminProducts = () => {
         </div>
       )}
 
-      {filteredProducts.length === 0 && (
-        <div className="p-24 flex flex-col items-center justify-center text-slate-500 bg-white rounded-[2rem] border border-slate-200 shadow-sm">
-          <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-            <Search size={32} className="text-slate-300" />
+      {/* ── Table View ── */}
+      {viewMode === "table" && filteredProducts.length > 0 && (
+        <div className="admin-card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="admin-table" style={{ minWidth: "700px" }}>
+              <thead>
+                <tr>
+                  <th className="admin-table-header text-left">Product</th>
+                  <th className="admin-table-header text-left">Category</th>
+                  <th className="admin-table-header text-left">Status</th>
+                  <th className="admin-table-header text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product) => (
+                  <tr key={product.id}>
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "10px",
+                            background: "#F1F3F7",
+                            overflow: "hidden",
+                            flexShrink: 0,
+                          }}
+                        >
+                          {product.image ? (
+                            <img
+                              src={product.image}
+                              alt=""
+                              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                          ) : (
+                            <div
+                              className="w-full h-full flex items-center justify-center"
+                              style={{ color: "#CBD5E1" }}
+                            >
+                              <ImageIcon size={16} />
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <div
+                            style={{
+                              fontFamily: "'Inter', sans-serif",
+                              fontWeight: 700,
+                              fontSize: "13px",
+                              color: "#111827",
+                            }}
+                          >
+                            {product.name}
+                          </div>
+                          <div
+                            style={{
+                              fontFamily: "'Inter', sans-serif",
+                              fontSize: "11px",
+                              color: "#94A3B8",
+                            }}
+                          >
+                            {product.brand} · {product.model}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span
+                        style={{
+                          fontFamily: "'Inter', sans-serif",
+                          fontSize: "12px",
+                          fontWeight: 600,
+                          color: "#374151",
+                        }}
+                      >
+                        {product.category}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        className={`status-pill ${
+                          product.availability === "sold"
+                            ? "status-pill-sold"
+                            : "status-pill-in-stock"
+                        }`}
+                      >
+                        {product.availability === "sold" ? "Sold" : "In Stock"}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          to={`/admin/edit-product/${product.id}`}
+                          className="admin-btn-edit"
+                          style={{ textDecoration: "none" }}
+                        >
+                          <Edit size={13} /> Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(product.id)}
+                          className="admin-btn-delete"
+                        >
+                          <Trash2 size={13} /> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <p className="text-xl font-display font-bold text-[#0F172A]">No matching machines found</p>
         </div>
       )}
+
+      {/* ── Empty state ── */}
+      {filteredProducts.length === 0 && (
+        <div className="admin-empty-state">
+          <div className="admin-empty-icon">
+            <Search size={28} />
+          </div>
+          <p
+            style={{
+              fontFamily: "'Sora', sans-serif",
+              fontWeight: 700,
+              fontSize: "18px",
+              color: "#111827",
+              marginBottom: "6px",
+            }}
+          >
+            No machines found
+          </p>
+          <p
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: "14px",
+              color: "#64748B",
+            }}
+          >
+            Try adjusting your search or filter criteria
+          </p>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 };
+
 export default AdminProducts;

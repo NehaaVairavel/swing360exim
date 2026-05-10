@@ -1,14 +1,16 @@
 import { useState, useRef, useEffect } from "react";
 import galleryService from "@/services/galleryService";
-import { 
-  Search, 
-  Trash2, 
-  Eye, 
-  UploadCloud, 
-  Image as ImageIcon, 
-  FolderOpen
+import {
+  Search,
+  Trash2,
+  Eye,
+  UploadCloud,
+  Image as ImageIcon,
+  FolderOpen,
+  Grid,
 } from "lucide-react";
 import { toast } from "sonner";
+import "@/styles/admin.css";
 
 const categories = ["Shipping", "Logistics", "Workshop", "Events", "Others"];
 
@@ -34,10 +36,12 @@ const AdminGallery = () => {
     fetchGallery();
   }, []);
 
-  const filteredMedia = images.filter(img => {
-    const matchesCategory = activeCategory === "All" || img.category === activeCategory;
-    const matchesSearch = (img.image_url || "").toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (img.category || "").toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredMedia = images.filter((img) => {
+    const matchesCategory =
+      activeCategory === "All" || img.category === activeCategory;
+    const matchesSearch =
+      (img.image_url || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (img.category || "").toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -45,7 +49,7 @@ const AdminGallery = () => {
     if (!window.confirm("Are you sure you want to delete this asset?")) return;
     try {
       await galleryService.delete(id);
-      setImages(prev => prev.filter(img => img.id !== id));
+      setImages((prev) => prev.filter((img) => img.id !== id));
       toast.success("Image deleted successfully");
     } catch (error) {
       toast.error("Delete failed");
@@ -53,13 +57,14 @@ const AdminGallery = () => {
   };
 
   const handleUpload = async (files) => {
-    const file = files[0]; // Assuming single upload for now or iterate
+    const file = files[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append("image", file);
-    formData.append("category", activeCategory === "All" ? "Others" : activeCategory);
-
+    formData.append(
+      "category",
+      activeCategory === "All" ? "Others" : activeCategory
+    );
     try {
       await galleryService.upload(formData);
       const freshData = await galleryService.getAll();
@@ -70,107 +75,335 @@ const AdminGallery = () => {
     }
   };
 
-  if (loading) return <div className="p-12 text-center text-slate-500 font-bold">Accessing Media Vault...</div>;
+  if (loading)
+    return (
+      <div className="admin-loading">
+        <span>Loading Media Vault...</span>
+      </div>
+    );
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8 pb-12">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div style={{ animation: "fadeIn 0.5s ease", paddingBottom: "48px" }}>
+      {/* ── Page Header ── */}
+      <div className="admin-page-header">
         <div>
-          <h1 className="admin-dashboard-title text-3xl text-[#0F172A]">Media Assets</h1>
-          <p className="text-slate-500 font-medium mt-1">Manage brand imagery and operational photos</p>
+          <h1 className="admin-page-title">Media Assets</h1>
+          <p className="admin-page-subtitle">
+            Manage brand imagery and operational photos
+          </p>
         </div>
-        <button 
+        <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-2 bg-[#0F172A] hover:bg-slate-800 text-white px-8 py-3.5 rounded-2xl admin-btn transition-all shadow-lg group"
+          className="btn-primary"
         >
-          <UploadCloud size={20} className="group-hover:scale-110 transition-transform" />
-          <span>Upload New Asset</span>
+          <UploadCloud size={17} />
+          Upload New Asset
         </button>
-        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => e.target.files && handleUpload(e.target.files)} />
+        <input
+          type="file"
+          ref={fileInputRef}
+          className="hidden"
+          accept="image/*"
+          onChange={(e) => e.target.files && handleUpload(e.target.files)}
+        />
       </div>
 
-      <div 
-        className={`w-full border-2 border-dashed rounded-[2rem] p-12 transition-all flex flex-col items-center justify-center cursor-pointer mb-8 ${
-          isDragging ? "border-amber-500 bg-amber-50/50" : "border-slate-200 bg-white hover:bg-slate-50"
+      {/* ── Upload Drop Zone ── */}
+      <div
+        className={`upload-zone flex flex-col items-center justify-center p-12 mb-7 ${
+          isDragging ? "dragging" : ""
         }`}
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setIsDragging(true);
+        }}
         onDragLeave={() => setIsDragging(false)}
-        onDrop={(e) => { e.preventDefault(); setIsDragging(false); if(e.dataTransfer.files) handleUpload(e.dataTransfer.files); }}
+        onDrop={(e) => {
+          e.preventDefault();
+          setIsDragging(false);
+          if (e.dataTransfer.files) handleUpload(e.dataTransfer.files);
+        }}
+        onClick={() => fileInputRef.current?.click()}
       >
-        <div className="w-20 h-20 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mb-4">
-          <ImageIcon size={32} />
+        <div
+          className="flex items-center justify-center mb-4"
+          style={{
+            width: "64px",
+            height: "64px",
+            borderRadius: "18px",
+            background: "#FEF9EC",
+            color: "#F5B301",
+          }}
+        >
+          <UploadCloud size={28} />
         </div>
-        <h3 className="text-xl font-display font-bold text-[#0F172A] mb-2">Drop your imagery here</h3>
-        <p className="text-slate-500 text-sm max-w-xs text-center">We support high-resolution machinery and site photography</p>
+        <h3
+          style={{
+            fontFamily: "'Sora', sans-serif",
+            fontWeight: 700,
+            fontSize: "17px",
+            color: "#111827",
+            marginBottom: "6px",
+          }}
+        >
+          Drop your imagery here
+        </h3>
+        <p
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "13px",
+            color: "#64748B",
+            textAlign: "center",
+            maxWidth: "300px",
+          }}
+        >
+          We support high-resolution machinery and site photography. Click or
+          drag files to upload.
+        </p>
       </div>
 
-      <div className="bg-white p-4 rounded-[2rem] shadow-sm border border-slate-200 flex flex-col lg:flex-row justify-between items-center gap-6">
-        <div className="flex bg-slate-100 p-1.5 rounded-2xl w-full lg:w-auto overflow-x-auto">
-          {['All', ...categories].map(cat => (
+      {/* ── Category Filter + Search ── */}
+      <div
+        className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 mb-7"
+        style={{
+          background: "#ffffff",
+          border: "1px solid #EAECEF",
+          borderRadius: "22px",
+          padding: "16px 20px",
+          boxShadow: "0 2px 8px rgba(15,23,42,0.04)",
+        }}
+      >
+        {/* Category tabs */}
+        <div
+          className="flex p-1 overflow-x-auto"
+          style={{
+            background: "#F1F3F7",
+            borderRadius: "14px",
+            gap: "2px",
+          }}
+        >
+          {["All", ...categories].map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
-                activeCategory === cat 
-                  ? "bg-white text-[#0F172A] shadow-sm" 
-                  : "text-slate-500 hover:text-slate-800"
-              }`}
+              style={{
+                padding: "8px 16px",
+                borderRadius: "10px",
+                border: "none",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "13px",
+                fontWeight: 600,
+                whiteSpace: "nowrap",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                background: activeCategory === cat ? "#ffffff" : "transparent",
+                color: activeCategory === cat ? "#111827" : "#64748B",
+                boxShadow:
+                  activeCategory === cat
+                    ? "0 2px 8px rgba(15,23,42,0.08)"
+                    : "none",
+              }}
             >
               {cat}
             </button>
           ))}
         </div>
-        <div className="relative w-full lg:w-80">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-          <input 
+
+        {/* Search */}
+        <div
+          className="relative"
+          style={{ width: "100%", maxWidth: "300px" }}
+        >
+          <Search
+            className="absolute left-4 top-1/2 -translate-y-1/2"
+            size={15}
+            style={{ color: "#94A3B8" }}
+          />
+          <input
             type="text"
             placeholder="Search assets..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-sm font-medium"
+            className="admin-input"
+            style={{ paddingLeft: "40px" }}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {/* ── Image Grid ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {filteredMedia.map((media) => (
-          <div key={media.id} className="group relative bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500">
-            <div className="aspect-[4/5] bg-slate-100 relative overflow-hidden">
-              <img src={media.image_url} alt="" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
-              
-              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-4 backdrop-blur-[2px]">
-                <button className="p-4 bg-white rounded-2xl text-[#0F172A] hover:bg-amber-500 transition-all"><Eye size={20} /></button>
-                <button 
-                  onClick={() => handleDelete(media.id)}
-                  className="p-4 bg-white rounded-2xl text-[#0F172A] hover:bg-rose-500 hover:text-white transition-all"
+          <div
+            key={media.id}
+            className="group overflow-hidden"
+            style={{
+              background: "#ffffff",
+              border: "1px solid #EAECEF",
+              borderRadius: "22px",
+              boxShadow: "0 8px 24px rgba(15,23,42,0.05)",
+              transition: "all 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow =
+                "0 18px 40px rgba(15,23,42,0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow =
+                "0 8px 24px rgba(15,23,42,0.05)";
+            }}
+          >
+            {/* Image */}
+            <div
+              className="relative overflow-hidden"
+              style={{ aspectRatio: "4/5", background: "#F1F3F7" }}
+            >
+              <img
+                src={media.image_url}
+                alt=""
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  transition: "transform 0.8s ease",
+                }}
+                className="group-hover:scale-105"
+              />
+
+              {/* Hover overlay */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center gap-3"
+                style={{ background: "rgba(17,24,39,0.55)" }}
+              >
+                <button
+                  className="flex items-center justify-center transition-all duration-200"
+                  style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "12px",
+                    background: "#ffffff",
+                    color: "#111827",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#F5B301";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "#ffffff";
+                  }}
                 >
-                  <Trash2 size={20} />
+                  <Eye size={18} />
+                </button>
+                <button
+                  onClick={() => handleDelete(media.id)}
+                  className="flex items-center justify-center transition-all duration-200"
+                  style={{
+                    width: "44px",
+                    height: "44px",
+                    borderRadius: "12px",
+                    background: "#ffffff",
+                    color: "#111827",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "#EF4444";
+                    e.currentTarget.style.color = "#ffffff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "#ffffff";
+                    e.currentTarget.style.color = "#111827";
+                  }}
+                >
+                  <Trash2 size={18} />
                 </button>
               </div>
 
-              <div className="absolute top-6 left-6 flex flex-col gap-2">
-                <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md text-[#0F172A] text-[10px] font-black uppercase tracking-widest rounded-lg shadow-sm">
+              {/* Category badge */}
+              <div
+                className="absolute top-4 left-4"
+              >
+                <span
+                  className="admin-label-small"
+                  style={{
+                    background: "#ffffff",
+                    color: "#374151",
+                    borderRadius: "8px",
+                    padding: "4px 10px",
+                    fontSize: "9px",
+                    boxShadow: "0 2px 8px rgba(15,23,42,0.1)",
+                  }}
+                >
                   {media.category}
                 </span>
               </div>
             </div>
-            
-            <div className="p-6">
-              <h4 className="font-display font-bold text-slate-900 truncate">Machine_{media.id}.jpg</h4>
+
+            {/* Caption */}
+            <div
+              className="px-5 py-4"
+              style={{ borderTop: "1px solid #F1F3F7" }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: "13px",
+                  color: "#374151",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Asset_{media.id}.jpg
+              </p>
             </div>
           </div>
         ))}
 
+        {/* Empty state */}
         {filteredMedia.length === 0 && (
-          <div className="col-span-full p-24 flex flex-col items-center justify-center text-slate-500 bg-white rounded-[2rem] border border-slate-200">
-            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-              <FolderOpen size={32} className="text-slate-300" />
+          <div
+            className="col-span-full admin-empty-state"
+            style={{ gridColumn: "1 / -1" }}
+          >
+            <div className="admin-empty-icon">
+              <FolderOpen size={28} />
             </div>
-            <p className="text-xl font-display font-bold text-[#0F172A]">No media assets found</p>
+            <p
+              style={{
+                fontFamily: "'Sora', sans-serif",
+                fontWeight: 700,
+                fontSize: "18px",
+                color: "#111827",
+                marginBottom: "6px",
+              }}
+            >
+              No media assets found
+            </p>
+            <p
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "14px",
+                color: "#64748B",
+              }}
+            >
+              Upload your first asset using the button above
+            </p>
           </div>
         )}
       </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </div>
   );
 };
+
 export default AdminGallery;
