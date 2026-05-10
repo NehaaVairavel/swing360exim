@@ -121,27 +121,21 @@ const AdminProducts = () => {
       </div>
 
       {/* ── Top Analytics Strip ── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="admin-card p-4 flex flex-col justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="admin-card p-4 flex flex-col justify-center items-center text-center">
           <span className="admin-label-small text-slate-500 mb-1">Total Machines</span>
-          <span className="font-display font-bold text-2xl text-slate-800">{products.length}</span>
+          <span className="font-display font-bold text-3xl text-slate-800">{products.length}</span>
         </div>
-        <div className="admin-card p-4 flex flex-col justify-center">
+        <div className="admin-card p-4 flex flex-col justify-center items-center text-center">
           <span className="admin-label-small text-slate-500 mb-1">Active Listings</span>
-          <span className="font-display font-bold text-2xl text-green-600">
+          <span className="font-display font-bold text-3xl text-green-600">
             {products.filter(p => p.availability !== 'sold').length}
           </span>
         </div>
-        <div className="admin-card p-4 flex flex-col justify-center">
+        <div className="admin-card p-4 flex flex-col justify-center items-center text-center">
           <span className="admin-label-small text-slate-500 mb-1">Sold</span>
-          <span className="font-display font-bold text-2xl text-slate-800">
+          <span className="font-display font-bold text-3xl text-slate-800">
             {products.filter(p => p.availability === 'sold').length}
-          </span>
-        </div>
-        <div className="admin-card p-4 flex flex-col justify-center">
-          <span className="admin-label-small text-slate-500 mb-1">Featured</span>
-          <span className="font-display font-bold text-2xl text-amber-500">
-            {products.filter(p => p.featured).length}
           </span>
         </div>
       </div>
@@ -277,7 +271,7 @@ const AdminProducts = () => {
 
       {/* ── Grid View ── */}
       {viewMode === "grid" && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 justify-items-center">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
@@ -404,21 +398,34 @@ const AdminProducts = () => {
       )}
 
       {/* ── Empty state ── */}
+      {/* ── Empty state ── */}
       {filteredProducts.length === 0 && (
-        <div className="admin-empty-state">
-          <div className="admin-empty-icon">
+        <div
+          className="admin-card flex flex-col items-center justify-center p-12 text-center"
+          style={{ minHeight: "400px", borderRadius: "24px" }}
+        >
+          <div
+            className="flex items-center justify-center mb-4"
+            style={{
+              width: "64px",
+              height: "64px",
+              borderRadius: "20px",
+              background: "#FEF9EC",
+              color: "#F5B301",
+            }}
+          >
             <Search size={28} />
           </div>
           <p
             style={{
               fontFamily: "'Sora', sans-serif",
+              fontSize: "20px",
               fontWeight: 700,
-              fontSize: "18px",
               color: "#111827",
-              marginBottom: "6px",
+              marginBottom: "8px",
             }}
           >
-            No machines found
+            No inventory found
           </p>
           <p
             style={{
@@ -427,8 +434,20 @@ const AdminProducts = () => {
               color: "#64748B",
             }}
           >
-            Try adjusting your search or filter criteria
+            {searchQuery || activeCategory !== "All" || activeStatus !== "All"
+              ? "Try adjusting your search or filter criteria."
+              : "Your inventory is currently empty. Add your first machine to get started."}
           </p>
+          {(!searchQuery && activeCategory === "All" && activeStatus === "All") && (
+            <Link
+              to="/admin/add-product"
+              className="btn-primary mt-6"
+              style={{ textDecoration: "none" }}
+            >
+              <Plus size={16} />
+              Add First Machine
+            </Link>
+          )}
         </div>
       )}
 
