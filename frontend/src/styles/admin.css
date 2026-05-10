@@ -94,3 +94,13 @@
   font-family: 'Sora', sans-serif;
   font-weight: 600;
 }
+
+.chart-line {
+  stroke-dasharray: 150;
+  stroke-dashoffset: 150;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.group:hover .chart-line {
+  stroke-dashoffset: 0;
+}

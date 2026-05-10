@@ -34,43 +34,86 @@ const CountUp = ({ end, duration = 1500, prefix = "" }) => {
 };
 
 
-const KpiCard = ({ title, value, icon: Icon, trend, trendUp, prefix = "", color = "amber" }) => (
-  <div className="card-premium p-5 group">
-    <div className="flex justify-between items-start mb-4">
-      <div className={`w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-[#030814] group-hover:bg-amber-500 group-hover:text-white group-hover:rotate-6 transition-all duration-700 shadow-sm border border-slate-100 group-hover:border-amber-400 group-hover:shadow-lg group-hover:shadow-amber-500/20`}>
-        <Icon size={22} />
+const colorMap = {
+  orange: {
+    bg: 'bg-orange-50',
+    iconText: 'text-orange-600',
+    iconHoverBg: 'group-hover:bg-orange-500',
+    borderHover: 'group-hover:border-orange-400',
+    shadowHover: 'group-hover:shadow-orange-500/40',
+    lineStroke: '#f97316', 
+    glow: 'group-hover:shadow-[0_12px_40px_-10px_rgb(249,115,22,0.5)]',
+  },
+  cyan: {
+    bg: 'bg-cyan-50',
+    iconText: 'text-cyan-600',
+    iconHoverBg: 'group-hover:bg-cyan-500',
+    borderHover: 'group-hover:border-cyan-400',
+    shadowHover: 'group-hover:shadow-cyan-500/40',
+    lineStroke: '#06b6d4', 
+    glow: 'group-hover:shadow-[0_12px_40px_-10px_rgb(6,182,212,0.5)]',
+  },
+  green: {
+    bg: 'bg-emerald-50',
+    iconText: 'text-emerald-600',
+    iconHoverBg: 'group-hover:bg-emerald-500',
+    borderHover: 'group-hover:border-emerald-400',
+    shadowHover: 'group-hover:shadow-emerald-500/40',
+    lineStroke: '#10b981', 
+    glow: 'group-hover:shadow-[0_12px_40px_-10px_rgb(16,185,129,0.5)]',
+  },
+  purple: {
+    bg: 'bg-purple-50',
+    iconText: 'text-purple-600',
+    iconHoverBg: 'group-hover:bg-purple-500',
+    borderHover: 'group-hover:border-purple-400',
+    shadowHover: 'group-hover:shadow-purple-500/40',
+    lineStroke: '#a855f7', 
+    glow: 'group-hover:shadow-[0_12px_40px_-10px_rgb(168,85,247,0.5)]',
+  }
+};
+
+const KpiCard = ({ title, value, icon: Icon, trend, trendUp, prefix = "", color = "orange" }) => {
+  const theme = colorMap[color] || colorMap.orange;
+  
+  return (
+  <div className={`bg-white rounded-[2rem] p-6 group border border-slate-200/60 shadow-lg shadow-slate-200/30 hover:-translate-y-2 hover:border-transparent transition-all duration-500 relative overflow-hidden ${theme.glow}`}>
+    <div className="flex justify-between items-start mb-6">
+      <div className={`w-14 h-14 rounded-2xl ${theme.bg} flex items-center justify-center ${theme.iconText} ${theme.iconHoverBg} group-hover:text-white group-hover:rotate-6 group-hover:scale-110 transition-all duration-700 shadow-sm border border-slate-100 ${theme.borderHover} ${theme.shadowHover}`}>
+        <Icon size={24} />
       </div>
       <div className="flex flex-col items-end">
-        <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[9px] font-black uppercase tracking-wider ${trendUp ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}`}>
+        <div className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider ${trendUp ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'} shadow-sm`}>
           {trendUp ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
           <span>{trend}</span>
         </div>
-        {/* Mock Sparkline */}
-        <div className="h-8 w-20 mt-3 opacity-30 group-hover:opacity-100 transition-opacity duration-700">
+        {/* Animated Sparkline */}
+        <div className="h-10 w-24 mt-4 opacity-40 group-hover:opacity-100 transition-opacity duration-700">
            <svg viewBox="0 0 100 30" className="w-full h-full overflow-visible">
               <path 
-                d={trendUp ? "M0,25 Q25,5 50,20 T100,5" : "M0,5 Q25,25 50,10 T100,25"} 
+                d={trendUp ? "M0,25 Q15,20 30,22 T60,10 T100,5" : "M0,5 Q20,10 40,20 T70,15 T100,25"} 
                 fill="none" 
-                stroke={trendUp ? "#10b981" : "#f43f5e"} 
+                stroke={theme.lineStroke} 
                 strokeWidth="3" 
                 strokeLinecap="round"
-                className="animate-pulse"
+                className="chart-line"
               />
            </svg>
         </div>
       </div>
     </div>
-    <div>
-      <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-2">{title}</p>
-      <div className="flex items-end gap-1.5">
-        <h3 className="admin-stats-number text-[#030814]">
+    <div className="mt-auto">
+      <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.2em] mb-2">{title}</p>
+      <div className="flex items-end gap-2">
+        <h3 className="admin-stats-number text-[#030814] drop-shadow-sm">
           <CountUp end={value} prefix={prefix} />
         </h3>
-        <span className="text-[10px] font-extrabold text-slate-400 mb-1.5 italic">Live</span>
+        <span className="text-[11px] font-extrabold text-slate-400 mb-2 italic">Live</span>
       </div>
     </div>
   </div>
-);
+  );
+};
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -108,11 +151,11 @@ const Dashboard = () => {
 
 
       {/* KPI Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-        <KpiCard title="Total Inventory" value={stats.total_products} icon={Box} trend="+12" trendUp={true} />
-        <KpiCard title="Active Listings" value={stats.available_products} icon={Globe} trend="+5" trendUp={true} />
-        <KpiCard title="Sold Units" value={stats.sold_products} icon={CheckCircle} trend="+8" trendUp={true} />
-        <KpiCard title="Total Leads" value={stats.enquiries_count} icon={Mail} trend="+15" trendUp={true} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <KpiCard title="Total Inventory" value={stats.total_products} icon={Box} trend="+12" trendUp={true} color="orange" />
+        <KpiCard title="Active Listings" value={stats.available_products} icon={Globe} trend="+5" trendUp={true} color="cyan" />
+        <KpiCard title="Sold Units" value={stats.sold_products} icon={CheckCircle} trend="+8" trendUp={true} color="green" />
+        <KpiCard title="Total Leads" value={stats.enquiries_count} icon={Mail} trend="+15" trendUp={true} color="purple" />
       </div>
 
       <div className="grid grid-cols-1 gap-6">
