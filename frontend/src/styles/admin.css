@@ -168,7 +168,7 @@
 }
 
 .admin-table tbody tr {
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .admin-table tbody tr:nth-child(even) {
@@ -176,7 +176,8 @@
 }
 
 .admin-table tbody tr:hover {
-  background: #F0F4FF;
+  background: #F8FAFC;
+  box-shadow: inset 2px 0 0 #F5B301;
 }
 
 .admin-table tbody td {
@@ -738,4 +739,47 @@
   height: 1px;
   background: #F1F3F7;
   margin: 12px 16px;
+}
+
+/* ---------- CUSTOM SCROLLBAR ---------- */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F6F7FB; 
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1; 
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8; 
+}
+
+/* ---------- SIDEBAR ACTIVE & HOVER ---------- */
+.sidebar-active-premium {
+  background: linear-gradient(135deg, #F5B301 0%, #FFCC33 100%) !important;
+  color: #111827 !important;
+  box-shadow: 0 4px 16px rgba(245, 179, 1, 0.25) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-active-premium::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #111827;
+}
+
+.sidebar-hover {
+  transition: all 0.3s ease;
+}
+.sidebar-hover:hover {
+  background: #F1F3F7;
+  transform: translateX(4px);
 }

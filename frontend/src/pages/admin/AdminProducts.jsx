@@ -15,6 +15,7 @@ import {
   Filter,
   CheckCircle,
   SlidersHorizontal,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
@@ -126,11 +127,36 @@ const AdminProducts = () => {
         >
           <Plus size={17} />
           Add New Machine
-        </Link>
+      </div>
+
+      {/* ── Top Analytics Strip ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div className="admin-card p-4 flex flex-col justify-center">
+          <span className="admin-label-small text-slate-500 mb-1">Total Machines</span>
+          <span className="font-display font-bold text-2xl text-slate-800">{products.length}</span>
+        </div>
+        <div className="admin-card p-4 flex flex-col justify-center">
+          <span className="admin-label-small text-slate-500 mb-1">Active Listings</span>
+          <span className="font-display font-bold text-2xl text-green-600">
+            {products.filter(p => p.availability !== 'sold').length}
+          </span>
+        </div>
+        <div className="admin-card p-4 flex flex-col justify-center">
+          <span className="admin-label-small text-slate-500 mb-1">Sold</span>
+          <span className="font-display font-bold text-2xl text-slate-800">
+            {products.filter(p => p.availability === 'sold').length}
+          </span>
+        </div>
+        <div className="admin-card p-4 flex flex-col justify-center">
+          <span className="admin-label-small text-slate-500 mb-1">Featured</span>
+          <span className="font-display font-bold text-2xl text-amber-500">
+            {products.filter(p => p.featured).length}
+          </span>
+        </div>
       </div>
 
       {/* ── Filter Bar ── */}
-      <div className="admin-filter-bar">
+      <div className="admin-filter-bar mb-4">
         {/* Search */}
         <div className="relative flex-1" style={{ minWidth: "240px", maxWidth: "360px" }}>
           <Search
@@ -218,9 +244,49 @@ const AdminProducts = () => {
         </div>
       </div>
 
+      {/* ── Filter Chips ── */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {activeCategory !== 'All' && (
+          <div className="flex items-center gap-1 bg-white border border-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 shadow-sm">
+            <span>Category: {activeCategory}</span>
+            <button onClick={() => setActiveCategory('All')} className="hover:text-red-500 ml-1">
+              <X size={12} />
+            </button>
+          </div>
+        )}
+        {activeStatus !== 'All' && (
+          <div className="flex items-center gap-1 bg-white border border-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 shadow-sm">
+            <span>Status: {activeStatus.replace('_', ' ')}</span>
+            <button onClick={() => setActiveStatus('All')} className="hover:text-red-500 ml-1">
+              <X size={12} />
+            </button>
+          </div>
+        )}
+        {searchQuery && (
+          <div className="flex items-center gap-1 bg-white border border-slate-200 px-3 py-1.5 rounded-full text-xs font-semibold text-slate-600 shadow-sm">
+            <span>Search: "{searchQuery}"</span>
+            <button onClick={() => setSearchQuery('')} className="hover:text-red-500 ml-1">
+              <X size={12} />
+            </button>
+          </div>
+        )}
+        {(activeCategory !== 'All' || activeStatus !== 'All' || searchQuery) && (
+          <button 
+            onClick={() => {
+              setActiveCategory('All');
+              setActiveStatus('All');
+              setSearchQuery('');
+            }}
+            className="text-xs font-semibold text-amber-500 hover:text-amber-600 px-2 underline"
+          >
+            Clear all
+          </button>
+        )}
+      </div>
+
       {/* ── Grid View ── */}
       {viewMode === "grid" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}

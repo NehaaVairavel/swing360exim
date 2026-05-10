@@ -23,7 +23,8 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
   const displayPrice = formatPrice(numericValue);
 
   // Ensure availability string is displayed cleanly
-  const statusLabel = product.availability ? product.availability.replace('_', ' ').toUpperCase() : 'ACTIVE';
+  const statusRaw = product.availability || "in_stock";
+  const statusLabel = statusRaw.replace('_', ' ').toUpperCase();
 
   return (
     <motion.div
@@ -45,8 +46,7 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
 
         {/* Top Left Admin Status Badge */}
         <div 
-          className="badge-year" 
-          style={{ background: isSold ? "#f43f5e" : "#10b981", padding: "5px 12px", fontSize: "10px" }}
+          className={`badge-status ${statusRaw}`} 
         >
           {statusLabel}
         </div>
@@ -73,14 +73,14 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
           {product.year && product.engine_hours && <span className="separator">•</span>}
           {product.engine_hours && (
             <span className="flex items-center gap-1">
-              <Clock size={12} className="text-slate-400" />
+              <Clock size={11} />
               {product.engine_hours} Hrs
             </span>
           )}
           {(product.year || product.engine_hours) && product.location && <span className="separator">•</span>}
           {product.location && (
             <span className="flex items-center gap-1">
-              <MapPin size={12} className="text-slate-400" />
+              <MapPin size={11} />
               {product.location.split(',')[0]}
             </span>
           )}
@@ -109,13 +109,13 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
             to={`/admin/edit-product/${product.id}`}
             className="admin-btn admin-btn-edit"
           >
-            <Edit size={14} /> Edit
+            <Edit size={12} /> Edit
           </Link>
           <button 
             onClick={() => handleDelete(product.id)}
             className="admin-btn admin-btn-delete"
           >
-            <Trash2 size={14} /> Delete
+            <Trash2 size={12} /> Delete
           </button>
           
           {!isSold && (
@@ -124,13 +124,13 @@ const ProductCard = ({ product, handleDelete, handleMarkSold, handleFeature }) =
                 onClick={() => handleFeature && handleFeature(product.id, product.featured)}
                 className="admin-btn admin-btn-feature"
               >
-                <Star size={14} /> Feature
+                <Star size={12} /> {product.featured ? 'Unfeature' : 'Feature'}
               </button>
               <button 
                 onClick={() => handleMarkSold(product.id)}
                 className="admin-btn admin-btn-sold"
               >
-                <CheckCircle size={14} /> Sold
+                <CheckCircle size={12} /> Mark Sold
               </button>
             </>
           )}

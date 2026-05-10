@@ -33,7 +33,7 @@ const SidebarItem = ({ icon: Icon, label, path, onClick }) => (
       `flex items-center gap-3 px-4 py-3 mx-3 rounded-2xl transition-all duration-300 group relative mb-1 ${
         isActive
           ? "sidebar-active-premium admin-sidebar-label text-[#111827]"
-          : "text-[#64748B] hover:text-[#111827] hover:bg-[#F6F7FB]"
+          : "sidebar-hover text-[#64748B] hover:text-[#111827]"
       }`
     }
   >
