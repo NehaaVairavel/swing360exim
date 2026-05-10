@@ -149,20 +149,15 @@ const Index = () => {
     refetchInterval: realtimeConnected ? false : 1000,
   });
 
-  const { data: featuredProducts = [], refetch: refetchFeatured } = useQuery({
-    queryKey: ["featuredProducts"],
-    queryFn: () => productService.getAll({ featured: true }).then(data => data.slice(0, 4)),
-    refetchInterval: realtimeConnected ? false : 1000,
-  });
+
 
   useEffect(() => {
     socket.on("products_updated", () => {
       console.log("Real-time home update received...");
       refetchAll();
-      refetchFeatured();
     });
     return () => socket.off("products_updated");
-  }, [refetchAll, refetchFeatured]);
+  }, [refetchAll]);
 
   const [siteSettings, setSiteSettings] = useState(null);
 

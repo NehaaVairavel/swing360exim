@@ -326,13 +326,11 @@ def dashboard():
     available = products_col.count_documents({"availability": "in_stock"})
     sold      = products_col.count_documents({"availability": "sold"})
     enqs      = enquiries_col.count_documents({})
-    featured  = products_col.count_documents({"featured": True})
     return jsonify({
         "total_products":     total,
         "available_products": available,
         "sold_products":      sold,
-        "enquiries_count":    enqs,
-        "featured_count":     featured
+        "enquiries_count":    enqs
     }), 200
 
 
@@ -372,8 +370,6 @@ def get_products():
     
     if category and category.lower() not in ("all", ""):
         query["category"] = category
-    if featured == "true":
-        query["featured"] = True
         
     # Enhanced search support for reference_no
     if search:
