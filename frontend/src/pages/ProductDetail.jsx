@@ -296,8 +296,8 @@ const ProductDetail = () => {
                       </div>
                       <div className="flex flex-col min-w-0">
                         <span className="text-[9px] uppercase font-bold tracking-[0.12em] text-slate-400 mb-0.5 leading-none">{spec.label}</span>
-                        <span className={`text-[14px] font-black tracking-tight leading-snug truncate ${
-                          isSpecial ? "text-amber-900" : "text-slate-900"
+                        <span className={`text-[14px] tracking-tight leading-snug truncate ${
+                          isSpecial ? "font-black text-amber-900" : spec.label === "Location" ? "font-black text-slate-950" : "font-black text-slate-900"
                         }`}>{spec.value}</span>
                       </div>
                     </motion.div>
@@ -308,11 +308,11 @@ const ProductDetail = () => {
               {/* CTA Buttons */}
               <div className="grid grid-cols-2 gap-3 mt-1">
                 <motion.button
-                  whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(245, 160, 0, 0.2)" }}
+                  whileHover={{ y: -3, boxShadow: "0 15px 30px rgba(245, 160, 0, 0.25)" }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => !isSold && setEnquiryOpen(true)}
                   disabled={isSold}
-                  className={`h-[50px] px-6 flex items-center justify-center gap-2 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "bg-[#f5a000] text-white shadow-lg shadow-[#f5a000]/15"}`}
+                  className={`h-[50px] px-6 flex items-center justify-center gap-2 rounded-xl font-black uppercase tracking-widest text-[11px] transition-all duration-300 ${isSold ? "bg-gray-100 text-gray-400 cursor-not-allowed" : "enquire-btn-animated text-white shadow-lg shadow-[#f5a000]/20"}`}
                 >
                   <MessageSquare size={16} className="shrink-0" /> {isSold ? "Machine Sold" : "Enquire Now"}
                 </motion.button>

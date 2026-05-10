@@ -824,4 +824,18 @@
   .thumbnail-zoom:hover img {
     @apply scale-110;
   }
+
+  /* ── Enquire Button Animated ── */
+  .enquire-btn-animated {
+    background: linear-gradient(90deg, #f5a000, #f0b429, #f5a000);
+    background-size: 200% 100%;
+    animation: enquire-shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes enquire-shimmer {
+    0%   { background-position: 100% 0; }
+    50%  { background-position: 0% 0; }
+    100% { background-position: 100% 0; }
+  }
 }
+
