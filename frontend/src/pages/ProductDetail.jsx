@@ -126,11 +126,22 @@ const ProductDetail = () => {
     );
   }
 
+  let displayModel = product.model || "";
+  let displayYear = product.year || "";
+
+  if (displayModel.includes('/')) {
+    const parts = displayModel.split('/');
+    displayModel = parts[0].trim();
+    if (!displayYear || displayYear === "") {
+      displayYear = parts[1].trim();
+    }
+  }
+
   const specifications = [
     { label: "Category", value: product.category, icon: Tag },
     { label: "Brand", value: product.brand, icon: Settings },
-    { label: "Model Number", value: product.model, icon: Info },
-    { label: "Year", value: product.year, icon: Clock },
+    { label: "Model Number", value: displayModel, icon: Info },
+    { label: "Year", value: displayYear, icon: Clock },
     { label: "Condition", value: product.condition || "Used - Good", icon: ShieldCheck },
     { label: "Engine Hours", value: product.engine_hours || "N/A", icon: Clock },
     { label: "Location", value: product.location || "Dubai, UAE", icon: MapPin },
@@ -402,8 +413,8 @@ const ProductDetail = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-0">
                 {[
                   { label: "Brand", value: product.brand },
-                  { label: "Model Number", value: product.model },
-                  { label: "Manufacturing Year", value: product.year },
+                  { label: "Model Number", value: displayModel },
+                  { label: "Manufacturing Year", value: displayYear },
                   { label: "Operating Hours", value: product.engine_hours || "N/A" },
                   { label: "Current Location", value: product.location || "India" },
                   { label: "Equipment Condition", value: product.condition || "Used - Good" },
