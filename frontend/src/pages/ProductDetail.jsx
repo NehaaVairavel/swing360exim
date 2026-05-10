@@ -145,30 +145,13 @@ const ProductDetail = () => {
 
       <div className="container-section relative z-10 mt-4">
         {/* Breadcrumbs & Actions */}
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-4">
+        <div className="mb-4">
           <Link to="/products" className="flex items-center gap-2.5 text-slate-400 hover:text-primary transition-all font-medium uppercase tracking-wider text-[11px] group">
             <div className="w-8 h-8 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
               <ArrowLeft size={14} />
             </div>
-            Back to Catalog
+            Back to Global Catalog
           </Link>
-          
-          <div className="flex items-center gap-3">
-             <span className="bg-amber-50 text-amber-900 border border-amber-200/60 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[1.2px] shadow-sm">
-               {product.category}
-             </span>
-             <span className="bg-slate-900 text-white px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-widest flex items-center gap-2 shadow-md">
-                REF NO: {refNumber}
-             </span>
-             <div className="h-4 w-px bg-slate-200 mx-1" />
-             <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[10px] uppercase tracking-wider">
-               <MapPin size={13} className="text-primary/60" /> {product.location || "India"}
-             </div>
-             <button onClick={handleShareLink} className="h-9 px-4 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[9px]">
-               {isCopied ? <CheckCircle2 size={14} className="text-green-500" /> : <Share2 size={14} />}
-               {isCopied ? "Copied" : "Share"}
-             </button>
-          </div>
         </div>
 
         <div className="grid lg:grid-cols-[55%_45%] gap-12 items-start h-auto">
@@ -237,6 +220,20 @@ const ProductDetail = () => {
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
+              {/* Top Metadata Cluster */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="bg-amber-50 text-amber-900 border border-amber-200/60 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[1.5px] shadow-sm">
+                  {product.category}
+                </span>
+                <span className="bg-slate-900 text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-2 shadow-md">
+                   REF NO: {refNumber}
+                </span>
+                <div className="h-4 w-px bg-slate-100 mx-1" />
+                <div className="flex items-center gap-1.5 text-slate-400 font-bold text-[11px] uppercase tracking-wider">
+                  <MapPin size={14} className="text-primary/60" /> {product.location || "India"}
+                </div>
+              </div>
+
               <div className="mb-3">
                 <h1 className="text-[26px] lg:text-[38px] font-extrabold text-[#0F172A] leading-[1.1] tracking-[-0.03em] uppercase">{product.name}</h1>
               </div>
