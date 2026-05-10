@@ -145,13 +145,17 @@ const ProductDetail = () => {
 
       <div className="container-section relative z-10 mt-4">
         {/* Breadcrumbs & Actions */}
-        <div className="mb-4">
+        <div className="mb-4 flex items-center justify-between gap-4">
           <Link to="/products" className="flex items-center gap-2.5 text-slate-400 hover:text-primary transition-all font-medium uppercase tracking-wider text-[11px] group">
             <div className="w-8 h-8 rounded-xl bg-white shadow-sm border border-gray-100 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/5 transition-all">
               <ArrowLeft size={14} />
             </div>
             Back to Global Catalog
           </Link>
+          
+          <button onClick={handleShareLink} className="h-10 px-5 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-primary/30 hover:bg-primary/5 text-heading/60 hover:text-primary transition-all flex items-center gap-2 font-black uppercase tracking-widest text-[10px]">
+            {isCopied ? <><CheckCircle2 size={16} className="text-green-500" /> Copied</> : <><Share2 size={16} /> Share Machine</>}
+          </button>
         </div>
 
         <div className="grid lg:grid-cols-[55%_45%] gap-12 items-start h-auto">
