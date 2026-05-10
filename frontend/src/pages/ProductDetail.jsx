@@ -162,20 +162,12 @@ const ProductDetail = () => {
           {/* Left Column: Gallery */}
           <div className="space-y-4">
             <motion.div 
-              initial={{ opacity: 0, y: 15 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              className="relative h-[420px] rounded-[24px] overflow-hidden bg-white border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] group"
-            >
-              <AnimatePresence initial={false} custom={direction}>
-          <div className="lg:col-span-3">
-            {/* Main Image */}
-            <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
               className="relative h-[420px] rounded-[24px] overflow-hidden bg-white border border-slate-100 shadow-[0_2px_14px_-2px_rgba(0,0,0,0.05),0_32px_64px_-16px_rgba(0,0,0,0.1)] group"
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" custom={direction}>
                 <motion.img
                   key={activeImage}
                   src={images[activeImage] || "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=1200"}
