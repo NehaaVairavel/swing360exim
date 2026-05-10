@@ -367,45 +367,51 @@ const ProductDetail = () => {
           initial={{ opacity: 0, y: 30 }} 
           whileInView={{ opacity: 1, y: 0 }} 
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
+          transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
           className="mt-12"
         >
-          <div className="flex items-center gap-4 mb-6">
-            <h2 className="text-[20px] lg:text-[24px] font-black text-[#0F172A] tracking-wider leading-none uppercase">Technical Overview</h2>
-            <div className="h-px flex-1 bg-gradient-to-r from-amber-500/50 to-transparent" />
+          <div className="flex items-center gap-4 mb-5">
+            <h2 className="text-[20px] lg:text-[24px] font-black text-[#0F172A] tracking-wider leading-none uppercase translate-y-[1px]">Technical Overview</h2>
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-amber-500/40 to-transparent opacity-80" />
           </div>
           
-          <div className="bg-white border border-slate-200/70 rounded-[24px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.02),0_16px_48px_-12px_rgba(0,0,0,0.08)]">
+          <div className="bg-white border border-slate-200/80 rounded-[16px] overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.02),0_16px_48px_-12px_rgba(245,158,11,0.03)]">
             
             {/* Machine Overview Box */}
-            <div className="p-8 lg:p-10 border-b border-slate-100 bg-slate-50/50">
-              <h3 className="text-[13px] font-black text-amber-900 uppercase tracking-widest flex items-center gap-3 mb-4">
-                <div className="w-1.5 h-4 rounded-full bg-amber-500" />
+            <div className="p-6 lg:p-8 border-b border-stone-200/60 bg-slate-50/40">
+              <h3 className="text-[13px] font-black text-amber-900 uppercase tracking-widest flex items-center gap-3 mb-3">
+                <div className="w-1 h-3.5 rounded-full bg-amber-500" />
                 Executive Summary
               </h3>
-              <p className="text-slate-600 font-medium leading-[1.8] text-[15px] max-w-4xl">
+              <p className="text-slate-600 font-medium leading-[1.8] text-[15px] lg:w-[70%]">
                 This {product.year} {product.brand} {product.model} has been thoroughly inspected and verified by our technical hub. It is in excellent operational condition, with all core hydraulic and engine components passing standard export stress tests. The unit is fully documented, cleaned, and structurally sound for immediate global deployment.
               </p>
               
-              <div className="flex flex-wrap gap-3 mt-6">
-                 <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md border border-slate-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
-                   <ShieldCheck size={14} className="text-amber-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">Export Ready</span>
+              <motion.div 
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.4 }}
+                className="flex flex-wrap gap-2.5 mt-4"
+              >
+                 <div className="flex items-center gap-1.5 px-2.5 py-1 bg-stone-50 rounded-[6px] border border-stone-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
+                   <ShieldCheck size={12} className="text-amber-500" />
+                   <span className="text-[9px] font-bold uppercase tracking-widest text-stone-700">Export Certified</span>
                  </div>
-                 <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md border border-slate-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
-                   <CheckCircle2 size={14} className="text-green-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">Hub Verified</span>
+                 <div className="flex items-center gap-1.5 px-2.5 py-1 bg-stone-50 rounded-[6px] border border-stone-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
+                   <CheckCircle2 size={12} className="text-green-500" />
+                   <span className="text-[9px] font-bold uppercase tracking-widest text-stone-700">Inspection Passed</span>
                  </div>
-                 <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-md border border-slate-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
-                   <Settings size={14} className="text-blue-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">Operational</span>
+                 <div className="flex items-center gap-1.5 px-2.5 py-1 bg-stone-50 rounded-[6px] border border-stone-200 shadow-sm cursor-default hover:border-amber-300 transition-colors">
+                   <Settings size={12} className="text-blue-500" />
+                   <span className="text-[9px] font-bold uppercase tracking-widest text-stone-700">Operationally Verified</span>
                  </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Technical Specs Grid */}
-            <div className="p-8 lg:p-10">
-               <h3 className="text-[13px] font-black text-[#0F172A] uppercase tracking-widest flex items-center gap-3 mb-6">
+            <div className="p-6 lg:p-8">
+               <h3 className="text-[13px] font-black text-[#0F172A] uppercase tracking-widest flex items-center gap-3 mb-4">
                 <Settings size={16} className="text-slate-400" />
                 Technical Specifications
               </h3>
@@ -425,12 +431,12 @@ const ProductDetail = () => {
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-50px" }}
-                    transition={{ delay: idx * 0.05, duration: 0.4 }}
+                    transition={{ delay: idx * 0.04, duration: 0.3 }}
                     key={idx} 
-                    className="flex justify-between items-center border-b border-slate-100 py-4 group hover:bg-amber-50/30 hover:border-amber-200/50 transition-colors px-3 -mx-3 rounded-lg"
+                    className="flex justify-between items-center border-b border-stone-200/60 py-3 group hover:bg-amber-50/20 border-l-2 border-l-transparent hover:border-l-amber-400 transition-all px-3 -mx-3"
                   >
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.15em] text-slate-400 group-hover:text-amber-700 transition-colors">{item.label}</span>
-                    <span className="text-[15px] font-extrabold text-slate-900 tracking-tight">{item.value}</span>
+                    <span className="text-[9.5px] font-bold uppercase tracking-[0.1em] text-slate-400/90 group-hover:text-amber-700 transition-colors">{item.label}</span>
+                    <span className="text-[14px] font-bold text-slate-900 tracking-tight">{item.value}</span>
                   </motion.div>
                 ))}
               </div>
