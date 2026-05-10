@@ -167,6 +167,15 @@ const ProductDetail = () => {
               className="relative h-[420px] rounded-[24px] overflow-hidden bg-white border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] group"
             >
               <AnimatePresence initial={false} custom={direction}>
+          <div className="lg:col-span-3">
+            {/* Main Image */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
+              className="relative h-[420px] rounded-[24px] overflow-hidden bg-white border border-slate-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.12)] group"
+            >
+              <AnimatePresence mode="wait">
                 <motion.img
                   key={activeImage}
                   src={images[activeImage] || "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=1200"}
@@ -174,9 +183,9 @@ const ProductDetail = () => {
                   initial={{ opacity: 0, scale: 1.02 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.45, ease: "easeOut" }}
+                  transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
                   alt={product.name}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[3s]"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-[2s] ease-out"
                 />
               </AnimatePresence>
 
@@ -202,30 +211,34 @@ const ProductDetail = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </motion.div>
 
-            <div className="grid grid-cols-5 gap-2.5 mt-2.5">
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
+              className="grid grid-cols-5 gap-2.5 mt-2.5"
+            >
               {images.map((img, idx) => (
-                <motion.button 
+                <button 
                   key={idx} 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   onClick={() => { setDirection(idx > activeImage ? 1 : -1); setActiveImage(idx); }} 
-                  className={`aspect-[4/3] h-[72px] rounded-xl overflow-hidden border-2 transition-all duration-300 relative group thumbnail-zoom ${activeImage === idx ? 'border-primary shadow-lg scale-105 z-10' : 'border-white bg-slate-50 opacity-60 hover:opacity-100 hover:border-primary/20'}`}
+                  className={`aspect-[4/3] h-[72px] rounded-xl overflow-hidden border-2 transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] relative group ${activeImage === idx ? 'border-primary shadow-[0_4px_16px_rgba(245,160,0,0.3)] scale-105 z-10 ring-2 ring-primary/20' : 'border-transparent bg-slate-50 opacity-75 hover:opacity-100 hover:border-primary/40 hover:scale-[1.02]'}`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover transition-transform duration-500" />
-                </motion.button>
+                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:scale-110" />
+                </button>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* Right Column: Info & CTAs */}
           <div className="flex flex-col">
-            <motion.div 
-              initial={{ opacity: 0, y: 15 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-            >
+            <div className="flex flex-col">
               {/* Top Metadata Cluster */}
-              <div className="inline-flex items-stretch h-[30px] mb-4 bg-white border border-slate-200/80 rounded-[8px] shadow-[0_2px_8px_rgba(15,23,42,0.04)]">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.1, ease: [0.25, 1, 0.5, 1] }}
+                className="inline-flex items-stretch h-[30px] mb-4 bg-white border border-slate-200/80 rounded-[8px] shadow-[0_2px_8px_rgba(15,23,42,0.04)] self-start"
+              >
                 <div className="flex items-center px-3.5 text-[10px] font-black uppercase tracking-[1.5px] text-amber-700 bg-amber-50/50 rounded-l-[8px]">
                   {product.category}
                 </div>
@@ -237,13 +250,21 @@ const ProductDetail = () => {
                 <div className="flex items-center gap-1.5 px-3.5 text-[10px] font-bold uppercase tracking-wider text-slate-600">
                   <MapPin size={12} className="text-slate-400" /> {product.location || "India"}
                 </div>
-              </div>
-
-              <div className="mb-3">
-                <h1 className="text-[26px] lg:text-[38px] font-extrabold text-[#0F172A] leading-[1.1] tracking-[-0.03em] uppercase">{product.name}</h1>
-              </div>
+              </motion.div>
 
               <motion.div 
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.15, ease: [0.25, 1, 0.5, 1] }}
+                className="mb-3"
+              >
+                <h1 className="text-[26px] lg:text-[38px] font-extrabold text-[#0F172A] leading-[1.1] tracking-[-0.03em] uppercase">{product.name}</h1>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 1, 0.5, 1] }}
                 whileHover={{ y: -4, boxShadow: "0 16px 40px -8px rgba(0,0,0,0.08)" }}
                 className="bg-white border border-slate-200/60 rounded-[22px] p-4 lg:px-6 lg:py-4 shadow-[0_8px_30px_-4px_rgba(0,0,0,0.06)] mb-3 relative overflow-hidden group hover:border-amber-500/30 transition-all duration-300"
               >
@@ -262,7 +283,12 @@ const ProductDetail = () => {
                 </div>
               </motion.div>
 
-              <div className="grid grid-cols-2 gap-3 mb-5">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.25 }}
+                className="grid grid-cols-2 gap-3 mb-5"
+              >
                 {specifications.map((spec, i) => {
                   const isSpecial = spec.label === "Condition" || spec.label === "Engine Hours" || spec.label === "Reference No";
                   return (
@@ -302,10 +328,15 @@ const ProductDetail = () => {
                     </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
 
               {/* CTA Buttons */}
-              <div className="grid grid-cols-2 gap-3 mt-1">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.35, ease: [0.25, 1, 0.5, 1] }}
+                className="grid grid-cols-2 gap-3 mt-1"
+              >
                 <motion.button
                   whileHover={{ y: -4, boxShadow: "inset 0 1px 2px rgba(255, 255, 255, 0.4), 0 16px 36px rgba(245, 160, 0, 0.25)" }}
                   whileTap={{ scale: 0.98 }}
@@ -331,8 +362,8 @@ const ProductDetail = () => {
                   </div>
                   WhatsApp
                 </motion.a>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
 

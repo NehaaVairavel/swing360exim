@@ -74,7 +74,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
   }
 
   return (
-    <div className="flex items-center bg-slate-100/80 p-1 rounded-full border border-slate-200/60 shadow-inner relative w-fit mx-auto lg:mx-0">
+    <div className="flex items-center bg-slate-100/50 p-1.5 rounded-full border border-slate-200/80 shadow-[inset_0_2px_8px_rgba(0,0,0,0.02)] relative w-fit mx-auto lg:mx-0">
       {currencies.map((curr) => {
         const isActive = currency.code === curr.code;
         return (
@@ -82,8 +82,8 @@ const CurrencyToggle = ({ variant = 'default' }) => {
             key={curr.code}
             onClick={() => setCurrency(curr)}
             className={`
-              relative z-10 w-[64px] h-9 flex items-center justify-center gap-1.5 rounded-full transition-all duration-500
-              uppercase tracking-tight font-bold text-[11px]
+              relative z-10 w-[64px] h-[38px] flex items-center justify-center gap-1.5 rounded-full transition-all duration-500
+              uppercase tracking-tight font-black text-[11px]
               ${isActive ? 'text-white' : 'text-slate-500 hover:text-slate-900'}
             `}
           >
@@ -93,7 +93,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
             {isActive && (
               <motion.div
                 layoutId={`activeCurrency-${variant}`}
-                className="absolute inset-0 bg-[#F59E0B] rounded-full -z-10 shadow-md"
+                className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full -z-10 shadow-[0_4px_16px_rgba(245,160,0,0.4)] border border-amber-400/80"
                 transition={{ type: 'spring', bounce: 0, duration: 0.4 }}
               />
             )}

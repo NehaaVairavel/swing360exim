@@ -68,22 +68,27 @@ const Navbar = () => {
                 key={link.path}
                 to={link.path}
                 onClick={link.path === "/" ? handleHomeClick : undefined}
-                className={`nav-link-hover relative font-display text-[14px] font-extrabold transition-all duration-400 py-2 ${
+                className={`relative font-display text-[14px] font-extrabold transition-all duration-500 py-2 group ${
                   location.pathname === link.path
-                    ? "text-primary text-shadow-sm"
-                    : "text-heading/80 hover:text-primary transition-colors"
+                    ? "text-primary drop-shadow-[0_2px_8px_rgba(245,160,0,0.3)]"
+                    : "text-slate-600 hover:text-primary hover:drop-shadow-[0_2px_8px_rgba(245,160,0,0.15)]"
                 }`}
               >
                 {link.label}
+                {/* Hover Underline for Inactive Links */}
+                {location.pathname !== link.path && (
+                  <div className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-primary/40 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                )}
+                {/* Active Underline */}
                 {location.pathname === link.path && (
                   <motion.div
                     layoutId="navbar-underline"
                     className="absolute -bottom-0.5 left-0 right-0 h-[2.5px] rounded-full"
                     style={{
-                      background: "linear-gradient(90deg, hsl(38 92% 50%), hsl(28 88% 42%))",
-                      boxShadow: "0 0 10px rgba(245,158,11,0.5)",
+                      background: "linear-gradient(90deg, #f5a000, #d97706)",
+                      boxShadow: "0 2px 12px rgba(245, 160, 0, 0.6)",
                     }}
-                    transition={{ duration: 0.4, type: "spring", stiffness: 250, damping: 25 }}
+                    transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
                   />
                 )}
               </Link>
