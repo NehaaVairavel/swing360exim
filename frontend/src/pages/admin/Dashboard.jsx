@@ -7,9 +7,6 @@ import {
   TrendingUp, 
   TrendingDown,
   Globe, 
-  Plus,
-  ArrowRight,
-  ExternalLink,
   Box
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -36,49 +33,6 @@ const CountUp = ({ end, duration = 1500, prefix = "" }) => {
   return <>{prefix}{count.toLocaleString()}</>;
 };
 
-const WelcomeBanner = () => (
-  <div className="relative overflow-hidden hero-banner-premium p-8 lg:p-10 mb-6 group shadow-2xl shadow-[#030814]/20">
-    <div className="absolute top-0 right-0 w-[60%] h-full opacity-40 pointer-events-none transition-transform duration-1000 group-hover:scale-105">
-      <div className="absolute inset-0 bg-gradient-to-l from-[#030814] via-transparent to-transparent z-10" />
-      <img 
-        src="https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=1200" 
-        alt="Machinery" 
-        className="w-full h-full object-cover mix-blend-luminosity brightness-75"
-      />
-      {/* Abstract World Map Overlay */}
-      <div className="absolute inset-0 opacity-20 mix-blend-overlay animate-pulse-subtle bg-[url('https://www.transparenttextures.com/patterns/world-map.png')] bg-repeat shadow-inner" />
-    </div>
-    
-    <div className="relative z-20 max-w-2xl">
-      <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[9px] font-black uppercase tracking-[0.2em] mb-6 animate-in slide-in-from-left duration-700">
-        <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping" />
-        <Globe size={12} />
-        <span>Global Network Sync Active</span>
-      </div>
-      <h1 className="text-4xl lg:text-5xl font-display font-black text-white mb-4 tracking-tight leading-[1.1]">
-        Swing360 <span className="text-amber-500">Global Command</span>
-      </h1>
-      <p className="text-slate-400 text-base mb-8 leading-relaxed font-semibold max-w-xl">
-        Streamline your heavy equipment ecosystem. Control inventory, track global enquiries, and optimize your Dubai-based export hub.
-      </p>
-      
-      <div className="flex flex-wrap gap-4">
-        <Link to="/admin/add-product" className="px-6 py-2.5 btn-orange-glow rounded-xl font-black text-[13px] flex items-center gap-2.5 group/btn">
-          <Plus size={18} className="transition-transform group-hover/btn:rotate-90 duration-500" />
-          <span>Post New Machinery</span>
-          <ArrowRight size={18} className="transition-transform group-hover/btn:translate-x-2 duration-500" />
-        </Link>
-        <a href="/" target="_blank" rel="noopener noreferrer" className="px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl font-black text-[13px] transition-all backdrop-blur-xl flex items-center gap-2.5 border border-white/10 hover:border-white/30">
-          <ExternalLink size={18} />
-          <span>Public Portal</span>
-        </a>
-      </div>
-    </div>
-    
-    {/* Decorative Elements */}
-    <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
-  </div>
-);
 
 const KpiCard = ({ title, value, icon: Icon, trend, trendUp, prefix = "", color = "amber" }) => (
   <div className="card-premium p-5 group">
@@ -151,7 +105,7 @@ const Dashboard = () => {
 
   return (
     <div className="animate-in fade-in duration-700">
-      <WelcomeBanner />
+
 
       {/* KPI Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
