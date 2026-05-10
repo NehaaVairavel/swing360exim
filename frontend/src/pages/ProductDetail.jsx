@@ -272,14 +272,12 @@ const ProductDetail = () => {
                       transition={{ delay: i * 0.05, duration: 0.35, ease: "easeOut" }}
                       whileHover={{
                         y: -3,
-                        boxShadow: isSpecial
-                          ? "0 8px 24px rgba(245,158,11,0.12)"
-                          : "0 8px 24px rgba(15,23,42,0.08)",
+                        boxShadow: "0 12px 28px -4px rgba(245, 158, 11, 0.15)",
                       }}
-                      className={`flex items-center gap-3 rounded-[18px] p-3.5 cursor-default group transition-colors duration-300 border ${
+                      className={`flex items-center gap-3 rounded-[18px] p-3.5 cursor-default group transition-all duration-300 border ${
                         isSpecial
-                          ? "bg-[#FFFBF0] border-amber-300/50 shadow-[0_2px_8px_rgba(245,158,11,0.06)]"
-                          : "bg-white border-slate-200 shadow-[0_2px_8px_rgba(15,23,42,0.05)] hover:border-slate-300"
+                          ? "bg-[#FFFBF0] border-amber-300/50 shadow-[0_2px_8px_rgba(245,158,11,0.06)] hover:border-amber-400/80"
+                          : "bg-white border-slate-200 shadow-[0_2px_8px_rgba(15,23,42,0.05)] hover:border-amber-300/60"
                       }`}
                     >
                       <div className={`w-9 h-9 rounded-[12px] flex items-center justify-center shrink-0 transition-colors duration-300 ${
