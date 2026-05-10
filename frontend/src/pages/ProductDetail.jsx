@@ -261,21 +261,21 @@ const ProductDetail = () => {
                 </div>
               </motion.div>
 
-              <div className="grid grid-cols-2 gap-2.5 mb-4">
+              <div className="grid grid-cols-2 gap-3 mb-5">
                 {specifications.map((spec, i) => {
-                   const isSpecial = spec.label === "Condition" || spec.label === "Engine Hours";
-                   return (
+                  const isSpecial = spec.label === "Condition" || spec.label === "Engine Hours" || spec.label === "Reference No";
+                  return (
                     <motion.div 
                       key={i} 
-                      whileHover={{ y: -4, shadow: "0 12px 24px rgba(0,0,0,0.06)" }}
-                      className={`flex items-center gap-3 bg-white border border-slate-200/60 rounded-[22px] p-4 transition-all duration-300 group cursor-default shadow-[0_2px_8px_rgba(0,0,0,0.02)] ${isSpecial ? 'bg-amber-50/20 border-amber-500/20 shadow-amber-900/5' : 'hover:border-primary/30 hover:shadow-xl'}`}
+                      whileHover={{ y: -4, shadow: "0 15px 35px rgba(0,0,0,0.06)" }}
+                      className={`flex items-center gap-4 bg-white border border-slate-100 rounded-[24px] p-4 transition-all duration-300 group cursor-default shadow-[0_2px_12px_rgba(0,0,0,0.03)] ${isSpecial ? 'bg-amber-50/15 border-amber-500/20 shadow-sm' : 'hover:border-primary/20 hover:bg-slate-50/30'}`}
                     >
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-colors ${isSpecial ? 'bg-amber-100/60' : 'bg-slate-50 group-hover:bg-primary/5'}`}>
-                        <spec.icon size={18} className={`${isSpecial ? 'text-amber-600' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${isSpecial ? 'bg-amber-100/60 shadow-[0_4px_10px_rgba(245,158,11,0.1)]' : 'bg-slate-50 group-hover:bg-primary/5 group-hover:scale-105'}`}>
+                        <spec.icon size={20} className={`${isSpecial ? 'text-amber-600' : 'text-slate-400 group-hover:text-primary'} transition-colors`} />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="industrial-label mb-0.5">{spec.label}</span>
-                        <span className={`industrial-value leading-none truncate ${isSpecial ? 'text-slate-900' : ''}`}>{spec.value}</span>
+                        <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-widest mb-0.5">{spec.label}</span>
+                        <span className={`text-[15px] font-black text-slate-900 leading-tight truncate ${isSpecial ? 'text-slate-950' : ''}`}>{spec.value}</span>
                       </div>
                     </motion.div>
                   );
