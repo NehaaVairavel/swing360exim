@@ -25,7 +25,7 @@ const staggerContainer = {
 const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-[#F1F5F9] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2">
+    <div className="border-b border-[#F3F4F6] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2">
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-4 h-[54px] rounded-2xl transition-all duration-300 group
@@ -51,10 +51,12 @@ const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaul
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden px-4 pb-4 pt-4"
+            transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+            className="overflow-hidden"
           >
-            {children}
+            <div className="px-4 pb-4 pt-4">
+              {children}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -409,7 +411,7 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar z-30 transition-[top] duration-200 ease-in-out"
+            className="w-full lg:w-[270px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar z-30 transition-[top] duration-200 ease-in-out"
           >
             <div className="products-sidebar flex flex-col overflow-hidden">
               
@@ -429,18 +431,21 @@ const Products = () => {
                   <div className="flex flex-wrap gap-2">
                     {selectedCategories.map(cat => (
                       <div key={cat} className="flex items-center gap-1.5 bg-primary/10 text-primary text-[11px] font-bold px-2 py-1 rounded-md">
+                        <LayoutGrid size={12} className="opacity-70" />
                         {cat}
                         <button onClick={() => setSelectedCategories(selectedCategories.filter(c => c !== cat))} className="hover:text-orange-700"><X size={12} strokeWidth={3} /></button>
                       </div>
                     ))}
                     {selectedBrands.map(brand => (
                       <div key={brand} className="flex items-center gap-1.5 bg-primary/10 text-primary text-[11px] font-bold px-2 py-1 rounded-md">
+                        <Tag size={12} className="opacity-70" />
                         {brand}
                         <button onClick={() => setSelectedBrands(selectedBrands.filter(b => b !== brand))} className="hover:text-orange-700"><X size={12} strokeWidth={3} /></button>
                       </div>
                     ))}
                     {selectedLocations.map(loc => (
                       <div key={loc} className="flex items-center gap-1.5 bg-primary/10 text-primary text-[11px] font-bold px-2 py-1 rounded-md">
+                        <MapPin size={12} className="opacity-70" />
                         {loc}
                         <button onClick={() => setSelectedLocations(selectedLocations.filter(l => l !== loc))} className="hover:text-orange-700"><X size={12} strokeWidth={3} /></button>
                       </div>
@@ -477,13 +482,20 @@ const Products = () => {
                       <label key={brand} className="flex items-center gap-3 cursor-pointer group">
                         <input 
                           type="checkbox"
-                          className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary transition-all"
+                          className="hidden"
                           checked={isSelected}
                           onChange={() => {
                             const next = isSelected ? selectedBrands.filter(b => b !== brand) : [...selectedBrands, brand];
                             setSelectedBrands(next);
                           }}
                         />
+                        <div className={`w-[18px] h-[18px] rounded flex items-center justify-center transition-all duration-200 border-[1.5px] ${isSelected ? 'bg-orange-500 border-orange-500 shadow-sm' : 'bg-white border-slate-300 group-hover:border-orange-400'}`}>
+                          {isSelected && (
+                            <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 20 }} className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={4}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </motion.svg>
+                          )}
+                        </div>
                         <span className={`font-sora text-[14px] font-semibold transition-colors ${isSelected ? 'text-primary' : 'text-slate-500 group-hover:text-primary'}`}>{brand}</span>
                       </label>
                     );
