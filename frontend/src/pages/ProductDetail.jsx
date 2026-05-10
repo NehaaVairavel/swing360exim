@@ -439,22 +439,7 @@ const ProductDetail = () => {
           </div>
         </motion.div>
 
-        {/* trust indicators */}
-        <div className="mt-8 grid md:grid-cols-3 gap-6">
-          {[
-            { icon: Globe, title: "Global Logistics", desc: "Door-to-door delivery across GCC, Africa, and Southeast Asia." },
-            { icon: ShieldCheck, title: "Verified Hub", desc: "Every machine passes a rigorous 150-point technical check." },
-            { icon: CheckCircle2, title: "Documentation", desc: "We handle all export paperwork and customs clearance." }
-          ].map((item, i) => (
-            <div key={i} className="p-7 rounded-[24px] border border-slate-200/60 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02),0_8px_24px_-4px_rgba(0,0,0,0.04)] hover:border-primary/30 hover:shadow-[0_2px_14px_rgba(0,0,0,0.03),0_16px_40px_-8px_rgba(0,0,0,0.08)] transition-all duration-300 group min-h-[220px]">
-              <div className="w-14 h-14 rounded-2xl bg-primary/5 flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-all">
-                <item.icon size={28} />
-              </div>
-              <h3 className="text-[24px] font-extrabold text-heading mb-3 tracking-tight">{item.title}</h3>
-              <p className="text-gray-400 text-[15px] font-medium leading-[1.6]">{item.desc}</p>
-            </div>
-          ))}
-        </div>
+
       </div>
       
       
