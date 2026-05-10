@@ -282,11 +282,6 @@ const ProductDetail = () => {
                 className="grid grid-cols-2 gap-3 mb-5"
               >
                 {specifications.map((spec, i) => {
-                  const isCondition = spec.label === "Condition";
-                  const isEngineHours = spec.label === "Engine Hours";
-                  const isRef = spec.label === "Reference No";
-                  const isSpecial = isCondition || isEngineHours || isRef;
-
                   return (
                     <motion.div
                       key={i}
@@ -295,42 +290,22 @@ const ProductDetail = () => {
                       transition={{ delay: i * 0.05, duration: 0.35, ease: "easeOut" }}
                       whileHover={{
                         y: -3,
-                        boxShadow: isSpecial 
-                          ? "0 12px 28px -4px rgba(245, 158, 11, 0.15)" 
-                          : "0 12px 28px -4px rgba(15, 23, 42, 0.06)",
+                        boxShadow: "0 12px 28px -4px rgba(245, 158, 11, 0.15)",
                       }}
-                      className={`relative flex items-center gap-3 rounded-[18px] p-3.5 cursor-default group transition-all duration-300 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.02),0_1px_3px_rgba(15,23,42,0.03)] border border-slate-200/70 ${
-                        isSpecial
-                          ? "border-l-[3px] border-l-amber-400 hover:border-amber-300/80 hover:shadow-[0_2px_16px_rgba(245,158,11,0.08)]"
-                          : "hover:border-slate-300 hover:shadow-[0_2px_16px_rgba(15,23,42,0.06)]"
-                      }`}
+                      className="relative flex items-center gap-3 rounded-[18px] p-3.5 cursor-default group transition-all duration-300 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.02),0_1px_3px_rgba(15,23,42,0.03)] border border-slate-200/70 border-l-[3px] border-l-amber-400 hover:border-amber-300/80 hover:shadow-[0_2px_16px_rgba(245,158,11,0.08)]"
                     >
                       <div className="absolute inset-0 rounded-[18px] ring-1 ring-inset ring-white/60 pointer-events-none" />
-                      <div className={`w-9 h-9 rounded-[12px] flex items-center justify-center shrink-0 transition-colors duration-300 ${
-                        isSpecial
-                          ? "bg-amber-50 group-hover:bg-amber-100"
-                          : "bg-slate-50 group-hover:bg-slate-100"
-                      }`}>
+                      <div className="w-9 h-9 rounded-[12px] flex items-center justify-center shrink-0 transition-colors duration-300 bg-amber-50 group-hover:bg-amber-100">
                         <spec.icon
                           size={16}
-                          className={`transition-colors duration-300 ${
-                            isSpecial ? "text-amber-600" : "text-slate-400 group-hover:text-slate-600"
-                          }`}
+                          className="transition-colors duration-300 text-amber-600"
                         />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className={`text-[8.5px] uppercase font-bold tracking-[0.2em] mb-1 leading-none ${isCondition ? "text-amber-700/80" : "text-slate-400/80"}`}>
+                        <span className="text-[8.5px] uppercase font-bold tracking-[0.2em] mb-1 leading-none text-amber-700/80">
                           {spec.label}
                         </span>
-                        <span className={`truncate leading-snug ${
-                          isCondition 
-                            ? "font-black text-[15px] text-amber-950 drop-shadow-[0_2px_6px_rgba(245,158,11,0.25)]" 
-                          : isEngineHours 
-                            ? "font-black text-[16px] text-slate-950 tracking-tight font-mono" 
-                          : isRef 
-                            ? "font-extrabold text-[15px] text-slate-900 tracking-widest font-mono" 
-                          : "font-black text-[15px] text-slate-900"
-                        }`}>
+                        <span className="truncate leading-snug font-black text-[15px] text-amber-950 drop-shadow-[0_2px_6px_rgba(245,158,11,0.25)]">
                           {spec.value}
                         </span>
                       </div>
