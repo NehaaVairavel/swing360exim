@@ -76,12 +76,12 @@ const AdminGallery = () => {
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 space-y-8 pb-12">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-3xl font-display font-bold text-[#0F172A] tracking-tight">Media Assets</h1>
+          <h1 className="admin-dashboard-title text-3xl text-[#0F172A]">Media Assets</h1>
           <p className="text-slate-500 font-medium mt-1">Manage brand imagery and operational photos</p>
         </div>
         <button 
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-2 bg-[#0F172A] hover:bg-slate-800 text-white px-8 py-3.5 rounded-2xl font-bold transition-all shadow-lg group"
+          className="flex items-center gap-2 bg-[#0F172A] hover:bg-slate-800 text-white px-8 py-3.5 rounded-2xl admin-btn transition-all shadow-lg group"
         >
           <UploadCloud size={20} className="group-hover:scale-110 transition-transform" />
           <span>Upload New Asset</span>

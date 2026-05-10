@@ -39,7 +39,7 @@ const SidebarItem = ({ icon: Icon, label, path }) => (
     {({ isActive }) => (
       <>
         <Icon size={18} className={`shrink-0 transition-all duration-500 ${isActive ? 'text-amber-500' : 'group-hover:scale-110 group-hover:rotate-3'}`} />
-        <span className="text-[13px] tracking-wide">{label}</span>
+        <span className="admin-sidebar-label tracking-wide">{label}</span>
       </>
     )}
   </NavLink>

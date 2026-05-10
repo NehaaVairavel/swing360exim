@@ -63,7 +63,7 @@ const KpiCard = ({ title, value, icon: Icon, trend, trendUp, prefix = "", color 
     <div>
       <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-2">{title}</p>
       <div className="flex items-end gap-1.5">
-        <h3 className="text-3xl font-display font-black text-[#030814] tracking-tighter">
+        <h3 className="admin-stats-number text-[#030814]">
           <CountUp end={value} prefix={prefix} />
         </h3>
         <span className="text-[10px] font-extrabold text-slate-400 mb-1.5 italic">Live</span>
@@ -120,18 +120,18 @@ const Dashboard = () => {
         <div className="bg-white rounded-3xl border border-slate-200/60 shadow-xl shadow-slate-200/40 overflow-hidden animate-in fade-in slide-in-from-bottom-6 duration-1000">
           <div className="p-6 lg:p-7 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-                <h2 className="text-xl font-display font-black text-[#030814] tracking-tight">Global Inquiries</h2>
+                <h2 className="admin-dashboard-title text-[#030814]">Global Inquiries</h2>
                 <p className="text-slate-400 text-[13px] font-semibold mt-0.5">Live feed of active machinery export requests</p>
             </div>
-            <Link to="/admin/enquiries" className="px-5 py-2 bg-slate-50 text-slate-900 font-extrabold text-[13px] hover:bg-slate-900 hover:text-white rounded-lg transition-all duration-500 shadow-sm border border-slate-200">View Full Log</Link>
+            <Link to="/admin/enquiries" className="px-5 py-2 bg-slate-50 text-slate-900 admin-btn text-[13px] hover:bg-slate-900 hover:text-white rounded-lg transition-all duration-500 shadow-sm border border-slate-200">View Full Log</Link>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-100">
-                  <th className="px-8 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">Client / Origin</th>
-                  <th className="px-8 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400">Machinery Requested</th>
-                  <th className="px-8 py-4 text-[9px] font-black uppercase tracking-widest text-slate-400 text-center">Lifecycle</th>
+                  <th className="px-8 py-4 admin-table-header text-slate-400">Client / Origin</th>
+                  <th className="px-8 py-4 admin-table-header text-slate-400">Machinery Requested</th>
+                  <th className="px-8 py-4 admin-table-header text-slate-400 text-center">Lifecycle</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">

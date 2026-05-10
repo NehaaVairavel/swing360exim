@@ -30,7 +30,7 @@ const TabButton = ({ active, label, icon: Icon, onClick }) => (
 const Section = ({ title, description, children }) => (
   <div className="bg-white rounded-[2rem] p-8 border border-slate-200 shadow-sm animate-in fade-in slide-in-from-right-4 duration-500">
     <div className="mb-8 pb-6 border-b border-slate-100">
-      <h2 className="text-2xl font-display font-bold text-[#0F172A]">{title}</h2>
+      <h2 className="admin-dashboard-title text-2xl text-[#0F172A]">{title}</h2>
       <p className="text-slate-500 text-sm mt-1 font-medium">{description}</p>
     </div>
     {children}
@@ -102,7 +102,7 @@ const AdminSettings = () => {
       <div className="flex flex-col lg:flex-row gap-12 max-w-7xl mx-auto">
         <div className="lg:w-72 space-y-2 shrink-0">
           <div className="mb-8 px-2">
-            <h1 className="text-3xl font-display font-bold text-[#0F172A] tracking-tight">Settings</h1>
+            <h1 className="admin-dashboard-title text-3xl text-[#0F172A]">Settings</h1>
             <p className="text-slate-500 text-sm mt-1 font-medium">Control center configuration</p>
           </div>
           
@@ -129,7 +129,7 @@ const AdminSettings = () => {
                   <Input label="WhatsApp Number" name="whatsapp" value={settings.whatsapp} onChange={handleInputChange} icon={MessageCircle} />
                 </div>
                 <div className="mt-8 pt-8 border-t border-slate-100 flex justify-end">
-                   <button type="submit" className="bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg">Save Changes</button>
+                   <button type="submit" className="bg-slate-900 text-white px-8 py-3.5 rounded-2xl admin-btn shadow-lg">Save Changes</button>
                 </div>
               </form>
             </Section>
@@ -148,7 +148,7 @@ const AdminSettings = () => {
                 ></textarea>
               </div>
               <div className="mt-8 pt-8 border-t border-slate-100 flex justify-end">
-                 <button onClick={handleSave} className="bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-bold">Save Website Config</button>
+                 <button onClick={handleSave} className="bg-slate-900 text-white px-8 py-3.5 rounded-2xl admin-btn">Save Website Config</button>
               </div>
             </Section>
           )}
@@ -161,7 +161,7 @@ const AdminSettings = () => {
                 <Input label="Confirm New Password" type="password" icon={Lock} />
               </div>
               <div className="mt-8 pt-8 border-t border-slate-100 flex justify-end">
-                 <button onClick={handleSave} className="bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-bold">Update Credentials</button>
+                 <button onClick={handleSave} className="bg-slate-900 text-white px-8 py-3.5 rounded-2xl admin-btn">Update Credentials</button>
               </div>
             </Section>
           )}

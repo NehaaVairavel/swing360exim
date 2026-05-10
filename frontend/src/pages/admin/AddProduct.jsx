@@ -168,7 +168,7 @@ const AddProduct = () => {
             <ArrowLeft size={18} />
           </button>
           <div>
-            <h1 className="text-2xl font-display font-bold text-[#0F172A] tracking-tight">Add New Equipment</h1>
+            <h1 className="admin-dashboard-title text-2xl text-[#0F172A]">Add New Equipment</h1>
             <p className="text-slate-500 text-sm font-medium">Create a premium listing for the global market</p>
           </div>
         </div>
@@ -177,7 +177,7 @@ const AddProduct = () => {
           <button 
             disabled={submitting}
             onClick={handleSubmit}
-            className="px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2 disabled:opacity-50"
+            className="px-8 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl admin-btn transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2 disabled:opacity-50"
           >
             <Send size={18} />
             <span>{submitting ? "Publishing..." : "Publish Product"}</span>

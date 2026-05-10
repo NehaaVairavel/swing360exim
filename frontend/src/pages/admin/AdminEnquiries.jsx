@@ -71,10 +71,10 @@ const AdminEnquiries = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-3xl font-display font-bold text-[#0F172A] tracking-tight">Client Enquiries</h1>
+          <h1 className="admin-dashboard-title text-3xl text-[#0F172A]">Client Enquiries</h1>
           <p className="text-slate-500 font-medium mt-1">Manage global machinery requests and leads</p>
         </div>
-        <button className="flex items-center gap-2 bg-white border border-slate-200 text-[#0F172A] px-6 py-3 rounded-2xl font-bold transition-all shadow-sm">
+        <button className="flex items-center gap-2 bg-white border border-slate-200 text-[#0F172A] px-6 py-3 rounded-2xl admin-btn transition-all shadow-sm">
           <Download size={20} className="text-amber-500" />
           <span>Export CSV</span>
         </button>
@@ -111,7 +111,7 @@ const AdminEnquiries = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse whitespace-nowrap">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-400 text-[10px] uppercase tracking-widest font-black">
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-400 admin-table-header">
                 <th className="p-6 px-8">Client</th>
                 <th className="p-6">Contact Info</th>
                 <th className="p-6">Interested Product</th>

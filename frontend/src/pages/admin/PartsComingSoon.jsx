@@ -43,7 +43,7 @@ const PartsComingSoon = () => {
       </div>
 
       <div className="text-center max-w-2xl mb-12">
-        <h1 className="text-4xl lg:text-5xl font-display font-bold text-[#0F172A] mb-4 tracking-tight">
+        <h1 className="admin-dashboard-title text-4xl lg:text-5xl text-[#0F172A] mb-4">
           Parts Marketplace <span className="text-amber-500">Launching Soon</span>
         </h1>
         <p className="text-slate-500 text-lg leading-relaxed">
@@ -86,7 +86,7 @@ const PartsComingSoon = () => {
           />
           <button 
             type="submit"
-            className="bg-[#0F172A] hover:bg-slate-800 text-white px-6 py-4 text-sm font-bold flex items-center gap-2 transition-all"
+            className="bg-[#0F172A] hover:bg-slate-800 text-white px-6 py-4 text-sm admin-btn flex items-center gap-2 transition-all"
           >
             Notify Me
             <ArrowRight size={16} />

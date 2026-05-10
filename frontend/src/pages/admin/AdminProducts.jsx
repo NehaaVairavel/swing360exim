@@ -97,12 +97,12 @@ const AdminProducts = () => {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>
-          <h1 className="text-3xl font-display font-bold text-[#0F172A] tracking-tight">Products Management</h1>
+          <h1 className="admin-dashboard-title text-3xl text-[#0F172A]">Products Management</h1>
           <p className="text-slate-500 font-medium mt-1">Total Products: <span className="font-bold text-amber-500">{products.length}</span></p>
         </div>
         <Link 
           to="/admin/add-product" 
-          className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
+          className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded-2xl admin-btn transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
         >
           <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
           <span>Add New Machine</span>
