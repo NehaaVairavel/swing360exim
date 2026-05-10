@@ -398,15 +398,15 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-8 md:px-12 lg:px-16">
-        <div className="flex flex-col lg:flex-row gap-10 items-start mt-4">
+      <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-6 lg:px-8">
+        <div className="flex flex-col lg:flex-row gap-5 items-start mt-4">
           
           <motion.aside 
             initial={{ opacity: 0, x: -15 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[320px] shrink-0 lg:sticky lg:top-[100px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30 pr-2"
+            className="w-full lg:w-[270px] shrink-0 lg:sticky lg:top-[100px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto hide-scrollbar z-30"
           >
             <div className="bg-white/95 backdrop-blur-[16px] rounded-[28px] shadow-[0_25px_60px_rgba(0,0,0,0.1)] border border-white/60 flex flex-col overflow-hidden products-sidebar">
               
