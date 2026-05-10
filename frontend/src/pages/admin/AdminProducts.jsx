@@ -102,13 +102,6 @@ const AdminProducts = () => {
       <div className="admin-page-header">
         <div>
           <h1 className="admin-page-title">Products Management</h1>
-          <p className="admin-page-subtitle">
-            Total inventory:{" "}
-            <span style={{ color: "#F5B301", fontWeight: 700 }}>
-              {products.length}
-            </span>{" "}
-            machines
-          </p>
         </div>
         <Link
           to="/admin/add-product"
@@ -120,25 +113,6 @@ const AdminProducts = () => {
         </Link>
       </div>
 
-      {/* ── Top Analytics Strip ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="admin-card p-4 flex flex-col justify-center items-center text-center">
-          <span className="admin-label-small text-slate-500 mb-1">Total Machines</span>
-          <span className="font-display font-bold text-3xl text-slate-800">{products.length}</span>
-        </div>
-        <div className="admin-card p-4 flex flex-col justify-center items-center text-center">
-          <span className="admin-label-small text-slate-500 mb-1">Active Listings</span>
-          <span className="font-display font-bold text-3xl text-green-600">
-            {products.filter(p => p.availability !== 'sold').length}
-          </span>
-        </div>
-        <div className="admin-card p-4 flex flex-col justify-center items-center text-center">
-          <span className="admin-label-small text-slate-500 mb-1">Sold</span>
-          <span className="font-display font-bold text-3xl text-slate-800">
-            {products.filter(p => p.availability === 'sold').length}
-          </span>
-        </div>
-      </div>
 
       {/* ── Filter Bar ── */}
       <div className="admin-filter-bar mb-4">
