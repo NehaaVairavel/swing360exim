@@ -302,10 +302,10 @@ const ProductDetail = () => {
                         />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="text-[8.5px] uppercase font-bold tracking-[0.2em] mb-1 leading-none text-amber-700/80">
+                        <span className="text-[8.5px] uppercase font-bold tracking-[0.2em] mb-1 leading-none text-slate-400/80">
                           {spec.label}
                         </span>
-                        <span className="truncate leading-snug font-black text-[15px] text-amber-950 drop-shadow-[0_2px_6px_rgba(245,158,11,0.25)]">
+                        <span className="truncate leading-snug font-black text-[16px] text-slate-950 tracking-tight font-mono">
                           {spec.value}
                         </span>
                       </div>
