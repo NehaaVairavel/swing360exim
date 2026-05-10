@@ -387,9 +387,8 @@ def get_products():
         
     products = serialize_list(products_col.find(query).sort("_id", -1))
     resp = jsonify(products)
-    # Safe caching: allow short-lived caching to speed up repeat navigations.
-    # Mutations broadcast realtime events + frontend refetch, so a brief cache is fine.
-    resp.headers["Cache-Control"] = "public, max-age=10, stale-while-revalidate=30"
+    # Disable HTTP caching for this endpoint to ensure real-time socket refetches always hit the database
+    resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
     return resp, 200
 
 
