@@ -14,7 +14,17 @@ const itemVariant = {
 
 const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
   const navigate = useNavigate();
-  const isSold = product.availability === "sold";
+  const normalizeAvailability = (value) => {
+    const v = (value ?? "").toString().trim().toLowerCase();
+    if (v === "sold") return "sold";
+    if (v === "coming_soon" || v === "coming soon") return "coming_soon";
+    return "in_stock";
+  };
+  const status = normalizeAvailability(product.availability);
+  const isSold = status === "sold";
+  const isComingSoon = status === "coming_soon";
+  const isInStock = status === "in_stock";
+  
   const refNumber = product.reference_number || product.reference_no || `EXC-000`;
   const { formatPrice } = useCurrency();
   const priceStr = cleanPrice(product.price);
@@ -45,27 +55,31 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
           />
         </div>
 
-        {/* Overlay Badges */}
-        {!isSold && (
-          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-20">
-            <div className="px-2.5 py-1 bg-white/90 backdrop-blur-md text-heading font-black text-[9px] uppercase tracking-widest rounded-lg shadow-sm border border-slate-200/50 flex items-center gap-1.5">
-              <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-              Verified
+        {/* Unified Status Badges */}
+        <div className="absolute top-3 right-3 z-20">
+          {isInStock && (
+            <div className="bg-gradient-to-r from-green-500 to-green-600 text-white font-black text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-full shadow-md border border-green-400/20">
+              In Stock
             </div>
-            <div className="px-2.5 py-1 bg-primary text-white font-black text-[9px] uppercase tracking-widest rounded-lg shadow-lg shadow-primary/20 flex items-center gap-1.5">
-              <RotateCcw size={10} className="rotate-180" />
-              Ready
+          )}
+          {isComingSoon && (
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-black text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-full shadow-md border border-orange-400/20">
+              Coming Soon
             </div>
-          </div>
-        )}
-
-        {isSold && (
-          <>
-            <div className="absolute inset-0 bg-slate-900/20 backdrop-grayscale-[0.8] z-10 pointer-events-none" />
-            <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-700 text-white font-black text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-full shadow-md z-20 border border-red-400/20">
+          )}
+          {isSold && (
+            <div className="bg-gradient-to-r from-red-500 to-red-700 text-white font-black text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-full shadow-md border border-red-400/20">
               SOLD
             </div>
-          </>
+          )}
+        </div>
+
+        {/* Overlays */}
+        {isSold && (
+          <div className="absolute inset-0 bg-slate-900/20 backdrop-grayscale-[0.8] z-10 pointer-events-none" />
+        )}
+        {isComingSoon && (
+          <div className="absolute inset-0 bg-slate-900/10 z-10 pointer-events-none" />
         )}
       </div>
       
@@ -118,6 +132,19 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
               <button disabled className="flex items-center justify-center h-[38px] rounded-xl bg-slate-100 text-slate-400 font-bold text-[11px] uppercase tracking-widest cursor-not-allowed opacity-60">
                 Details
               </button>
+              <button disabled className="flex items-center justify-center gap-2 h-[38px] rounded-xl bg-slate-100 text-slate-400 font-bold text-[11px] uppercase tracking-widest cursor-not-allowed opacity-60">
+                <MessageCircle size={14} />
+                Enquire
+              </button>
+            </div>
+          ) : isComingSoon ? (
+            <div className="grid grid-cols-2 gap-2">
+              <Link 
+                to={`/product/${product.id}`}
+                className="flex items-center justify-center h-[38px] rounded-xl border-2 border-[#0F172A] text-[#0F172A] font-bold text-[11px] uppercase tracking-widest hover:bg-[#0F172A] hover:text-white transition-all"
+              >
+                Details
+              </Link>
               <button disabled className="flex items-center justify-center gap-2 h-[38px] rounded-xl bg-slate-100 text-slate-400 font-bold text-[11px] uppercase tracking-widest cursor-not-allowed opacity-60">
                 <MessageCircle size={14} />
                 Enquire
