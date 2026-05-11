@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import productService from "@/services/productService";
 import {
   Search, Plus, Trash2, LayoutGrid, List, SlidersHorizontal, X, CheckSquare,
+  Edit, Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
