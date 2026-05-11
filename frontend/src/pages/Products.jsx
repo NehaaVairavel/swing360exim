@@ -675,15 +675,16 @@ const Products = () => {
 
                 {/* Previously Sold Units */}
                 {activeStatus === "All" && availableProducts.length > 0 && soldProducts.length > 0 && (
-                  <div className="mt-10 flex flex-col items-center text-center">
+                  <div className="mt-8 flex flex-col items-center text-center">
                     <div className="flex items-center justify-center w-full mb-1">
                       <div className="h-[1px] bg-slate-200/80 flex-1 max-w-[120px] md:max-w-[250px]" />
-                      <h2 className="text-2xl md:text-3xl font-display font-black text-heading tracking-tight mx-5">
+                      <h2 className="text-3xl md:text-4xl font-display font-black text-heading tracking-tight mx-5 relative">
                         Our <span className="text-gradient drop-shadow-sm">Sold Machinery</span> Fleet
+                        <div className="absolute inset-0 bg-primary/5 blur-3xl -z-10 rounded-full" />
                       </h2>
                       <div className="h-[1px] bg-slate-200/80 flex-1 max-w-[120px] md:max-w-[250px]" />
                     </div>
-                    <p className="text-slate-400 font-medium text-[13px] mb-6">Machines successfully exported to global buyers.</p>
+                    <p className="text-slate-400 text-[13px] max-w-[520px] mx-auto mt-1 mb-4 font-semibold">Machines successfully exported to global buyers.</p>
                   </div>
                 )}
 
