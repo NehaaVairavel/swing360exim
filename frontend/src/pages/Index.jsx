@@ -9,6 +9,7 @@ import BrandCarousel from "@/components/BrandCarousel";
 import productService from "@/services/productService";
 import settingsService from "@/services/settingsService";
 import { socket } from "@/socket";
+import { MACHINERY_CATEGORIES } from "@/constants/categories";
 import heroBg from "@/assets/hero-bg.jpg";
 import excavatorImg from "@/assets/category/excavator.jpg";
 import backhoeImg from "@/assets/category/backhoe.jpg";
@@ -29,18 +30,23 @@ const stats = [
   { value: 6, suffix: "", label: "Countries Served", icon: Globe },
 ];
 
-const categoriesData = [
-  { name: "Excavators", image: excavatorImg },
-  { name: "Backhoe Loaders", image: backhoeImg },
-  { name: "Dozers", image: dozerImg },
-  { name: "Wheel Loaders", image: wheelLoaderImg },
-  { name: "Graders", image: graderImg },
-  { name: "Rollers", image: rollerImg },
-  { name: "Skid Steer", image: skidSteerImg },
-  { name: "Buckets", image: bucketsImg },
-  { name: "Material Handlers", image: materialHandlerImg },
-  { name: "Others", image: othersImg },
-];
+const categoryImageMap = {
+  "Excavators": excavatorImg,
+  "Backhoe Loaders": backhoeImg,
+  "Dozers": dozerImg,
+  "Wheel Loaders": wheelLoaderImg,
+  "Graders": graderImg,
+  "Rollers": rollerImg,
+  "Skid Steer": skidSteerImg,
+  "Buckets": bucketsImg,
+  "Material Handlers": materialHandlerImg,
+  "Others": othersImg
+};
+
+const categoriesData = MACHINERY_CATEGORIES.map(name => ({
+  name,
+  image: categoryImageMap[name] || othersImg
+}));
 
 const markets = [
   { name: "UAE", code: "ae" },

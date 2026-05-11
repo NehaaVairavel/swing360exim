@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, Eye, Send, LayoutGrid, Tag, MapPin, Clock, DollarSign, CheckCircle2, X } from "lucide-react";
+import { MACHINERY_CATEGORIES } from "@/constants/categories";
 import { AllIcon, ExcavatorIcon, BackhoeIcon, DozerIcon, WheelLoaderIcon, GraderIcon, RollerIcon, SkidSteerIcon, BucketIcon, MaterialHandlerIcon, OtherIcon } from "@/components/products/MachineIcons";
 import productService from "@/services/productService";
 import { socket } from "@/socket";
@@ -82,19 +83,7 @@ const titleVariants = {
 };
 
 
-const MASTER_CATEGORIES = [
-  "All",
-  "Excavators",
-  "Backhoe Loaders",
-  "Dozers",
-  "Wheel Loaders",
-  "Graders",
-  "Rollers",
-  "Skid Steer",
-  "Buckets",
-  "Material Handlers",
-  "Others"
-];
+const MASTER_CATEGORIES = ["All", ...MACHINERY_CATEGORIES];
 
 const CATEGORY_ICONS = {
   "All": AllIcon,

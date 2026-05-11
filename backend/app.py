@@ -201,12 +201,10 @@ CATEGORY_CODES = {
     "Skid Steer": "SKD",
     "Buckets": "BKT",
     "Material Handlers": "MTH",
-    "Forklifts": "FLT",
-    "Generators": "GEN",
-    "Cranes": "CRN",
-    "Others": "OTH",
-    "Other": "OTH"
+    "Others": "OTH"
 }
+
+VALID_CATEGORIES = list(CATEGORY_CODES.keys())
 
 def get_next_reference(category_name):
     # Normalize category name to match map
@@ -436,11 +434,7 @@ def get_product_by_ref(ref_number):
 
 @app.route("/api/categories", methods=["GET"])
 def get_categories():
-    cats = [c for c in products_col.distinct("category") if c]
-    if not cats:
-        cats = ["Excavators", "Backhoe Loaders", "Dozers", "Wheel Loaders",
-                "Graders", "Rollers", "Skid Steer", "Buckets", "Material Handlers", "Others"]
-    return jsonify(cats), 200
+    return jsonify(VALID_CATEGORIES), 200
 
 
 @app.route("/api/products", methods=["POST"])
@@ -453,6 +447,9 @@ def create_product():
     
     # Generate Automatic Reference Number
     category = data.get("category", "Others")
+    if category not in VALID_CATEGORIES:
+        category = "Others"
+    data["category"] = category
     data["reference_no"] = get_next_reference(category)
     
     result = products_col.insert_one(data)
@@ -471,6 +468,10 @@ def update_product(product_id):
     data = request.get_json(force=True, silent=True) or {}
     data.pop("id", None)
     data.pop("_id", None)
+    
+    if "category" in data and data["category"] not in VALID_CATEGORIES:
+        data["category"] = "Others"
+        
     result = products_col.update_one({"_id": ObjectId(product_id)}, {"$set": data})
     if result.matched_count == 0:
         return jsonify({"error": "Product not found"}), 404

@@ -188,16 +188,6 @@ export const products = [
   }
 ];
 
-export const categories = [
-  "All",
-  "Excavators",
-  "Backhoe Loaders",
-  "Dozers", 
-  "Wheel Loaders",
-  "Graders",
-  "Rollers",
-  "Skid Steer",
-  "Buckets",
-  "Material Handlers",
-  "Others"
-];
+import { MACHINERY_CATEGORIES } from "@/constants/categories";
+
+export const categories = ["All", ...MACHINERY_CATEGORIES];

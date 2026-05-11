@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
+import { MACHINERY_CATEGORIES } from "@/constants/categories";
 import ProductCard from "@/components/admin/ProductCard";
 import { cleanPrice } from "@/utils/priceFormatter";
 import { motion, AnimatePresence } from "framer-motion";
@@ -108,19 +109,7 @@ const AdminProducts = () => {
     }
   };
 
-  const categories = [
-    "All",
-    "Excavators",
-    "Backhoe Loaders",
-    "Dozers",
-    "Wheel Loaders",
-    "Graders",
-    "Rollers",
-    "Skid Steer",
-    "Buckets",
-    "Material Handlers",
-    "Others"
-  ];
+  const categories = ["All", ...MACHINERY_CATEGORIES];
 
   if (loading)
     return (

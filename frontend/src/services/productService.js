@@ -1,9 +1,7 @@
 import api from '../api/api';
+import { MACHINERY_CATEGORIES } from '../constants/categories';
 
-const FALLBACK_CATEGORIES = [
-  "Excavators", "Backhoe Loaders", "Dozers", "Wheel Loaders",
-  "Graders", "Rollers", "Skid Steer", "Buckets", "Material Handlers", "Others"
-];
+const FALLBACK_CATEGORIES = MACHINERY_CATEGORIES;
 
 const productService = {
   getAll: async (params = {}) => {
