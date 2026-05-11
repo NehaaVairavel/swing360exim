@@ -43,7 +43,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
 
   if (isSpacious) {
     return (
-      <div className="flex items-center gap-3 md:gap-4 bg-white px-3 py-1.5 rounded-2xl border border-slate-200 shadow-sm relative shrink-0">
+      <div className="flex items-center gap-3 md:gap-4 bg-white px-3 h-[48px] rounded-[14px] border border-slate-200 shadow-sm relative shrink-0">
         {currencies.map((curr) => {
           const isActive = currency.code === curr.code;
           return (
@@ -51,7 +51,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
               key={curr.code}
               onClick={() => setCurrency(curr)}
               className={`
-                relative z-10 min-w-[58px] px-3 h-[42px] flex items-center justify-center gap-2 rounded-xl transition-all duration-300
+                relative z-10 min-w-[58px] px-3 h-[40px] flex items-center justify-center gap-2 rounded-[10px] transition-all duration-300
                 text-[13px] font-bold tracking-wide
                 ${isActive ? 'text-white' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}
               `}
@@ -62,7 +62,7 @@ const CurrencyToggle = ({ variant = 'default' }) => {
               {isActive && (
                 <motion.div
                   layoutId={`activeCurrency-${variant}`}
-                  className="absolute inset-0 bg-primary rounded-xl -z-10 shadow-md"
+                  className="absolute inset-0 bg-primary rounded-[10px] -z-10 shadow-md"
                   transition={{ type: 'spring', bounce: 0.1, duration: 0.4 }}
                 />
               )}

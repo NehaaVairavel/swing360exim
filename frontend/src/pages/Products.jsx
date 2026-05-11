@@ -352,8 +352,14 @@ const Products = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 rounded-[32px] shadow-xl border border-orange-300/30 p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0 mx-auto"
-            style={{ width: 'calc(100% - 48px)', maxWidth: '1650px' }}
+            className="rounded-[18px] p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[minmax(420px,1.8fr)_220px_auto_140px] items-center gap-4 transition-all my-0 mx-auto"
+            style={{ 
+              width: 'calc(100% - 48px)', 
+              maxWidth: '1650px',
+              background: 'linear-gradient(180deg, #FFFFFF 0%, #FFF9F2 100%)',
+              border: '2px solid #FF8A00',
+              boxShadow: '0 10px 30px rgba(255,138,0,0.10)'
+            }}
           >
             {/* 1. COMPACT LUXURY SEARCH BAR (White Card) */}
             <div className="relative group w-full h-[48px] transition-all duration-300">
@@ -365,7 +371,7 @@ const Products = () => {
                 placeholder="Search excavators, CAT 320D..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-full pl-12 pr-4 bg-white border border-transparent rounded-2xl text-[15px] font-semibold text-heading placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-white/20 transition-all shadow-md"
+                className="w-full h-full pl-12 pr-4 bg-white border border-slate-200 rounded-[14px] text-[15px] font-semibold text-heading placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all shadow-sm"
               />
             </div>
 
@@ -377,7 +383,7 @@ const Products = () => {
               <select 
                 value={activeSort}
                 onChange={(e) => setActiveSort(e.target.value)}
-                className="w-full pl-4 pr-10 pt-3 h-full bg-white border border-transparent rounded-2xl text-[16px] font-bold text-heading appearance-none outline-none focus:ring-4 focus:ring-white/20 transition-all cursor-pointer shadow-md"
+                className="w-full pl-4 pr-10 pt-3 h-full bg-white border border-slate-200 rounded-[14px] text-[16px] font-bold text-heading appearance-none outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all cursor-pointer shadow-sm"
               >
                 {["Newest", "Price Low to High", "Price High to Low", "Hours Low to High", "Hours High to Low", "Brand A-Z"].map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -392,7 +398,7 @@ const Products = () => {
             {/* 4. RESET BUTTON (White Card) */}
             <button 
               onClick={handleReset}
-              className="h-[48px] w-[140px] bg-white text-orange-600 rounded-2xl font-black text-[12px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-2 shadow-md active:scale-95 mx-auto xl:mx-0 border border-transparent"
+              className="h-[48px] w-[140px] bg-white text-orange-600 rounded-[14px] font-black text-[12px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 mx-auto xl:mx-0 border border-slate-200"
             >
               <RotateCcw size={14} />
               <span>Reset</span>
