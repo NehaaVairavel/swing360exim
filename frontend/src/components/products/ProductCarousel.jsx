@@ -6,12 +6,13 @@ import { Link } from 'react-router-dom';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import logo from '@/assets/logo.png';
 
 const ImageWithRetry = ({ src, alt, isSold }) => {
   const [imgSrc, setImgSrc] = useState(src);
   const [hasRetried, setHasRetried] = useState(false);
   const [error, setError] = useState(false);
-  const fallbackImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
+  const fallbackImage = logo;
 
   useEffect(() => {
     setImgSrc(src);
@@ -45,7 +46,7 @@ const ImageWithRetry = ({ src, alt, isSold }) => {
 
 const ProductCarousel = ({ images, image, photo, isSold, name, id, updatedAt }) => {
   // Priority: 1. image, 2. first item of images array, 3. photo field, 4. fallback machinery image
-  const fallbackMachineImage = "https://images.unsplash.com/photo-1541888009187-54b38dcd2b31?auto=format&fit=crop&q=80&w=800";
+  const fallbackMachineImage = logo;
   
   let displayImages = [];
   

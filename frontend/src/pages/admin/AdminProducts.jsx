@@ -18,7 +18,7 @@ import "@/styles/admin.css";
 import "@/styles/cards.css";
 
 const AdminProducts = () => {
-  const { products, loading, error } = useProducts();
+  const { products, loading, error, optimisticDelete } = useProducts();
   const queryClient = useQueryClient();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,7 +48,8 @@ const AdminProducts = () => {
   const handleDelete = async (id) => {
     try {
       await productService.delete(id);
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      // Instant UI sync without refetch
+      optimisticDelete(id);
       setSelectedIds(prev => { const n = new Set(prev); n.delete(id); return n; });
       toast.success("Machine deleted successfully");
     } catch (error) {
@@ -62,7 +63,7 @@ const AdminProducts = () => {
     const ids = [...selectedIds];
     try {
       await Promise.all(ids.map(id => productService.delete(id)));
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      ids.forEach((id) => optimisticDelete(id));
       setSelectedIds(new Set());
       toast.success(`${ids.length} machine${ids.length > 1 ? "s" : ""} deleted`);
     } catch { toast.error("Bulk delete failed"); }

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
+import { useProducts } from "@/context/ProductContext";
 import "@/styles/admin.css";
 
 /* ── Status badge preview ── */
@@ -175,6 +176,7 @@ const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { optimisticUpdate } = useProducts();
   const fileInputRef = useRef(null);
 
   const [loading, setLoading] = useState(true);
@@ -302,7 +304,9 @@ const EditProduct = () => {
         updated_at: new Date().toISOString(),
       };
 
-      await productService.update(id, payload);
+      const updated = await productService.update(id, payload);
+      // Instant UI sync across all subscribed pages
+      if (updated?.id) optimisticUpdate(updated);
       queryClient.invalidateQueries({ queryKey: ["products"] });
       queryClient.invalidateQueries({ queryKey: ["products", "admin"] });
       toast.success("Product updated successfully!");

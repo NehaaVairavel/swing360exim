@@ -443,7 +443,9 @@ def create_product():
     data = request.get_json(force=True, silent=True) or {}
     if not data:
         return jsonify({"error": "No data provided"}), 400
-    data["created_at"] = datetime.utcnow().isoformat()
+    now = datetime.utcnow()
+    data["created_at"] = now.isoformat()
+    data["updated_at"] = now
     
     # Validate Year
     year = data.get("year")
@@ -464,13 +466,13 @@ def create_product():
     data["reference_no"] = get_next_reference(category)
     
     result = products_col.insert_one(data)
-    data["id"] = str(result.inserted_id)
-    data.pop("_id", None)
-    
-    # Broadcast real-time update
-    socketio.emit("products_updated", {"type": "create", "product": data})
-    
-    return jsonify(data), 201
+    product = products_col.find_one({"_id": result.inserted_id})
+    serialized = serialize(product)
+
+    # Broadcast real-time update with consistent serialized product shape
+    socketio.emit("products_updated", {"type": "create", "id": serialized.get("id"), "product": serialized})
+
+    return jsonify(serialized), 201
 
 
 @app.route("/api/products/<product_id>", methods=["PUT"])

@@ -27,7 +27,8 @@ const productService = {
 
   update: async (id, data) => {
     const response = await api.put(`/products/${id}`, data);
-    return response.data;
+    // Backend may return either `{ message, product }` or the product directly
+    return response.data?.product ?? response.data;
   },
 
   delete: async (id) => {

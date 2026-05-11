@@ -8,6 +8,7 @@ import { cleanPrice } from '@/utils/priceFormatter';
 import { useCurrency } from '@/context/CurrencyContext';
 import productService from '@/services/productService';
 import { useQueryClient } from '@tanstack/react-query';
+import { useProducts } from '@/context/ProductContext';
 import '@/styles/cards.css';
 
 const itemVariant = {
@@ -46,6 +47,7 @@ const StatusSelector = ({ productId, current }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
+  const { optimisticUpdate } = useProducts();
   const cfg = STATUS_CFG[current] || STATUS_CFG.in_stock;
   const options = Object.entries(STATUS_CFG).map(([value, c]) => ({ value, ...c }));
 
@@ -54,7 +56,8 @@ const StatusSelector = ({ productId, current }) => {
     if (value === current) return;
     setLoading(true);
     try {
-      await productService.update(productId, { availability: value });
+      const updated = await productService.update(productId, { availability: value, updated_at: new Date().toISOString() });
+      if (updated?.id) optimisticUpdate(updated);
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success(`Status → ${STATUS_CFG[value]?.label}`);
     } catch {

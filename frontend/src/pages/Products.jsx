@@ -191,8 +191,10 @@ const Products = () => {
       
       return matchesCategory && matchesSearch && matchesBrand && matchesLocation && matchesCondition && matchesStatus && matchesHours && matchesPrice;
     }).sort((a, b) => {
-      if (activeSort === "Newest") return new Date(b.createdAt) - new Date(a.createdAt);
-      if (activeSort === "Oldest") return new Date(a.createdAt) - new Date(b.createdAt);
+      const aCreated = new Date(a.created_at || a.createdAt || a.updated_at || a.updatedAt || 0).getTime();
+      const bCreated = new Date(b.created_at || b.createdAt || b.updated_at || b.updatedAt || 0).getTime();
+      if (activeSort === "Newest") return bCreated - aCreated;
+      if (activeSort === "Oldest") return aCreated - bCreated;
       if (activeSort === "Price Low to High") {
         const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
         const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;

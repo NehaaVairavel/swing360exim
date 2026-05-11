@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
+import { useProducts } from "@/context/ProductContext";
 import "@/styles/admin.css";
 
 /* ── Status badge preview ── */
@@ -172,6 +173,7 @@ const PreviewCard = ({ formData, images }) => {
 const AddProduct = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { optimisticCreate } = useProducts();
   const fileInputRef = useRef(null);
   const [images, setImages] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
@@ -280,8 +282,9 @@ const AddProduct = () => {
         images: finalImageUrls,
         image: finalImageUrls[0] || null,
       };
-      await productService.create(payload);
-      queryClient.invalidateQueries({ queryKey: ["products"] });
+      const created = await productService.create(payload);
+      // Instant UI sync (admin + public) without waiting for sockets/refetch
+      optimisticCreate(created);
       localStorage.removeItem("swing360_draft");
       setIsDirty(false);
       toast.success("Equipment published successfully!");
