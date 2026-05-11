@@ -204,23 +204,37 @@ const Products = () => {
     const filteredProducts = products.filter((product) => {
       const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
       const matchesSearch = 
-        (product.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (product.brand || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (product.model || "").toLowerCase().includes(searchQuery.toLowerCase());
+        !searchQuery || [
+          product.name,
+          product.brand,
+          product.model,
+          product.category,
+          product.id,
+          product.reference_number,
+          product.reference_no,
+          product.location
+        ].some(val => (val || "").toString().toLowerCase().includes(searchQuery.toLowerCase()));
       
       const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
       const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(product.location);
-      const matchesCondition = selectedCondition === "All" || product.condition === selectedCondition;
+      const pStatus = normalizeAvailability(product.availability);
+      const matchesStatus = 
+        activeStatus === "All" || 
+        (activeStatus === "Available" && pStatus === "in_stock") || 
+        (activeStatus === "Sold" && pStatus === "sold") || 
+        (activeStatus === "Coming Soon" && pStatus === "coming_soon");
       
       const hours = parseInt(product.engine_hours) || 0;
-      const matchesHours = hours <= engineHours;
+      const matchesHours = engineHours >= 15000 ? true : hours <= engineHours;
       
       const price = parseFloat(cleanPrice(product.price).replace(/[^0-9.]/g, '')) || 0;
-      const matchesPrice = price >= minPrice && price <= maxPrice;
+      const effectiveMaxPrice = maxPrice > 0 ? maxPrice : Infinity;
+      const matchesPrice = price >= minPrice && price <= effectiveMaxPrice;
       
-      return matchesCategory && matchesSearch && matchesBrand && matchesLocation && matchesCondition && matchesHours && matchesPrice;
+      return matchesCategory && matchesSearch && matchesBrand && matchesLocation && matchesCondition && matchesStatus && matchesHours && matchesPrice;
     }).sort((a, b) => {
       if (activeSort === "Newest") return new Date(b.createdAt) - new Date(a.createdAt);
+      if (activeSort === "Oldest") return new Date(a.createdAt) - new Date(b.createdAt);
       if (activeSort === "Price Low to High") {
         const pA = parseFloat(cleanPrice(a.price).replace(/[^0-9.]/g, '')) || 0;
         const pB = parseFloat(cleanPrice(b.price).replace(/[^0-9.]/g, '')) || 0;
@@ -236,9 +250,6 @@ const Products = () => {
       }
       if (activeSort === "Hours High to Low") {
         return (parseInt(b.engine_hours) || 0) - (parseInt(a.engine_hours) || 0);
-      }
-      if (activeSort === "Brand A-Z") {
-        return (a.brand || "").localeCompare(b.brand || "");
       }
       return 0;
     });
@@ -385,7 +396,7 @@ const Products = () => {
                 onChange={(e) => setActiveSort(e.target.value)}
                 className="w-full pl-4 pr-10 pt-3 h-full bg-white border border-[#E5E7EB] rounded-[14px] text-[16px] font-bold text-heading appearance-none outline-none focus:border-[#FF8A00] focus:shadow-[0_0_0_4px_rgba(255,138,0,0.12)] transition-all cursor-pointer shadow-sm"
               >
-                {["Newest", "Price Low to High", "Price High to Low", "Hours Low to High", "Hours High to Low", "Brand A-Z"].map(opt => (
+                {["Newest", "Oldest", "Price Low to High", "Price High to Low", "Hours Low to High", "Hours High to Low"].map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
@@ -632,7 +643,7 @@ const Products = () => {
                 <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
                   <RotateCcw size={40} className="text-slate-200" />
                 </div>
-                <h3 className="text-2xl font-display font-black text-heading mb-3">No machinery found</h3>
+                <h3 className="text-2xl font-display font-black text-heading mb-3">No machinery matches your filters.</h3>
                 <p className="text-slate-500 font-medium max-w-sm mx-auto mb-10">Try adjusting filters or search terms to find the perfect equipment for your needs.</p>
                 <div className="flex flex-wrap items-center justify-center gap-4">
                   <button 
