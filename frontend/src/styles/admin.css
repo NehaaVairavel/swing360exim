@@ -216,14 +216,20 @@
 
 .status-pill-in-stock {
   background: #F0FDF4;
-  color: #15803D;
-  border: 1px solid #86EFAC;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+.status-pill-coming-soon {
+  background: #FFFBEB;
+  color: #D97706;
+  border: 1px solid #FEF3C7;
 }
 
 .status-pill-sold {
-  background: #FFF1F2;
-  color: #BE123C;
-  border: 1px solid #FECDD3;
+  background: #FEF2F2;
+  color: #DC2626;
+  border: 1px solid #FEE2E2;
 }
 
 /* ---------- FORM ELEMENTS ---------- */

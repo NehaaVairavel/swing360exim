@@ -528,15 +528,12 @@ const AdminProducts = () => {
                       </span>
                     </td>
                     <td>
-                      <span
-                        className={`status-pill ${
-                          product.availability === "sold"
-                            ? "status-pill-sold"
-                            : "status-pill-in-stock"
-                        }`}
-                      >
-                        {product.availability === "sold" ? "Sold" : "In Stock"}
-                      </span>
+                      {(() => {
+                        const status = product.availability || "in_stock";
+                        const label = status === "in_stock" ? "In Stock" : status === "coming_soon" ? "Coming Soon" : "Sold";
+                        const cssClass = `status-pill status-pill-${status.replace("_", "-")}`;
+                        return <span className={cssClass}>{label}</span>;
+                      })()}
                     </td>
                     <td>
                       <div className="flex items-center justify-end gap-2">
