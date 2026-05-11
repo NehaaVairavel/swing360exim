@@ -217,6 +217,7 @@ const Products = () => {
       
       const matchesBrand = selectedBrands.length === 0 || selectedBrands.includes(product.brand);
       const matchesLocation = selectedLocations.length === 0 || selectedLocations.includes(product.location);
+      const matchesCondition = selectedCondition === "All" || product.condition === selectedCondition;
       const pStatus = normalizeAvailability(product.availability);
       const matchesStatus = 
         activeStatus === "All" || 
@@ -674,11 +675,15 @@ const Products = () => {
 
                 {/* Previously Sold Units */}
                 {activeStatus === "All" && availableProducts.length > 0 && soldProducts.length > 0 && (
-                  <div className="pt-[30px] mt-[30px] border-t border-[#edf1f5] flex flex-col items-center text-center">
-                    <h2 className="text-2xl md:text-3xl font-display font-black text-heading tracking-tight mb-[8px]">
-                      Our <span className="text-gradient drop-shadow-sm">Sold Machinery</span> Fleet
-                    </h2>
-                    <p className="text-slate-500 font-semibold text-[13px] mb-[24px]">Machines successfully exported to global buyers.</p>
+                  <div className="mt-10 flex flex-col items-center text-center">
+                    <div className="flex items-center justify-center w-full mb-1">
+                      <div className="h-[1px] bg-slate-200/80 flex-1 max-w-[120px] md:max-w-[250px]" />
+                      <h2 className="text-2xl md:text-3xl font-display font-black text-heading tracking-tight mx-5">
+                        Our <span className="text-gradient drop-shadow-sm">Sold Machinery</span> Fleet
+                      </h2>
+                      <div className="h-[1px] bg-slate-200/80 flex-1 max-w-[120px] md:max-w-[250px]" />
+                    </div>
+                    <p className="text-slate-400 font-medium text-[13px] mb-6">Machines successfully exported to global buyers.</p>
                   </div>
                 )}
 
