@@ -8,7 +8,7 @@ import {
   CheckCircle, Zap, RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useCurrency } from "@/context/CurrencyContext";
+import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
 import "@/styles/admin.css";
 
 /* ── Status badge preview ── */
@@ -89,7 +89,7 @@ const Select = ({ label, required, options, error, ...props }) => (
 /* ── Live Preview Card ── */
 const PreviewCard = ({ formData, images }) => {
   const price = parseFloat(String(formData.price).replace(/[^0-9.]/g, "")) || 0;
-  const symbol = SYMBOLS[formData.currency] || "$";
+  const symbol = CURRENCY_META[formData.currency]?.symbol || "$";
   const isSold = formData.availability === "sold";
 
   return (

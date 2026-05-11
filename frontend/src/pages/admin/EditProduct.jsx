@@ -3,102 +3,174 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import productService from "@/services/productService";
 import {
-  ArrowLeft,
-  UploadCloud,
-  Trash2,
-  Image as ImageIcon,
-  Save,
-  Info,
-  DollarSign,
-  CheckCircle2,
-  AlertTriangle,
+  ArrowLeft, UploadCloud, Trash2, Image as ImageIcon,
+  Save, Info, DollarSign, MapPin, Clock, Eye,
+  CheckCircle, Zap, RefreshCw, AlertTriangle
 } from "lucide-react";
 import { toast } from "sonner";
+import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
 import "@/styles/admin.css";
 
-/* ─── Form Section wrapper ─── */
-const Section = ({ title, icon: Icon, children }) => (
-  <div className="admin-card p-8 mb-6" style={{ borderRadius: "28px" }}>
-    <div
-      className="flex items-center gap-3 mb-7 pb-5"
-      style={{ borderBottom: "1px solid #F1F3F7" }}
-    >
-      <div
-        className="flex items-center justify-center"
-        style={{
-          width: "38px",
-          height: "38px",
-          borderRadius: "12px",
-          background: "#FEF9EC",
-          color: "#F5B301",
-        }}
-      >
-        <Icon size={18} />
+/* ── Status badge preview ── */
+const StatusPreview = ({ status }) => {
+  const cfg = {
+    in_stock:    { label: "In Stock",    bg: "linear-gradient(135deg,#22c55e,#16a34a)", shadow: "rgba(34,197,94,0.4)" },
+    coming_soon: { label: "Coming Soon", bg: "linear-gradient(135deg,#f59e0b,#d97706)", shadow: "rgba(245,158,11,0.35)" },
+    sold:        { label: "Sold",        bg: "linear-gradient(135deg,#ef4444,#b91c1c)", shadow: "rgba(239,68,68,0.35)" },
+  }[status];
+  if (!cfg) return null;
+  return (
+    <span style={{
+      padding: "4px 12px", borderRadius: 999, fontSize: 10, fontWeight: 800,
+      fontFamily: "'Inter',sans-serif", color: "#fff", textTransform: "uppercase",
+      letterSpacing: "0.06em", background: cfg.bg,
+      boxShadow: `0 4px 12px ${cfg.shadow}`,
+    }}>{cfg.label}</span>
+  );
+};
+
+/* ── Section wrapper ── */
+const Section = ({ title, subtitle, icon: Icon, children, id }) => (
+  <div id={id} className="admin-card mb-5" style={{ borderRadius: 24, padding: "22px 24px" }}>
+    <div className="flex items-center gap-3 mb-5 pb-4" style={{ borderBottom: "1px solid #F1F3F7" }}>
+      <div className="flex items-center justify-center shrink-0"
+        style={{ width: 34, height: 34, borderRadius: 10, background: "#FEF9EC", color: "#F5B301" }}>
+        <Icon size={16} />
       </div>
-      <h3
-        style={{
-          fontFamily: "'Sora', sans-serif",
-          fontWeight: 700,
-          fontSize: "17px",
-          color: "#111827",
-          letterSpacing: "-0.025em",
-        }}
-      >
-        {title}
-      </h3>
+      <div>
+        <h3 style={{ fontFamily: "'Sora',sans-serif", fontWeight: 700, fontSize: 15, color: "#111827", margin: 0 }}>
+          {title}
+        </h3>
+        {subtitle && (
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#94A3B8", margin: "2px 0 0", fontWeight: 500 }}>
+            {subtitle}
+          </p>
+        )}
+      </div>
     </div>
     {children}
   </div>
 );
 
-/* ─── Input field ─── */
-const Input = ({ label, required, ...props }) => (
-  <div style={{ marginBottom: "20px" }}>
-    <label
-      style={{
-        display: "block",
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "13px",
-        fontWeight: 600,
-        color: "#374151",
-        marginBottom: "6px",
-      }}
-    >
+/* ── Validated Input ── */
+const Input = ({ label, required, error, hint, ...props }) => (
+  <div style={{ marginBottom: 16 }}>
+    <label style={{ display: "block", fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 5 }}>
       {label} {required && <span style={{ color: "#EF4444" }}>*</span>}
     </label>
-    <input className="admin-input" {...props} />
+    <input
+      className="admin-input"
+      style={{ borderColor: error ? "#EF4444" : undefined, boxShadow: error ? "0 0 0 3px rgba(239,68,68,0.1)" : undefined }}
+      {...props}
+    />
+    {error && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#EF4444", marginTop: 4 }}>⚠ {error}</p>}
+    {hint && !error && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#94A3B8", marginTop: 4 }}>{hint}</p>}
   </div>
 );
 
-/* ─── Select field ─── */
-const Select = ({ label, required, options, ...props }) => (
-  <div style={{ marginBottom: "20px" }}>
-    <label
-      style={{
-        display: "block",
-        fontFamily: "'Inter', sans-serif",
-        fontSize: "13px",
-        fontWeight: 600,
-        color: "#374151",
-        marginBottom: "6px",
-      }}
-    >
+/* ── Select ── */
+const Select = ({ label, required, options, error, ...props }) => (
+  <div style={{ marginBottom: 16 }}>
+    <label style={{ display: "block", fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "#374151", marginBottom: 5 }}>
       {label} {required && <span style={{ color: "#EF4444" }}>*</span>}
     </label>
-    <select className="admin-select" {...props}>
+    <select className="admin-select"
+      style={{ borderColor: error ? "#EF4444" : undefined }}
+      {...props}>
       <option value="">Select {label}</option>
-      {options &&
-        Array.isArray(options) &&
-        options.filter(Boolean).map((opt) => (
-          <option key={opt?.id || opt} value={opt?.id || opt}>
-            {opt?.name || opt}
-          </option>
-        ))}
+      {options && options.filter(Boolean).map(opt => (
+        <option key={opt?.id || opt} value={opt?.id || opt}>{opt?.name || opt}</option>
+      ))}
     </select>
+    {error && <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#EF4444", marginTop: 4 }}>⚠ {error}</p>}
   </div>
 );
 
-/* ─── EditProduct Page ─── */
+/* ── Live Preview Card ── */
+const PreviewCard = ({ formData, images }) => {
+  const price = parseFloat(String(formData.price).replace(/[^0-9.]/g, "")) || 0;
+  const symbol = CURRENCY_META[formData.currency]?.symbol || "$";
+  const isSold = formData.availability === "sold";
+
+  return (
+    <div style={{
+      background: "#fff", borderRadius: 20, border: "1px solid #EEF1F5",
+      boxShadow: "0 8px 32px rgba(15,23,42,0.08)", overflow: "hidden",
+    }}>
+      {/* Image */}
+      <div style={{ height: 160, background: "#F1F5F9", position: "relative", overflow: "hidden" }}>
+        {images[0] ? (
+          <img src={images[0]} alt="" style={{
+            width: "100%", height: "100%", objectFit: "cover",
+            filter: isSold ? "grayscale(80%)" : "none",
+          }} />
+        ) : (
+          <div className="flex items-center justify-center h-full" style={{ color: "#CBD5E1" }}>
+            <ImageIcon size={36} />
+          </div>
+        )}
+        {/* Status badge */}
+        {formData.availability && (
+          <div style={{ position: "absolute", top: 10, left: 10 }}>
+            <StatusPreview status={formData.availability} />
+          </div>
+        )}
+        {/* Year badge */}
+        {formData.year && (
+          <div style={{
+            position: "absolute", top: 10, right: 10,
+            background: "#fff", borderRadius: 999, padding: "4px 10px",
+            fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700,
+            color: "#111827", boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          }}>{formData.year}</div>
+        )}
+        {/* Image count */}
+        {images.length > 1 && (
+          <div style={{
+            position: "absolute", bottom: 8, right: 8,
+            background: "rgba(15,23,42,0.65)", backdropFilter: "blur(4px)",
+            borderRadius: 999, padding: "3px 8px",
+            fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, color: "#fff",
+          }}>+{images.length - 1} more</div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div style={{ padding: "14px 16px" }}>
+        <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 3 }}>
+          {formData.brand || "Brand"} · {formData.category || "Category"}
+        </p>
+        <h3 style={{ fontFamily: "'Sora',sans-serif", fontSize: 16, fontWeight: 700, color: "#111827", margin: "0 0 6px", lineHeight: 1.2 }}>
+          {formData.name || "Product Name"}
+        </h3>
+        <div style={{ display: "flex", gap: 12, marginBottom: 10 }}>
+          {formData.engine_hours && (
+            <span style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#94A3B8" }}>
+              <Clock size={10} /> {formData.engine_hours} Hrs
+            </span>
+          )}
+          {formData.location && (
+            <span style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#94A3B8" }}>
+              <MapPin size={10} /> {formData.location.split(",")[0]}
+            </span>
+          )}
+        </div>
+        <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: 10 }}>
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 2 }}>Export Price</p>
+          <p style={{
+            fontFamily: "'Sora',sans-serif", fontSize: 20, fontWeight: 800,
+            color: isSold ? "#94A3B8" : "#F5B301",
+            textDecoration: isSold ? "line-through" : "none", margin: 0,
+          }}>
+            {price > 0 ? `${symbol}${price.toLocaleString()}` : "—"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ── Main EditProduct Page ── */
 const EditProduct = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -109,27 +181,21 @@ const EditProduct = () => {
   const [submitting, setSubmitting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [errors, setErrors] = useState({});
 
-  // Existing images from server (URLs)
+  const { convertAll, ratesLoaded, rateDate } = useCurrency();
+
+  // Existing images from server
   const [existingImages, setExistingImages] = useState([]);
-  // New local files added by user (File objects)
+  // New local files
   const [newImageFiles, setNewImageFiles] = useState([]);
-  // Preview URLs for new files
   const [newImagePreviews, setNewImagePreviews] = useState([]);
 
   const [formData, setFormData] = useState({
-    name: "",
-    brand: "",
-    model: "",
-    year: "",
-    category: "",
-    condition: "Used",
-    price: "",
-    currency: "USD",
-    engine_hours: "",
-    availability: "",
-    location: "Dubai, UAE",
-    full_description: "",
+    name: "", brand: "", model: "", year: "", category: "",
+    condition: "Used", price: "", currency: "USD",
+    engine_hours: "", availability: "",
+    location: "Dubai, UAE", full_description: "",
   });
 
   useEffect(() => {
@@ -155,13 +221,7 @@ const EditProduct = () => {
           full_description: product.full_description || "",
         });
 
-        // Collect all existing image URLs
-        const imgs = [];
-        if (product.images && product.images.length > 0) {
-          imgs.push(...product.images);
-        } else if (product.image) {
-          imgs.push(product.image);
-        }
+        const imgs = product.images?.length > 0 ? [...product.images] : product.image ? [product.image] : [];
         setExistingImages([...new Set(imgs)]);
         setCategories(Array.isArray(cats) ? cats : []);
       } catch (err) {
@@ -172,54 +232,55 @@ const EditProduct = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: null }));
   };
 
   const handleNewFiles = (files) => {
     const newFiles = Array.from(files);
-    setNewImageFiles((prev) => [...prev, ...newFiles]);
-    const previews = newFiles.map((f) => URL.createObjectURL(f));
-    setNewImagePreviews((prev) => [...prev, ...previews]);
-    toast.success(`${newFiles.length} image(s) queued for upload`);
+    setNewImageFiles(prev => [...prev, ...newFiles]);
+    setNewImagePreviews(prev => [...prev, ...newFiles.map(f => URL.createObjectURL(f))]);
+    toast.success(`${newFiles.length} image(s) added`);
   };
 
   const removeExistingImage = (idx) => {
-    const total = existingImages.length + newImageFiles.length;
-    if (total <= 1) {
-      toast.error("At least one image is required.");
+    if (existingImages.length + newImageFiles.length <= 1) {
+      toast.error("At least one image is required");
       return;
     }
-    setExistingImages((prev) => prev.filter((_, i) => i !== idx));
+    setExistingImages(prev => prev.filter((_, i) => i !== idx));
   };
 
   const removeNewImage = (idx) => {
-    const total = existingImages.length + newImageFiles.length;
-    if (total <= 1) {
-      toast.error("At least one image is required.");
+    if (existingImages.length + newImageFiles.length <= 1) {
+      toast.error("At least one image is required");
       return;
     }
     URL.revokeObjectURL(newImagePreviews[idx]);
-    setNewImageFiles((prev) => prev.filter((_, i) => i !== idx));
-    setNewImagePreviews((prev) => prev.filter((_, i) => i !== idx));
+    setNewImageFiles(prev => prev.filter((_, i) => i !== idx));
+    setNewImagePreviews(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const validate = () => {
+    const errs = {};
+    if (!formData.name) errs.name = "Product name is required";
+    if (!formData.category) errs.category = "Category is required";
+    if (!formData.year) errs.year = "Year is required";
+    if (!formData.engine_hours) errs.engine_hours = "Engine hours required";
+    if (!formData.price) errs.price = "Price is required";
+    if (!formData.availability) errs.availability = "Status is required";
+    if (existingImages.length + newImageFiles.length === 0) errs.images = "At least one image required";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const totalImages = existingImages.length + newImageFiles.length;
-    if (totalImages === 0) {
-      return toast.error("At least one product image is required.");
-    }
-
-    const requiredFields = ["name", "category", "year", "engine_hours", "location", "availability", "price", "currency"];
-    const missing = requiredFields.filter((f) => !formData[f]);
-    if (missing.length > 0) {
-      return toast.error(`Please fill in: ${missing.map((f) => f.replace("_", " ")).join(", ")}`);
-    }
+    e?.preventDefault();
+    if (!validate()) return;
 
     setSubmitting(true);
     try {
@@ -231,7 +292,6 @@ const EditProduct = () => {
       }
 
       const allImages = [...existingImages, ...uploadedUrls];
-
       const payload = {
         ...formData,
         images: allImages,
@@ -245,334 +305,140 @@ const EditProduct = () => {
       toast.success("Product updated successfully!");
       navigate("/admin/products");
     } catch (err) {
-      const msg = err?.response?.data?.error || "Failed to update product";
-      toast.error(msg);
+      toast.error(err?.response?.data?.error || "Failed to update product");
     } finally {
       setSubmitting(false);
     }
   };
 
-  const totalImageCount = existingImages.length + newImageFiles.length;
+  const priceNum = parseFloat(String(formData.price).replace(/[^0-9.]/g, "")) || 0;
+  const conversions = priceNum > 0 ? convertAll(priceNum) : [];
+  const descLen = (formData.full_description || "").length;
+  const previewImages = [...existingImages, ...newImagePreviews];
 
-  if (loading) {
-    return (
-      <div className="admin-loading">
-        <span>Loading Product…</span>
-      </div>
-    );
-  }
+  if (loading) return <div className="admin-loading"><span>Loading Product…</span></div>;
 
   return (
-    <div style={{ animation: "fadeIn 0.5s ease", maxWidth: "1200px", margin: "0 auto", paddingBottom: "80px" }}>
-      {/* ── Sticky top bar ── */}
-      <div
-        className="sticky top-0 z-30 flex items-center justify-between mb-8 py-5"
-        style={{
-          background: "#F6F7FB",
-          borderBottom: "1px solid #EAECEF",
-          marginLeft: "-24px",
-          marginRight: "-24px",
-          paddingLeft: "24px",
-          paddingRight: "24px",
-        }}
-      >
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center justify-center transition-all duration-200"
-            style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "12px",
-              background: "#ffffff",
-              border: "1px solid #EAECEF",
-              color: "#64748B",
-              cursor: "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "#F5B301";
-              e.currentTarget.style.color = "#F5B301";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "#EAECEF";
-              e.currentTarget.style.color = "#64748B";
-            }}
-          >
-            <ArrowLeft size={18} />
+    <div style={{ animation: "fadeIn 0.5s ease", maxWidth: 1300, margin: "0 auto", paddingBottom: 80 }}>
+
+      {/* Header */}
+      <div className="sticky top-0 z-30 flex items-center justify-between py-4 mb-6"
+        style={{ background: "#F6F7FB", borderBottom: "1px solid #EAECEF", marginLeft: -24, marginRight: -24, paddingLeft: 24, paddingRight: 24 }}>
+        <div className="flex items-center gap-3">
+          <button onClick={() => navigate(-1)} className="flex items-center justify-center transition-all"
+            style={{ width: 38, height: 38, borderRadius: 11, background: "#fff", border: "1px solid #EAECEF", color: "#64748B", cursor: "pointer" }}>
+            <ArrowLeft size={16} />
           </button>
           <div>
-            <h1 className="admin-dashboard-title" style={{ fontSize: "22px", color: "#111827" }}>
-              Edit Equipment
-            </h1>
-            <p className="admin-page-subtitle" style={{ color: "#64748B" }}>
-              {formData.name || "Product"} — update details below
+            <h1 style={{ fontFamily: "'Sora',sans-serif", fontSize: 20, fontWeight: 800, color: "#111827", margin: 0 }}>Edit Equipment</h1>
+            <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, color: "#94A3B8", margin: 0 }}>
+              Update listing for: {formData.name || "Product"}
             </p>
           </div>
         </div>
-        <button
-          disabled={submitting}
-          onClick={handleSubmit}
-          className="btn-accent flex items-center gap-2"
-          style={{ opacity: submitting ? 0.65 : 1 }}
-        >
-          <Save size={16} />
+        <button disabled={submitting} onClick={handleSubmit} className="btn-accent flex items-center gap-2"
+          style={{ opacity: submitting ? 0.65 : 1 }}>
+          <Save size={15} />
           {submitting ? "Saving…" : "Save Changes"}
         </button>
       </div>
 
-      {/* ── Form grid ── */}
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left col — 2/3 width */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2">
-          <Section title="Basic Information" icon={Info}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-              <Input
-                label="Product Name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                placeholder="e.g. Caterpillar 320 GC"
-                required
-              />
-              <Select
-                label="Category"
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                options={categories}
-                required
-              />
-              <Input
-                label="Brand"
-                name="brand"
-                value={formData.brand}
-                onChange={handleInputChange}
-                placeholder="Caterpillar"
-              />
-              <Input
-                label="Model Number"
-                name="model"
-                value={formData.model}
-                onChange={handleInputChange}
-                placeholder="320 GC"
-              />
-              <Input
-                label="Year"
-                name="year"
-                type="number"
-                value={formData.year}
-                onChange={handleInputChange}
-                placeholder="Enter manufacturing year"
-                required
-              />
-              <Select
-                label="Condition"
-                name="condition"
-                value={formData.condition}
-                onChange={handleInputChange}
-                options={["New", "Used", "Refurbished"]}
-                required
-              />
-              <Input
-                label="Engine Hours"
-                name="engine_hours"
-                value={formData.engine_hours}
-                onChange={handleInputChange}
-                type="number"
-                placeholder="e.g. 1200"
-                required
-              />
-              <Input
-                label="Location"
-                name="location"
-                value={formData.location}
-                onChange={handleInputChange}
-                placeholder="e.g. Dubai, UAE"
-                required
-              />
-              <Select
-                label="Availability"
-                name="availability"
-                value={formData.availability}
-                onChange={handleInputChange}
-                options={[
-                  { id: "in_stock", name: "In Stock" },
-                  { id: "sold", name: "Sold" },
-                  { id: "coming_soon", name: "Coming Soon" },
-                ]}
-                required
-              />
+          <Section id="basic" title="Machine Specifications" subtitle="Core details shown on public marketplace" icon={Info}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
+              <Input label="Product Name" name="name" value={formData.name} onChange={handleInputChange} required error={errors.name} />
+              <Select label="Category" name="category" value={formData.category} onChange={handleInputChange} options={categories} required error={errors.category} />
+              <Input label="Brand" name="brand" value={formData.brand} onChange={handleInputChange} />
+              <Input label="Model Number" name="model" value={formData.model} onChange={handleInputChange} />
+              <Input label="Year" name="year" type="number" value={formData.year} onChange={handleInputChange} required error={errors.year} />
+              <Select label="Condition" name="condition" value={formData.condition} onChange={handleInputChange} options={["New", "Used", "Refurbished"]} required />
+              <Input label="Engine Hours" name="engine_hours" type="number" value={formData.engine_hours} onChange={handleInputChange} required error={errors.engine_hours} />
+              <Input label="Location" name="location" value={formData.location} onChange={handleInputChange} required error={errors.location} />
+              <div style={{ gridColumn: "1 / -1" }}>
+                <Select label="Availability Status" name="availability" value={formData.availability} onChange={handleInputChange}
+                  options={[{ id: "in_stock", name: "In Stock" }, { id: "coming_soon", name: "Coming Soon" }, { id: "sold", name: "Sold" }]}
+                  required error={errors.availability} />
+                {formData.availability && <div className="flex items-center gap-2 mt-1 mb-2"><StatusPreview status={formData.availability} /></div>}
+              </div>
             </div>
-            <div style={{ marginTop: "8px" }}>
-              <label
-                style={{
-                  display: "block",
-                  fontFamily: "'Inter', sans-serif",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  color: "#374151",
-                  marginBottom: "6px",
-                }}
-              >
-                Description
-              </label>
-              <textarea
-                name="full_description"
-                value={formData.full_description}
-                onChange={handleInputChange}
-                className="admin-textarea"
-                style={{ height: "120px" }}
-                placeholder="Describe the machine's features, history, and technical condition…"
-              />
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label style={{ fontSize: 12, fontWeight: 600, color: "#374151" }}>Description</label>
+                <span style={{ fontSize: 11, color: "#94A3B8" }}>{descLen} / 1000</span>
+              </div>
+              <textarea name="full_description" value={formData.full_description} onChange={handleInputChange} className="admin-textarea" maxLength={1000} style={{ height: 100 }} />
             </div>
           </Section>
 
-          <Section title="Pricing" icon={DollarSign}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
-              <Input
-                label="Price"
-                name="price"
-                value={formData.price}
-                onChange={handleInputChange}
-                type="text"
-                placeholder="e.g. 125000"
-                required
-              />
-              <Select
-                label="Currency"
-                name="currency"
-                value={formData.currency}
-                onChange={handleInputChange}
-                options={[
-                  { id: "INR", name: "INR ₹" },
-                  { id: "USD", name: "USD $" },
-                  { id: "AED", name: "AED د.إ" },
-                  { id: "EUR", name: "EUR €" },
-                ]}
-                required
-              />
+          <Section id="pricing" title="Pricing & Visibility" subtitle="Live-converted price shown to global buyers" icon={DollarSign}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-5">
+              <Input label="Price" name="price" value={formData.price} onChange={handleInputChange} type="text" required error={errors.price} />
+              <Select label="Currency" name="currency" value={formData.currency} onChange={handleInputChange} options={[{ id: "USD", name: "USD $" }, { id: "AED", name: "AED د.إ" }, { id: "EUR", name: "EUR €" }, { id: "INR", name: "INR ₹" }]} required />
             </div>
+            {conversions.length > 0 && (
+              <div style={{ background: "#F8FAFC", borderRadius: 12, padding: "12px 14px", border: "1px solid #E2E8F0" }}>
+                <div className="flex items-center justify-between mb-2">
+                  <p style={{ fontSize: 10, fontWeight: 800, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em", margin: 0 }}><Zap size={10} style={{ display: "inline", marginRight: 4 }} />Live Conversion Preview</p>
+                  <span style={{ fontSize: 10, color: "#22C55E", fontWeight: 600 }}><RefreshCw size={9} style={{ marginRight: 4 }} />{ratesLoaded && rateDate ? `Updated ${rateDate.toLocaleDateString()}` : "Loading..."}</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {conversions.map(({ currency, symbol, flag, value }) => (
+                    <div key={currency} style={{ background: "#fff", borderRadius: 8, padding: "6px 12px", border: "1px solid #E2E8F0" }}>
+                      <span style={{ fontSize: 11, marginRight: 4 }}>{flag}</span>
+                      <span style={{ fontSize: 11, color: "#94A3B8", fontWeight: 600 }}>{currency} </span>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: "#111827" }}>{symbol}{value.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </Section>
         </div>
 
-        {/* Right col — 1/3 width */}
-        <div>
-          <Section title="Media Gallery" icon={ImageIcon}>
-            {/* Min-image warning */}
-            {totalImageCount <= 1 && (
-              <div
-                className="flex items-start gap-2 mb-4 p-3 rounded-xl"
-                style={{ background: "#FEF9EC", border: "1px solid #FDE68A" }}
-              >
-                <AlertTriangle size={15} style={{ color: "#D97706", flexShrink: 0, marginTop: "1px" }} />
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#92400E" }}>
-                  Minimum 1 image required. You cannot delete the last image.
-                </p>
+        <div className="flex flex-col gap-5">
+          <Section id="media" title="Media Gallery" subtitle="Existing and newly queued images" icon={ImageIcon}>
+            {(existingImages.length + newImageFiles.length) <= 1 && (
+              <div className="flex items-start gap-2 mb-3 p-2 rounded-lg" style={{ background: "#FEF9EC", border: "1px solid #FDE68A" }}>
+                <AlertTriangle size={13} style={{ color: "#D97706", marginTop: 2 }} />
+                <p style={{ fontSize: 11, color: "#92400E" }}>Min 1 image required.</p>
               </div>
             )}
-
-            {/* Drop zone */}
-            <div
-              className={`upload-zone flex flex-col items-center justify-center p-6 mb-4 ${isDragging ? "dragging" : ""}`}
+            <div className={`upload-zone flex flex-col items-center justify-center p-6 mb-4 ${isDragging ? "dragging" : ""}`}
               onClick={() => fileInputRef.current?.click()}
-              onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+              onDragOver={e => { e.preventDefault(); setIsDragging(true); }}
               onDragLeave={() => setIsDragging(false)}
-              onDrop={(e) => {
-                e.preventDefault();
-                setIsDragging(false);
-                if (e.dataTransfer.files) handleNewFiles(e.dataTransfer.files);
-              }}
-            >
-              <input
-                type="file"
-                ref={fileInputRef}
-                className="hidden"
-                multiple
-                accept="image/*"
-                onChange={(e) => e.target.files && handleNewFiles(e.target.files)}
-              />
-              <UploadCloud size={24} style={{ color: "#F5B301", marginBottom: "8px" }} />
-              <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: "13px", color: "#374151", textAlign: "center", marginBottom: "3px" }}>
-                Add More Images
-              </p>
-              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", color: "#94A3B8", textAlign: "center" }}>
-                Drag & drop or click to upload
-              </p>
+              onDrop={e => { e.preventDefault(); setIsDragging(false); if (e.dataTransfer.files) handleNewFiles(e.dataTransfer.files); }}>
+              <input type="file" ref={fileInputRef} className="hidden" multiple accept="image/*" onChange={e => e.target.files && handleNewFiles(e.target.files)} />
+              <UploadCloud size={24} style={{ color: "#F5B301", marginBottom: 8 }} />
+              <p style={{ fontWeight: 700, fontSize: 12, color: "#374151" }}>Add Images</p>
             </div>
-
-            {/* Existing images */}
+            
+            {/* Existing Images */}
             {existingImages.length > 0 && (
-              <div>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>
-                  Current Images ({existingImages.length})
-                </p>
-                <div className="grid grid-cols-3 gap-2 mb-4">
+              <div className="mb-4">
+                <p style={{ fontSize: 10, fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", marginBottom: 5 }}>Current Images</p>
+                <div className="grid grid-cols-3 gap-2">
                   {existingImages.map((src, idx) => (
-                    <div
-                      key={idx}
-                      className="relative group"
-                      style={{ aspectRatio: "1", borderRadius: "10px", overflow: "hidden", border: "2px solid #EAECEF" }}
-                    >
+                    <div key={idx} className="relative group" style={{ aspectRatio: "1", borderRadius: 8, overflow: "hidden", border: "1px solid #EAECEF" }}>
                       <img src={src} className="w-full h-full object-cover" alt="" />
-                      {idx === 0 && (
-                        <div
-                          className="absolute top-1 left-1"
-                          style={{ background: "#F5B301", borderRadius: "5px", padding: "2px 5px", fontFamily: "'Inter', sans-serif", fontSize: "8px", fontWeight: 700, color: "#111827" }}
-                        >
-                          MAIN
-                        </div>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => removeExistingImage(idx)}
-                        title={totalImageCount <= 1 ? "Cannot remove last image" : "Remove image"}
-                        className="absolute top-1 right-1 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{
-                          width: "22px",
-                          height: "22px",
-                          borderRadius: "6px",
-                          background: totalImageCount <= 1 ? "#94A3B8" : "#EF4444",
-                          color: "#ffffff",
-                          border: "none",
-                          cursor: totalImageCount <= 1 ? "not-allowed" : "pointer",
-                        }}
-                      >
-                        <Trash2 size={11} />
-                      </button>
+                      {idx === 0 && <div style={{ position: "absolute", top: 2, left: 2, background: "#F5B301", borderRadius: 4, padding: "1px 4px", fontSize: 7, fontWeight: 800 }}>COVER</div>}
+                      <button type="button" onClick={() => removeExistingImage(idx)} className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity" style={{ width: 18, height: 18, borderRadius: 4, background: "#EF4444", color: "#fff", border: "none" }}><Trash2 size={9} /></button>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* New pending images */}
+            {/* New Images */}
             {newImagePreviews.length > 0 && (
               <div>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", fontWeight: 700, color: "#22C55E", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "8px" }}>
-                  New Images to Upload ({newImagePreviews.length})
-                </p>
+                <p style={{ fontSize: 10, fontWeight: 700, color: "#22C55E", textTransform: "uppercase", marginBottom: 5 }}>New Pending</p>
                 <div className="grid grid-cols-3 gap-2">
                   {newImagePreviews.map((src, idx) => (
-                    <div
-                      key={idx}
-                      className="relative group"
-                      style={{ aspectRatio: "1", borderRadius: "10px", overflow: "hidden", border: "2px solid #86EFAC" }}
-                    >
+                    <div key={idx} className="relative group" style={{ aspectRatio: "1", borderRadius: 8, overflow: "hidden", border: "1px solid #86EFAC" }}>
                       <img src={src} className="w-full h-full object-cover" alt="" />
-                      <div
-                        className="absolute top-1 left-1"
-                        style={{ background: "#22C55E", borderRadius: "5px", padding: "2px 5px", fontFamily: "'Inter', sans-serif", fontSize: "8px", fontWeight: 700, color: "#ffffff" }}
-                      >
-                        NEW
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeNewImage(idx)}
-                        className="absolute top-1 right-1 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                        style={{ width: "22px", height: "22px", borderRadius: "6px", background: "#EF4444", color: "#ffffff", border: "none", cursor: "pointer" }}
-                      >
-                        <Trash2 size={11} />
-                      </button>
+                      <button type="button" onClick={() => removeNewImage(idx)} className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity" style={{ width: 18, height: 18, borderRadius: 4, background: "#EF4444", color: "#fff", border: "none" }}><Trash2 size={9} /></button>
                     </div>
                   ))}
                 </div>
@@ -580,29 +446,22 @@ const EditProduct = () => {
             )}
           </Section>
 
-          {/* Save confirmation card */}
-          <div style={{ background: "#F0FDF4", border: "1px solid #86EFAC", borderRadius: "20px", padding: "20px" }}>
+          <Section id="preview" title="Public Card Preview" subtitle="Real-time look on the marketplace" icon={Eye}>
+            <PreviewCard formData={formData} images={previewImages} />
+          </Section>
+
+          <div style={{ background: "#F0FDF4", border: "1px solid #86EFAC", borderRadius: 16, padding: "16px" }}>
             <div className="flex items-start gap-3">
-              <CheckCircle2 size={18} style={{ color: "#16A34A", flexShrink: 0, marginTop: "1px" }} />
+              <CheckCircle size={16} style={{ color: "#16A34A", marginTop: 1 }} />
               <div>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: "13px", color: "#15803D", marginBottom: "4px" }}>
-                  Changes Live Instantly
-                </p>
-                <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#16A34A", opacity: 0.8 }}>
-                  Saved updates will reflect globally across all pages immediately.
-                </p>
+                <p style={{ fontWeight: 700, fontSize: 12, color: "#15803D", margin: 0 }}>Changes Live Instantly</p>
+                <p style={{ fontSize: 11, color: "#16A34A", opacity: 0.85, margin: "2px 0 0" }}>Saved updates reflect globally across all pages immediately.</p>
               </div>
             </div>
           </div>
         </div>
-      </form>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
+      </div>
+      <style>{` @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } `}</style>
     </div>
   );
 };
