@@ -6,13 +6,13 @@
 .product-card {
   width: 100%;
   max-width: 300px;
-  min-height: 420px;
-  max-height: 480px;
+  min-height: 400px;
+  max-height: 460px;
   border-radius: 24px;
   background: #FFFFFF;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(15,23,42,0.05), 0 2px 8px rgba(15,23,42,0.04);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.05), 0 1px 4px rgba(15,23,42,0.04);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -20,13 +20,37 @@
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(15,23,42,0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 20px 48px rgba(15,23,42,0.12), 0 4px 12px rgba(15,23,42,0.06);
+}
+
+/* Sold state */
+.card-sold-state {
+  opacity: 0.88;
+}
+
+.img-sold-overlay > * {
+  filter: grayscale(85%);
+  transition: filter 0.3s ease;
+}
+
+.card-sold-state:hover .img-sold-overlay > * {
+  filter: grayscale(60%);
+}
+
+/* Image zoom on hover */
+.product-card-image-section img,
+.product-card-image-section video {
+  transition: transform 0.45s ease;
+}
+.product-card:hover .product-card-image-section img,
+.product-card:hover .product-card-image-section video {
+  transform: scale(1.06);
 }
 
 /* Image Section */
 .product-card-image-section {
-  height: 180px;
+  height: 165px;
   width: 100%;
   position: relative;
   overflow: hidden;
@@ -133,7 +157,7 @@
 
 .product-card-price {
   font-family: 'Sora', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: #f5b301;
   line-height: 1;
@@ -141,6 +165,13 @@
   align-items: baseline;
   gap: 2px;
   letter-spacing: -0.02em;
+}
+
+/* Strike-through for sold cards */
+.price-strikethrough {
+  text-decoration: line-through;
+  color: #94A3B8 !important;
+  opacity: 0.8;
 }
 
 .product-card-price .currency-symbol {
@@ -296,33 +327,38 @@
   background: #DCFCE7;
 }
 
-/* Premium Status Badges */
+/* Premium Status Badges — replaced by JS component */
 .badge-status {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  padding: 8px 14px;
+  top: 10px;
+  left: 10px;
+  padding: 5px 11px;
   border-radius: 999px;
   font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 9px;
+  font-weight: 800;
   color: #ffffff;
   z-index: 10;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .badge-status.in_stock {
-  background: #22c55e;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  box-shadow: 0 4px 14px rgba(34,197,94,0.40);
 }
 
 .badge-status.coming_soon {
-  background: #f59e0b;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  box-shadow: 0 4px 14px rgba(245,158,11,0.35);
 }
 
 .badge-status.sold {
-  background: #ef4444;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  box-shadow: 0 4px 14px rgba(239,68,68,0.35);
 }
 
 .badge-verified {

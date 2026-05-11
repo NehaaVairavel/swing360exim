@@ -65,13 +65,13 @@ const AdminProducts = () => {
   }, [searchQuery, activeCategory, activeStatus, products]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this machine?")) return;
     try {
       await productService.delete(id);
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast.success("Machine deleted successfully");
     } catch (error) {
       toast.error("Failed to delete machine");
+      throw error;
     }
   };
 
@@ -190,6 +190,7 @@ const AdminProducts = () => {
           >
             <option value="All">All Status</option>
             <option value="in_stock">In Stock</option>
+            <option value="coming_soon">Coming Soon</option>
             <option value="sold">Sold</option>
           </select>
         </div>
@@ -263,7 +264,6 @@ const AdminProducts = () => {
               key={product.id}
               product={product}
               handleDelete={handleDelete}
-              handleMarkSold={handleMarkSold}
             />
           ))}
         </div>
