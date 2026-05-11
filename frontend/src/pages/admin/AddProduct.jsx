@@ -246,8 +246,10 @@ const AddProduct = () => {
     const errs = {};
     if (!formData.name) errs.name = "Product name is required";
     if (!formData.category) errs.category = "Please select a category";
+    const CURRENT_YEAR = new Date().getFullYear();
+    const MAX_YEAR = CURRENT_YEAR + 2;
     if (!formData.year) errs.year = "Year is required";
-    if (formData.year && (formData.year < 1980 || formData.year > 2025)) errs.year = "Enter a valid year (1980–2025)";
+    if (formData.year && (formData.year < 1980 || formData.year > MAX_YEAR)) errs.year = `Enter a valid year (1980–${MAX_YEAR})`;
     if (!formData.engine_hours) errs.engine_hours = "Engine hours required";
     if (formData.engine_hours && isNaN(Number(formData.engine_hours))) errs.engine_hours = "Must be a number";
     if (!formData.price) errs.price = "Price is required";
@@ -348,7 +350,7 @@ const AddProduct = () => {
               <Input label="Brand" name="brand" value={formData.brand} onChange={handleInputChange} placeholder="Caterpillar" />
               <Input label="Model Number" name="model" value={formData.model} onChange={handleInputChange} placeholder="320 GC" />
               <Input label="Year" name="year" type="number" value={formData.year} onChange={handleInputChange}
-                placeholder="Manufacturing year" required error={errors.year} hint="Enter year between 1980–2025" />
+                placeholder="Manufacturing year" required error={errors.year} hint={`Enter year between 1980–${new Date().getFullYear() + 2}`} />
               <Select label="Condition" name="condition" value={formData.condition} onChange={handleInputChange}
                 options={["New", "Used", "Refurbished"]} required />
               <Input label="Engine Hours" name="engine_hours" type="number" value={formData.engine_hours}

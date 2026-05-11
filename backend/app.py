@@ -445,6 +445,17 @@ def create_product():
         return jsonify({"error": "No data provided"}), 400
     data["created_at"] = datetime.utcnow().isoformat()
     
+    # Validate Year
+    year = data.get("year")
+    if year:
+        try:
+            year_int = int(year)
+            max_allowed = datetime.utcnow().year + 2
+            if year_int < 1980 or year_int > max_allowed:
+                return jsonify({"error": f"Invalid year. Must be between 1980 and {max_allowed}"}), 400
+        except ValueError:
+            return jsonify({"error": "Year must be a valid number"}), 400
+
     # Generate Automatic Reference Number
     category = data.get("category", "Others")
     if category not in VALID_CATEGORIES:
@@ -469,6 +480,17 @@ def update_product(product_id):
     data.pop("id", None)
     data.pop("_id", None)
     
+    # Validate Year if provided
+    year = data.get("year")
+    if year:
+        try:
+            year_int = int(year)
+            max_allowed = datetime.utcnow().year + 2
+            if year_int < 1980 or year_int > max_allowed:
+                return jsonify({"error": f"Invalid year. Must be between 1980 and {max_allowed}"}), 400
+        except ValueError:
+            return jsonify({"error": "Year must be a valid number"}), 400
+
     if "category" in data and data["category"] not in VALID_CATEGORIES:
         data["category"] = "Others"
         
