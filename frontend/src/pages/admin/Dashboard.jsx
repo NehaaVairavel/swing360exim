@@ -11,6 +11,7 @@ import {
   Activity,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Clock } from "lucide-react";
 import "@/styles/admin.css";
 
 /* ─── CountUp animation ─── */
@@ -68,10 +69,18 @@ const colorMap = {
     trendBg: "#F5F3FF",
     trendColor: "#7C3AED",
   },
+  orange: {
+    iconBg: "#FFF7ED",
+    iconColor: "#EA580C",
+    lineStroke: "#F97316",
+    trendBg: "#FFF7ED",
+    trendColor: "#EA580C",
+  },
 };
 
 /* ─── KPI Stat Card ─── */
 const KpiCard = ({
+  superTitle,
   title,
   value,
   icon: Icon,
@@ -83,21 +92,21 @@ const KpiCard = ({
   const theme = colorMap[color] || colorMap.yellow;
 
   return (
-    <div className="kpi-card p-7 group">
+    <div className="kpi-card p-5 group">
       {/* Top row */}
-      <div className="flex items-start justify-between mb-5">
+      <div className="flex items-start justify-between mb-4">
         {/* Icon */}
         <div
           className="flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105"
           style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "14px",
+            width: "36px",
+            height: "36px",
+            borderRadius: "10px",
             background: theme.iconBg,
             color: theme.iconColor,
           }}
         >
-          <Icon size={22} />
+          <Icon size={18} />
         </div>
 
         {/* Trend badge + sparkline */}
@@ -156,13 +165,26 @@ const KpiCard = ({
       {/* Number + label */}
       <div>
         <p
-          className="admin-label-small mb-2"
-          style={{ color: "#94A3B8" }}
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "9px",
+            fontWeight: 800,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            color: "#94A3B8",
+            marginBottom: "4px"
+          }}
+        >
+          {superTitle}
+        </p>
+        <p
+          className="admin-label-small mb-1"
+          style={{ color: "#334155", fontWeight: 700, fontSize: "11px" }}
         >
           {title}
         </p>
-        <div className="flex items-end gap-2">
-          <h3 className="admin-stats-number" style={{ color: "#111827" }}>
+        <div className="flex items-end gap-2 mt-1">
+          <h3 className="admin-stats-number" style={{ color: "#0F172A", fontSize: "24px", lineHeight: "1.1" }}>
             <CountUp end={value} prefix={prefix} />
           </h3>
           <div
@@ -274,10 +296,11 @@ const Dashboard = () => {
 
       {/* ── KPI Stats Grid ── */}
       <div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8"
+        className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-4 mb-8"
       >
         <KpiCard
-          title="Total Inventory"
+          superTitle="Inventory Overview"
+          title="TOTAL INVENTORY"
           value={stats.total_products}
           icon={Box}
           trend="+5"
@@ -285,7 +308,8 @@ const Dashboard = () => {
           color="yellow"
         />
         <KpiCard
-          title="Active Listings"
+          superTitle="Marketplace Status"
+          title="ACTIVE LISTINGS"
           value={stats.available_products}
           icon={Globe}
           trend="+8"
@@ -293,7 +317,8 @@ const Dashboard = () => {
           color="blue"
         />
         <KpiCard
-          title="Sold Units"
+          superTitle="Sales Analytics"
+          title="SOLD UNITS"
           value={stats.sold_products}
           icon={CheckCircle}
           trend="+15"
@@ -301,7 +326,17 @@ const Dashboard = () => {
           color="green"
         />
         <KpiCard
-          title="Total Leads"
+          superTitle="Product Pipeline"
+          title="COMING SOON"
+          value={stats.coming_soon_products || 0}
+          icon={Clock}
+          trend="Upcoming"
+          trendUp={true}
+          color="orange"
+        />
+        <KpiCard
+          superTitle="Lead Monitoring"
+          title="TOTAL LEADS"
           value={stats.enquiries_count}
           icon={Mail}
           trend="Tracking"
