@@ -322,15 +322,22 @@ def me():
 @app.route("/api/dashboard", methods=["GET"])
 @jwt_required()
 def dashboard():
-    total     = products_col.count_documents({})
-    available = products_col.count_documents({"availability": "in_stock"})
-    sold      = products_col.count_documents({"availability": "sold"})
-    enqs      = enquiries_col.count_documents({})
+    total = products_col.count_documents({})
+    
+    # Use $regex for case-insensitive matching or exact matches
+    sold = products_col.count_documents({"availability": {"$in": ["sold", "Sold", "SOLD"]}})
+    coming_soon = products_col.count_documents({"availability": {"$in": ["coming_soon", "Coming Soon", "coming soon"]}})
+    
+    # Everything else defaults to Active/In Stock to ensure math perfectly aligns
+    available = total - sold - coming_soon
+    
+    enqs = enquiries_col.count_documents({})
     return jsonify({
-        "total_products":     total,
+        "total_products": total,
         "available_products": available,
-        "sold_products":      sold,
-        "enquiries_count":    enqs
+        "sold_products": sold,
+        "coming_soon_products": coming_soon,
+        "enquiries_count": enqs
     }), 200
 
 
