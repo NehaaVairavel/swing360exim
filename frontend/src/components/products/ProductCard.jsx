@@ -33,8 +33,8 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
     <motion.div
       variants={itemVariant}
       layout
-      onClick={handleCardClick}
-      className={`relative bg-white rounded-[22px] overflow-hidden border border-slate-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-premium hover:-translate-y-2 hover:ring-1 hover:ring-primary/20 transition-all duration-500 group flex flex-col h-full ${isSold ? "opacity-90" : ""}`}
+      onClick={isSold ? undefined : handleCardClick}
+      className={`relative bg-white rounded-[22px] overflow-hidden border border-slate-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-500 group flex flex-col h-full ${isSold ? "opacity-90" : "hover:shadow-premium hover:-translate-y-2 hover:ring-1 hover:ring-primary/20"}`}
     >
       {/* 1. Image Section */}
       <div className="relative h-[160px] overflow-hidden shrink-0">
@@ -46,21 +46,26 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
         </div>
 
         {/* Overlay Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-          <div className="px-2.5 py-1 bg-white/90 backdrop-blur-md text-heading font-black text-[9px] uppercase tracking-widest rounded-lg shadow-sm border border-slate-200/50 flex items-center gap-1.5">
-            <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
-            Verified
+        {!isSold && (
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-20">
+            <div className="px-2.5 py-1 bg-white/90 backdrop-blur-md text-heading font-black text-[9px] uppercase tracking-widest rounded-lg shadow-sm border border-slate-200/50 flex items-center gap-1.5">
+              <div className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
+              Verified
+            </div>
+            <div className="px-2.5 py-1 bg-primary text-white font-black text-[9px] uppercase tracking-widest rounded-lg shadow-lg shadow-primary/20 flex items-center gap-1.5">
+              <RotateCcw size={10} className="rotate-180" />
+              Ready
+            </div>
           </div>
-          <div className="px-2.5 py-1 bg-primary text-white font-black text-[9px] uppercase tracking-widest rounded-lg shadow-lg shadow-primary/20 flex items-center gap-1.5">
-            <RotateCcw size={10} className="rotate-180" />
-            Ready
-          </div>
-        </div>
+        )}
 
         {isSold && (
-          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center z-20">
-            <span className="px-6 py-2 bg-white text-slate-900 font-black text-sm tracking-[0.3em] uppercase rounded-full shadow-2xl">Sold</span>
-          </div>
+          <>
+            <div className="absolute inset-0 bg-slate-900/20 backdrop-grayscale-[0.8] z-10 pointer-events-none" />
+            <div className="absolute top-3 right-3 bg-gradient-to-r from-red-500 to-red-700 text-white font-black text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-full shadow-md z-20 border border-red-400/20">
+              SOLD
+            </div>
+          </>
         )}
       </div>
       
@@ -98,7 +103,7 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
           <div className="pt-3 border-t border-slate-50 flex items-end justify-between mb-3">
             <div>
               <span className="industrial-label mb-0.5 block">Export Price</span>
-              <div className="text-2xl font-display font-black price-cat flex items-baseline gap-1">
+              <div className={`text-2xl font-display font-black flex items-baseline gap-1 ${isSold ? 'text-slate-400 line-through decoration-2 decoration-slate-300' : 'price-cat'}`}>
                 {displayPrice}
               </div>
             </div>
@@ -108,21 +113,33 @@ const ProductCard = ({ product, setSelectedProduct, setEnquiryOpen }) => {
           </div>
           
           {/* Actions */}
-          <div className="grid grid-cols-2 gap-2">
-            <Link 
-              to={`/product/${product.id}`}
-              className="flex items-center justify-center h-[38px] rounded-xl border-2 border-[#0F172A] text-[#0F172A] font-bold text-[11px] uppercase tracking-widest hover:bg-[#0F172A] hover:text-white transition-all"
-            >
-              Details
-            </Link>
-            <button 
-              onClick={(e) => { e.stopPropagation(); setSelectedProduct(product); setEnquiryOpen(true); }}
-              className="flex items-center justify-center gap-2 h-[38px] rounded-xl bg-primary text-white font-bold text-[11px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
-            >
-              <MessageCircle size={14} />
-              Enquire
-            </button>
-          </div>
+          {isSold ? (
+            <div className="grid grid-cols-2 gap-2">
+              <button disabled className="flex items-center justify-center h-[38px] rounded-xl bg-slate-100 text-slate-400 font-bold text-[11px] uppercase tracking-widest cursor-not-allowed opacity-60">
+                Details
+              </button>
+              <button disabled className="flex items-center justify-center gap-2 h-[38px] rounded-xl bg-slate-100 text-slate-400 font-bold text-[11px] uppercase tracking-widest cursor-not-allowed opacity-60">
+                <MessageCircle size={14} />
+                Enquire
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-2">
+              <Link 
+                to={`/product/${product.id}`}
+                className="flex items-center justify-center h-[38px] rounded-xl border-2 border-[#0F172A] text-[#0F172A] font-bold text-[11px] uppercase tracking-widest hover:bg-[#0F172A] hover:text-white transition-all"
+              >
+                Details
+              </Link>
+              <button 
+                onClick={(e) => { e.stopPropagation(); setSelectedProduct(product); setEnquiryOpen(true); }}
+                className="flex items-center justify-center gap-2 h-[38px] rounded-xl bg-primary text-white font-bold text-[11px] uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all"
+              >
+                <MessageCircle size={14} />
+                Enquire
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
