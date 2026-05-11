@@ -409,23 +409,24 @@ const Products = () => {
 
 
 
-      <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-6 lg:px-5">
-        <div className="flex flex-col lg:flex-row gap-[20px] items-start mt-[8px]">
+      <div className="container-section max-w-[1750px] mx-auto pt-0 pb-10 mt-0 px-4 md:px-6 lg:px-5">
+        <div className="flex flex-col lg:flex-row gap-[20px] items-stretch mt-[8px]">
           
-          <motion.aside 
-            initial={{ opacity: 0, x: -15 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[120px] lg:max-h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar-slim z-30 transition-all duration-200 ease-in-out self-start mt-[8px]"
-            style={{
-              background: '#F8FAFC',
-              borderRadius: '28px',
-              border: '1px solid #EEF2F7',
-              boxShadow: scrolled ? '0 8px 24px rgba(15,23,42,0.04)' : 'none'
-            }}
-          >
-            <div className="products-sidebar flex flex-col w-full box-border" style={{ width: '100%', boxSizing: 'border-box' }}>
+          <aside className="w-full lg:w-[260px] shrink-0 z-30">
+            <motion.div 
+              initial={{ opacity: 0, x: -15 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="w-full lg:sticky lg:top-[100px] transition-all duration-200 ease-in-out"
+              style={{
+                background: '#F8FAFC',
+                borderRadius: '28px',
+                border: '1px solid #EEF2F7',
+                boxShadow: scrolled ? '0 8px 24px rgba(15,23,42,0.04)' : 'none'
+              }}
+            >
+              <div className="products-sidebar flex flex-col w-full box-border" style={{ width: '100%', boxSizing: 'border-box' }}>
               
               <div className="px-5 pt-[20px] pb-3 border-b border-[#EEF2F7] mb-2 bg-white rounded-t-[28px]">
                 <div className="flex items-center justify-between mb-1">
@@ -615,11 +616,12 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-            </div>
-          </motion.aside>
+              </div>
+            </motion.div>
+          </aside>
 
           {/* RIGHT SIDE PRODUCT GRID */}
-          <main className="flex-1 min-w-0">
+          <main className="flex-1 min-w-0 pb-[40px]">
             {filteredProducts.length === 0 ? (
               /* 4. EMPTY STATE */
               <motion.div 
