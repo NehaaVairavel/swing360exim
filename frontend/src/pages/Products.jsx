@@ -28,13 +28,13 @@ const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaul
     <div className="border-b border-[#EEF2F7] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2" style={{ width: '100%', boxSizing: 'border-box' }}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between px-[18px] h-[56px] rounded-[16px] transition-all duration-300 group
+        className={`w-full flex items-center justify-between px-[16px] h-[52px] rounded-[16px] transition-all duration-300 group
           ${isOpen ? 'bg-white border-[1px] border-[#EEF2F7] shadow-sm' : 'bg-white border-[1px] border-transparent hover:bg-[#F8FAFC] hover:border-[#EEF2F7]'}`}
       >
         <div className="flex items-center gap-3">
           {Icon && <Icon size={18} className={`${isOpen ? 'text-[#F59E0B]' : 'text-slate-400 group-hover:text-[#F59E0B]'} transition-colors`} />}
           <div className="flex items-center">
-            <span className={`font-sora text-[12px] font-[800] tracking-[0.12em] uppercase ${isOpen ? 'text-heading' : 'text-slate-600'}`}>{title}</span>
+            <span className={`font-sora text-[14px] font-[800] tracking-[0.12em] uppercase ${isOpen ? 'text-heading' : 'text-slate-600'}`}>{title}</span>
             {badge && <span className={`font-semibold text-[11px] ml-1.5 ${isOpen ? 'text-orange-600/80' : 'text-slate-400'}`}>({badge})</span>}
           </div>
           {count > 0 && (
@@ -346,13 +346,13 @@ const Products = () => {
       </section>
 
       {/* 2. PREMIUM SEARCH & FILTER TOOLBAR WRAPPER */}
-      <section className={`${scrolled ? 'sticky top-[80px]' : 'relative'} z-40 pt-2 pb-3 -mt-2 transition-all duration-300`}>
+      <section className={`${scrolled ? 'sticky top-[78px]' : 'relative'} z-40 pt-2 pb-3 -mt-2 transition-all duration-300`}>
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="rounded-[18px] py-[10px] px-[18px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[42fr_16fr_28fr_12fr] items-center gap-4 transition-all my-0 mx-auto"
+            className="rounded-[20px] py-[10px] px-[14px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[42fr_16fr_28fr_12fr] items-center gap-4 transition-all my-0 mx-auto"
             style={{ 
               width: 'calc(100% - 48px)', 
               maxWidth: '1650px',
@@ -417,13 +417,12 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[140px] h-fit overflow-visible z-30 transition-all duration-200 ease-in-out self-start"
+            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[120px] lg:max-h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar-slim z-30 transition-all duration-200 ease-in-out self-start"
             style={{
-              background: '#FFFFFF',
+              background: '#F8FAFC',
               borderRadius: '28px',
               border: '1px solid #EEF2F7',
-              boxShadow: scrolled ? '0 8px 24px rgba(15,23,42,0.04)' : 'none',
-              paddingBottom: '120px'
+              boxShadow: scrolled ? '0 8px 24px rgba(15,23,42,0.04)' : 'none'
             }}
           >
             <div className="products-sidebar flex flex-col w-full box-border" style={{ width: '100%', boxSizing: 'border-box' }}>
@@ -478,7 +477,7 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        style={{ padding: '10px 14px', fontSize: '14px', borderRadius: '12px' }}
+                        style={{ padding: '10px 12px', fontSize: '13px', minHeight: '42px', borderRadius: '12px' }}
                         className={`flex items-center justify-center font-manrope transition-all duration-200 border text-center leading-tight ${isSelected ? 'bg-[#FFF9F0] border-[#F59E0B] text-heading font-[700] shadow-sm' : 'bg-white border-[#EEF2F7] text-slate-600 hover:bg-[#F8FAFC] hover:border-[#cbd5e1]'}`}
                       >
                         {cat}
@@ -650,8 +649,8 @@ const Products = () => {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-50px" }}
-                  className="grid gap-4"
-                  style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))' }}
+                  className="grid gap-4 items-start auto-rows-min"
+                  style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}
                 >
                   <AnimatePresence mode="popLayout">
                     {availableProducts.map((product) => (
@@ -662,12 +661,9 @@ const Products = () => {
 
                 {/* Previously Sold Units */}
                 {activeStatus === "All" && availableProducts.length > 0 && soldProducts.length > 0 && (
-                  <div className="relative pt-12">
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-slate-100" />
-                    <div className="relative flex justify-center">
-                      <div className="bg-[#F8FAFC] px-10 py-3 rounded-full border border-slate-100">
-                        <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em]">Previously Sold Units</h2>
-                      </div>
+                  <div className="relative flex justify-center" style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid #edf1f5' }}>
+                    <div className="absolute top-[-16px] bg-[#F8FAFC] px-8 py-2 rounded-full border border-[#edf1f5]">
+                      <h2 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Previously Sold Units</h2>
                     </div>
                   </div>
                 )}
@@ -678,8 +674,8 @@ const Products = () => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
-                    className="grid gap-4 opacity-80"
-                    style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))' }}
+                    className="grid gap-4 items-start auto-rows-min opacity-80"
+                    style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}
                   >
                     <AnimatePresence mode="popLayout">
                       {soldProducts.map((product) => (

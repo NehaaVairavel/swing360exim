@@ -124,3 +124,15 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #cbd5e1;
 }
+
+/* Slim Custom Scrollbar for Sidebar */
+.custom-scrollbar-slim::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar-slim::-webkit-scrollbar-thumb {
+  background: #d6dce5;
+  border-radius: 10px;
+}
