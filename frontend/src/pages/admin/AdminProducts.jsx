@@ -4,18 +4,8 @@ import { socket } from "@/socket";
 import { Link } from "react-router-dom";
 import productService from "@/services/productService";
 import {
-  Search,
-  Plus,
-  Eye,
-  Edit,
-  Trash2,
-  Image as ImageIcon,
-  LayoutGrid,
-  List,
-  Filter,
-  CheckCircle,
-  SlidersHorizontal,
-  X,
+  Search, Plus, Eye, Edit, Trash2, Image as ImageIcon,
+  LayoutGrid, List, SlidersHorizontal, X, CheckSquare,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency } from "@/context/CurrencyContext";
@@ -41,6 +31,7 @@ const AdminProducts = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeStatus, setActiveStatus] = useState("All");
   const [viewMode, setViewMode] = useState("grid");
+  const [selectedIds, setSelectedIds] = useState(new Set());
   const { formatPrice } = useCurrency();
 
   useEffect(() => {
@@ -68,6 +59,7 @@ const AdminProducts = () => {
     try {
       await productService.delete(id);
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      setSelectedIds(prev => { const n = new Set(prev); n.delete(id); return n; });
       toast.success("Machine deleted successfully");
     } catch (error) {
       toast.error("Failed to delete machine");
@@ -75,13 +67,41 @@ const AdminProducts = () => {
     }
   };
 
-  const handleMarkSold = async (id) => {
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    const ids = [...selectedIds];
     try {
-      await productService.update(id, { availability: "sold" });
+      await Promise.all(ids.map(id => productService.delete(id)));
       queryClient.invalidateQueries({ queryKey: ["products"] });
-      toast.success("Machine marked as sold");
-    } catch (error) {
-      toast.error("Update failed");
+      setSelectedIds(new Set());
+      toast.success(`${ids.length} machine${ids.length > 1 ? "s" : ""} deleted`);
+    } catch { toast.error("Bulk delete failed"); }
+  };
+
+  const handleBulkMarkSold = async () => {
+    if (selectedIds.size === 0) return;
+    const ids = [...selectedIds];
+    try {
+      await Promise.all(ids.map(id => productService.update(id, { availability: "sold" })));
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      setSelectedIds(new Set());
+      toast.success(`${ids.length} machine${ids.length > 1 ? "s" : ""} marked as sold`);
+    } catch { toast.error("Bulk update failed"); }
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedIds(prev => {
+      const n = new Set(prev);
+      n.has(id) ? n.delete(id) : n.add(id);
+      return n;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.size === filteredProducts.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredProducts.map(p => p.id)));
     }
   };
 
@@ -127,7 +147,7 @@ const AdminProducts = () => {
 
 
       {/* ── Filter Bar ── */}
-      <div className="admin-filter-bar mb-4">
+      <div className="admin-filter-bar mb-4" style={{ backdropFilter: "blur(12px)", boxShadow: "0 2px 12px rgba(15,23,42,0.06)" }}>
         {/* Search */}
         <div className="relative flex-1" style={{ minWidth: "240px", maxWidth: "360px" }}>
           <Search
@@ -256,6 +276,50 @@ const AdminProducts = () => {
         )}
       </div>
 
+      {/* ── Bulk Action Bar ── */}
+      {selectedIds.size > 0 && (
+        <div style={{
+          display: "flex", alignItems: "center", gap: 12,
+          background: "#111827", borderRadius: 14, padding: "10px 16px",
+          marginBottom: 16, animation: "fadeIn 0.2s ease",
+        }}>
+          <CheckSquare size={16} style={{ color: "#F5B301" }} />
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700, color: "#fff" }}>
+            {selectedIds.size} selected
+          </span>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 8 }}>
+            <button onClick={handleBulkMarkSold}
+              style={{ height: 32, padding: "0 14px", borderRadius: 8, border: "none", background: "#22C55E", color: "#fff", fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+              Mark Sold
+            </button>
+            <button onClick={handleBulkDelete}
+              style={{ height: 32, padding: "0 14px", borderRadius: 8, border: "none", background: "#EF4444", color: "#fff", fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+              Delete All
+            </button>
+            <button onClick={() => setSelectedIds(new Set())}
+              style={{ height: 32, width: 32, borderRadius: 8, border: "none", background: "rgba(255,255,255,0.1)", color: "#94A3B8", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Select All row ── */}
+      {viewMode === "grid" && filteredProducts.length > 0 && (
+        <div className="flex items-center gap-2 mb-3">
+          <button onClick={toggleSelectAll}
+            style={{ fontFamily: "'Inter',sans-serif", fontSize: 12, fontWeight: 600, color: "#64748B", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 5 }}>
+            <div style={{ width: 16, height: 16, borderRadius: 4, border: "2px solid #CBD5E1", background: selectedIds.size === filteredProducts.length ? "#F5B301" : "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {selectedIds.size === filteredProducts.length && <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1.5 5l2.5 2.5 4.5-4.5" stroke="#fff" strokeWidth="1.8" fill="none" strokeLinecap="round" /></svg>}
+            </div>
+            {selectedIds.size === filteredProducts.length ? "Deselect All" : "Select All"}
+          </button>
+          <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#94A3B8" }}>
+            {filteredProducts.length} machine{filteredProducts.length !== 1 ? "s" : ""}
+          </span>
+        </div>
+      )}
+
       {/* ── Grid View ── */}
       {viewMode === "grid" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 justify-items-center">
@@ -264,6 +328,8 @@ const AdminProducts = () => {
               key={product.id}
               product={product}
               handleDelete={handleDelete}
+              isSelected={selectedIds.has(product.id)}
+              onSelect={toggleSelect}
             />
           ))}
         </div>
@@ -384,54 +450,29 @@ const AdminProducts = () => {
       )}
 
       {/* ── Empty state ── */}
-      {/* ── Empty state ── */}
       {filteredProducts.length === 0 && (
-        <div
-          className="admin-card flex flex-col items-center justify-center p-12 text-center"
-          style={{ minHeight: "400px", borderRadius: "24px" }}
-        >
-          <div
-            className="flex items-center justify-center mb-4"
-            style={{
-              width: "64px",
-              height: "64px",
-              borderRadius: "20px",
-              background: "#FEF9EC",
-              color: "#F5B301",
-            }}
-          >
-            <Search size={28} />
+        <div className="admin-card flex flex-col items-center justify-center text-center"
+          style={{ minHeight: "360px", borderRadius: "24px", padding: 40 }}>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>
+            {searchQuery || activeCategory !== "All" || activeStatus !== "All" ? "🔍" : "📦"}
           </div>
-          <p
-            style={{
-              fontFamily: "'Sora', sans-serif",
-              fontSize: "20px",
-              fontWeight: 700,
-              color: "#111827",
-              marginBottom: "8px",
-            }}
-          >
-            No inventory found
+          <p style={{ fontFamily: "'Sora',sans-serif", fontSize: 20, fontWeight: 700, color: "#111827", marginBottom: 6 }}>
+            {searchQuery || activeCategory !== "All" || activeStatus !== "All" ? "No results found" : "Your inventory is empty"}
           </p>
-          <p
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: "14px",
-              color: "#64748B",
-            }}
-          >
+          <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 14, color: "#64748B", marginBottom: 20, maxWidth: 320 }}>
             {searchQuery || activeCategory !== "All" || activeStatus !== "All"
-              ? "Try adjusting your search or filter criteria."
-              : "Your inventory is currently empty. Add your first machine to get started."}
+              ? "Try adjusting your search or filter criteria to find what you're looking for."
+              : "Add your first machine to start building your global inventory."}
           </p>
+          {(activeCategory !== "All" || activeStatus !== "All" || searchQuery) && (
+            <button onClick={() => { setActiveCategory("All"); setActiveStatus("All"); setSearchQuery(""); }}
+              style={{ height: 36, padding: "0 18px", borderRadius: 10, border: "1px solid #E2E8F0", background: "#F8FAFC", fontFamily: "'Inter',sans-serif", fontSize: 13, fontWeight: 700, color: "#374151", cursor: "pointer", marginBottom: 10 }}>
+              Clear all filters
+            </button>
+          )}
           {(!searchQuery && activeCategory === "All" && activeStatus === "All") && (
-            <Link
-              to="/admin/add-product"
-              className="btn-primary mt-6"
-              style={{ textDecoration: "none" }}
-            >
-              <Plus size={16} />
-              Add First Machine
+            <Link to="/admin/add-product" className="btn-primary" style={{ textDecoration: "none" }}>
+              <Plus size={16} /> Add First Machine
             </Link>
           )}
         </div>
