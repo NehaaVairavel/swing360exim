@@ -346,7 +346,7 @@ const Products = () => {
       </section>
 
       {/* 2. PREMIUM SEARCH & FILTER TOOLBAR WRAPPER */}
-      <section className={`${scrolled ? 'sticky top-[78px]' : 'relative'} z-40 pt-2 pb-3 -mt-2 transition-all duration-300`}>
+      <section className="relative z-40 pt-2 pb-3 -mt-2 transition-all duration-300">
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
