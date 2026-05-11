@@ -410,14 +410,14 @@ const Products = () => {
 
 
       <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-6 lg:px-5">
-        <div className="flex flex-col lg:flex-row gap-[20px] items-start mt-4">
+        <div className="flex flex-col lg:flex-row gap-[20px] items-start mt-[8px]">
           
           <motion.aside 
             initial={{ opacity: 0, x: -15 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[120px] lg:max-h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar-slim z-30 transition-all duration-200 ease-in-out self-start"
+            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[120px] lg:max-h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar-slim z-30 transition-all duration-200 ease-in-out self-start mt-[8px]"
             style={{
               background: '#F8FAFC',
               borderRadius: '28px',
@@ -427,7 +427,7 @@ const Products = () => {
           >
             <div className="products-sidebar flex flex-col w-full box-border" style={{ width: '100%', boxSizing: 'border-box' }}>
               
-              <div className="px-5 py-4 border-b border-[#EEF2F7] mb-2 bg-white rounded-t-[28px]">
+              <div className="px-5 pt-[20px] pb-3 border-b border-[#EEF2F7] mb-2 bg-white rounded-t-[28px]">
                 <div className="flex items-center justify-between mb-1">
                   <div className="text-[10px] font-bold text-slate-400 tracking-[3px] uppercase">FILTERS</div>
                   {(selectedCategories.length > 0 || selectedBrands.length > 0 || selectedLocations.length > 0 || engineHours < 15000 || minPrice > 0 || maxPrice < 1000000 || selectedCondition !== "All" || activeStatus !== "All") && (
