@@ -1,25 +1,15 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import productService from "@/services/productService";
 import {
   ArrowLeft, UploadCloud, Trash2, Image as ImageIcon,
   Send, Info, DollarSign, MapPin, Clock, Eye,
-  CheckCircle, AlertCircle, Zap,
+  CheckCircle, Zap, RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useCurrency } from "@/context/CurrencyContext";
 import "@/styles/admin.css";
-
-/* ── Currency rates ── */
-const RATES = { USD: 1, AED: 3.67, EUR: 0.92, INR: 83.5 };
-const SYMBOLS = { USD: "$", AED: "AED", EUR: "€", INR: "₹" };
-
-function convertPrice(amount, fromCurrency) {
-  const usd = amount / (RATES[fromCurrency] || 1);
-  return Object.entries(RATES)
-    .filter(([c]) => c !== fromCurrency)
-    .map(([c, r]) => ({ currency: c, symbol: SYMBOLS[c], value: Math.round(usd * r) }));
-}
 
 /* ── Status badge preview ── */
 const StatusPreview = ({ status }) => {
@@ -192,6 +182,7 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
   const [draftSaved, setDraftSaved] = useState(null);
+  const { convertAll, ratesLoaded, rateDate } = useCurrency();
 
   const [formData, setFormData] = useState({
     name: "", brand: "", model: "", year: "", category: "",
@@ -293,7 +284,8 @@ const AddProduct = () => {
   };
 
   const priceNum = parseFloat(String(formData.price).replace(/[^0-9.]/g, "")) || 0;
-  const conversions = priceNum > 0 ? convertPrice(priceNum, formData.currency) : [];
+  // Convert from entered currency to USD first, then to others via live rates
+  const conversions = priceNum > 0 ? convertAll(priceNum) : [];
   const descLen = (formData.full_description || "").length;
 
   return (
@@ -386,15 +378,22 @@ const AddProduct = () => {
                 options={[{ id: "USD", name: "USD $" }, { id: "AED", name: "AED د.إ" }, { id: "EUR", name: "EUR €" }, { id: "INR", name: "INR ₹" }]}
                 required />
             </div>
-            {/* Currency conversion preview */}
+            {/* Currency conversion preview — live rates */}
             {conversions.length > 0 && (
               <div style={{ background: "#F8FAFC", borderRadius: 12, padding: "12px 14px", border: "1px solid #E2E8F0" }}>
-                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 800, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>
-                  <Zap size={10} style={{ display: "inline", marginRight: 4 }} />Currency Conversion Preview
-                </p>
+                <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
+                  <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 800, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em", margin: 0 }}>
+                    <Zap size={10} style={{ display: "inline", marginRight: 4 }} />Live Conversion Preview
+                  </p>
+                  <span style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "'Inter',sans-serif", fontSize: 10, color: ratesLoaded ? "#22C55E" : "#94A3B8", fontWeight: 600 }}>
+                    <RefreshCw size={9} />
+                    {ratesLoaded && rateDate ? `Updated ${rateDate.toLocaleDateString()}` : "Loading rates..."}
+                  </span>
+                </div>
                 <div className="flex flex-wrap gap-3">
-                  {conversions.map(({ currency, symbol, value }) => (
+                  {conversions.map(({ currency, symbol, flag, value }) => (
                     <div key={currency} style={{ background: "#fff", borderRadius: 8, padding: "6px 12px", border: "1px solid #E2E8F0" }}>
+                      <span style={{ fontSize: 11, marginRight: 4 }}>{flag}</span>
                       <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#94A3B8", fontWeight: 600 }}>{currency} </span>
                       <span style={{ fontFamily: "'Sora',sans-serif", fontSize: 13, fontWeight: 700, color: "#111827" }}>
                         {symbol}{value.toLocaleString()}
