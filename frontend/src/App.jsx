@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CurrencyProvider } from "@/context/CurrencyContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { ProductProvider } from "@/context/ProductContext";
 
 import PublicLayout from "./components/PublicLayout";
 import AdminLayout from "./components/admin/AdminLayout";
@@ -50,8 +51,9 @@ const queryClient = new QueryClient({
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <CurrencyProvider>
-        <TooltipProvider>
+      <ProductProvider>
+        <CurrencyProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -90,8 +92,9 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
       </CurrencyProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+    </ProductProvider>
+  </AuthProvider>
+</QueryClientProvider>
 );
 
 

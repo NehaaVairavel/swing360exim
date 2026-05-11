@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Search, ArrowRight, Settings, MessageCircle, Heart, Share2, ShieldCheck, Globe, Truck, Users, RotateCcw, ChevronDown, Eye, Send, LayoutGrid, Tag, MapPin, Clock, DollarSign, CheckCircle2, X } from "lucide-react";
@@ -11,6 +10,7 @@ import EnquiryModal from "@/components/EnquiryModal";
 import AnimatedGear from "@/components/AnimatedGear";
 import SectionReveal from "@/components/SectionReveal";
 import { useCurrency } from "@/context/CurrencyContext";
+import { useProducts } from "@/context/ProductContext";
 import settingsService from "@/services/settingsService";
 import CurrencyToggle from "@/components/CurrencyToggle";
 import ProductCard from "@/components/products/ProductCard";
@@ -139,39 +139,7 @@ const Products = () => {
     return v || "in_stock";
   };
 
-  const [realtimeConnected, setRealtimeConnected] = useState(socket.connected);
-  useEffect(() => {
-    const onConnect = () => setRealtimeConnected(true);
-    const onDisconnect = () => setRealtimeConnected(false);
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-    };
-  }, []);
-
-  const { data: products = [], isLoading: loading, refetch } = useQuery({
-    queryKey: ["products"],
-    queryFn: productService.getAll,
-    // Override global defaults: keep product list fairly fresh, but still cached for fast navigation.
-    staleTime: 10_000,
-    // Critical for instant admin->main sync:
-    // when admin invalidates ["products"], navigating to this page must refetch without manual refresh.
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-    // Socket.IO should handle real-time updates; if not connected, poll as a fallback
-    // so new admin-added products appear without a manual refresh.
-    refetchInterval: realtimeConnected ? false : 1000,
-  });
-
-  useEffect(() => {
-    socket.on("products_updated", () => {
-      console.log("Real-time update received: Refreshing products...");
-      refetch();
-    });
-    return () => socket.off("products_updated");
-  }, [refetch]);
+  const { products, loading } = useProducts();
 
   useEffect(() => {
     const handleScroll = () => {

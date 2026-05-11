@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
+import { useProducts } from "@/context/ProductContext";
 import { MACHINERY_CATEGORIES } from "@/constants/categories";
 import ProductCard from "@/components/admin/ProductCard";
 import { cleanPrice } from "@/utils/priceFormatter";
@@ -17,18 +18,8 @@ import "@/styles/admin.css";
 import "@/styles/cards.css";
 
 const AdminProducts = () => {
+  const { products, loading, error } = useProducts();
   const queryClient = useQueryClient();
-  const {
-    data: products = [],
-    isLoading: loading,
-    refetch,
-  } = useQuery({
-    queryKey: ["products", "admin"],
-    queryFn: () => productService.getAll({ all: true }),
-    staleTime: 5_000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-  });
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -38,12 +29,7 @@ const AdminProducts = () => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const { formatPrice, currency, setCurrency, currencies, convertAll, rates } = useCurrency();
 
-  useEffect(() => {
-    socket.on("products_updated", () => {
-      refetch();
-    });
-    return () => socket.off("products_updated");
-  }, [refetch]);
+
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {

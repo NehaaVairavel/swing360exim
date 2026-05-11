@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import publicService from "@/services/publicService";
 import enquiryService from "@/services/enquiryService";
 import {
@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Clock } from "lucide-react";
+import { useProducts } from "@/context/ProductContext";
 import "@/styles/admin.css";
 
 /* ─── CountUp animation ─── */
@@ -219,31 +220,28 @@ const KpiCard = ({
 
 /* ─── Dashboard Page ─── */
 const Dashboard = () => {
-  const [stats, setStats] = useState({
-    total_products: 0,
-    available_products: 0,
-    sold_products: 0,
-    enquiries_count: 0,
-  });
+  const { products, loading: productsLoading } = useProducts();
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const stats = useMemo(() => {
+    return {
+      total_products: products.length,
+      available_products: products.filter(p => p.availability !== "sold").length,
+      sold_products: products.filter(p => p.availability === "sold").length,
+      enquiries_count: enquiries.length,
+    };
+  }, [products, enquiries]);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [statsData, enquiriesData] = await Promise.all([
-          publicService.getDashboardStats(),
-          enquiryService.getAll(),
-        ]);
-        setStats(statsData || {});
+        const enquiriesData = await enquiryService.getAll();
         setEnquiries(
           Array.isArray(enquiriesData) ? enquiriesData.slice(0, 6) : []
         );
       } catch (error) {
-        console.error(
-          "Dashboard fetch error:",
-          error?.response?.data || error.message
-        );
+        console.error("Dashboard fetch error:", error);
       } finally {
         setLoading(false);
       }

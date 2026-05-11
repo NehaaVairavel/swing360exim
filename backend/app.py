@@ -498,10 +498,14 @@ def update_product(product_id):
     if result.matched_count == 0:
         return jsonify({"error": "Product not found"}), 404
     
-    # Broadcast real-time update
-    socketio.emit("products_updated", {"type": "update", "id": product_id})
+    # Fetch updated product to broadcast full data
+    updated_product = products_col.find_one({"_id": ObjectId(product_id)})
+    serialized = serialize(updated_product)
     
-    return jsonify({"message": "Product updated"}), 200
+    # Broadcast real-time update with full product data
+    socketio.emit("products_updated", {"type": "update", "id": product_id, "product": serialized})
+    
+    return jsonify({"message": "Product updated", "product": serialized}), 200
 
 
 @app.route("/api/products/<product_id>", methods=["DELETE"])

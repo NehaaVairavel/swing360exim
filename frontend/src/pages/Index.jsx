@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, useMotionValue, useTransform, useInView, useScroll } from "framer-motion";
 import { Truck, Wrench, Banknote, Headphones, Globe, ArrowRight, Shield, Award, Search } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import AnimatedGear from "@/components/AnimatedGear";
 import SectionReveal from "@/components/SectionReveal";
 import BrandCarousel from "@/components/BrandCarousel";
@@ -10,6 +9,7 @@ import productService from "@/services/productService";
 import settingsService from "@/services/settingsService";
 import { socket } from "@/socket";
 import { MACHINERY_CATEGORIES } from "@/constants/categories";
+import { useProducts } from "@/context/ProductContext";
 import heroBg from "@/assets/hero-bg.jpg";
 import excavatorImg from "@/assets/category/excavator.jpg";
 import backhoeImg from "@/assets/category/backhoe.jpg";
@@ -137,33 +137,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [realtimeConnected, setRealtimeConnected] = useState(socket.connected);
-  useEffect(() => {
-    const onConnect = () => setRealtimeConnected(true);
-    const onDisconnect = () => setRealtimeConnected(false);
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-    return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-    };
-  }, []);
-
-  const { data: allProducts = [], refetch: refetchAll } = useQuery({
-    queryKey: ["products"],
-    queryFn: productService.getAll,
-    refetchInterval: realtimeConnected ? false : 1000,
-  });
-
-
-
-  useEffect(() => {
-    socket.on("products_updated", () => {
-      console.log("Real-time home update received...");
-      refetchAll();
-    });
-    return () => socket.off("products_updated");
-  }, [refetchAll]);
+  const { products: allProducts, loading } = useProducts();
 
   const [siteSettings, setSiteSettings] = useState(null);
 
