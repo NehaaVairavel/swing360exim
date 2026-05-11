@@ -355,7 +355,7 @@ const EditProduct = () => {
               <Input label="Brand" name="brand" value={formData.brand} onChange={handleInputChange} />
               <Input label="Model Number" name="model" value={formData.model} onChange={handleInputChange} />
               <Input label="Year" name="year" type="number" value={formData.year} onChange={handleInputChange} 
-                required error={errors.year} hint={`Enter year between 1980–${new Date().getFullYear() + 2}`} />
+                required error={errors.year} />
               <Select label="Condition" name="condition" value={formData.condition} onChange={handleInputChange} options={["New", "Used", "Refurbished"]} required />
               <Input label="Engine Hours" name="engine_hours" type="number" value={formData.engine_hours} onChange={handleInputChange} required error={errors.engine_hours} />
               <Input label="Location" name="location" value={formData.location} onChange={handleInputChange} required error={errors.location} />

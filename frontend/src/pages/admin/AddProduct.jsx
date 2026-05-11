@@ -349,8 +349,8 @@ const AddProduct = () => {
                 options={categories} required error={errors.category} />
               <Input label="Brand" name="brand" value={formData.brand} onChange={handleInputChange} placeholder="Caterpillar" />
               <Input label="Model Number" name="model" value={formData.model} onChange={handleInputChange} placeholder="320 GC" />
-              <Input label="Year" name="year" type="number" value={formData.year} onChange={handleInputChange}
-                placeholder="Manufacturing year" required error={errors.year} hint={`Enter year between 1980–${new Date().getFullYear() + 2}`} />
+              <Input label="Year" name="year" type="number" value={formData.year} onChange={handleInputChange} 
+                required error={errors.year} />
               <Select label="Condition" name="condition" value={formData.condition} onChange={handleInputChange}
                 options={["New", "Used", "Refurbished"]} required />
               <Input label="Engine Hours" name="engine_hours" type="number" value={formData.engine_hours}
