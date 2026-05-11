@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Clock, MapPin, CheckCircle, AlertCircle, Edit3, Archive } from 'lucide-react';
+import { Trash2, Clock, MapPin, ChevronDown, CheckCircle, AlertCircle, Edit3, Archive } from 'lucide-react';
 import { toast } from 'sonner';
 import ProductCarousel from '../products/ProductCarousel';
 import { cleanPrice } from '@/utils/priceFormatter';
@@ -15,14 +15,14 @@ const itemVariant = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.38, ease: "easeOut" } }
 };
 
-/* ── Status Config ── */
+/* ── Status config ── */
 const STATUS_CFG = {
-  in_stock:    { label: "In Stock",    icon: "🟢", color: "#22c55e", bg: "linear-gradient(135deg,#22c55e,#16a34a)", shadow: "rgba(34,197,94,0.40)",   pill: "#F0FDF4", text: "#16A34A", pulse: true  },
-  coming_soon: { label: "Coming Soon", icon: "🟠", color: "#f59e0b", bg: "linear-gradient(135deg,#f59e0b,#d97706)", shadow: "rgba(245,158,11,0.35)", pill: "#FFFBEB", text: "#D97706", pulse: false },
-  sold:        { label: "Sold",        icon: "🔴", color: "#ef4444", bg: "linear-gradient(135deg,#ef4444,#b91c1c)", shadow: "rgba(239,68,68,0.35)",   pill: "#FEF2F2", text: "#DC2626", pulse: false },
+  in_stock:    { label: "In Stock",    color: "#16a34a", icon: "🟢", bg: "linear-gradient(135deg,#22c55e,#16a34a)", shadow: "rgba(34,197,94,0.40)", pulse: true  },
+  coming_soon: { label: "Coming Soon", color: "#ea580c", icon: "🟠", bg: "linear-gradient(135deg,#f59e0b,#d97706)", shadow: "rgba(245,158,11,0.35)", pulse: false },
+  sold:        { label: "Sold",        color: "#dc2626", icon: "🔴", bg: "linear-gradient(135deg,#ef4444,#b91c1c)", shadow: "rgba(239,68,68,0.35)",   pulse: false },
 };
 
-/* ── Premium Status Image Badge ── */
+/* ── Image Status Badge (on card image) ── */
 const StatusBadge = ({ status }) => {
   const cfg = STATUS_CFG[status] || STATUS_CFG.in_stock;
   return (
@@ -36,20 +36,17 @@ const StatusBadge = ({ status }) => {
       <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.06em" }}>
         {cfg.label}
       </span>
-      {cfg.pulse && (
-        <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,0.85)", animation: "badge-pulse 1.8s ease-in-out infinite", display: "inline-block" }} />
-      )}
+      {cfg.pulse && <span style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,0.85)", animation: "badge-pulse 1.8s ease-in-out infinite", display: "inline-block" }} />}
     </div>
   );
 };
 
-/* ── Colored Status Dropdown Trigger ── */
-const StatusDropdown = ({ productId, current, isSelected, onSelect }) => {
+/* ── Minimal text-only Status Selector ── */
+const StatusSelector = ({ productId, current }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
   const cfg = STATUS_CFG[current] || STATUS_CFG.in_stock;
-
   const options = Object.entries(STATUS_CFG).map(([value, c]) => ({ value, ...c }));
 
   const handleSelect = async (value) => {
@@ -69,43 +66,37 @@ const StatusDropdown = ({ productId, current, isSelected, onSelect }) => {
 
   return (
     <div style={{ position: "relative", gridColumn: "1 / -1" }} onClick={e => e.stopPropagation()}>
+      {/* Trigger — text only, no background */}
       <button
         onClick={() => setOpen(v => !v)}
         style={{
-          width: "100%", height: 32, borderRadius: 8,
-          border: `1.5px solid ${cfg.color}22`,
-          background: cfg.pill,
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-          fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 800,
-          color: cfg.text, cursor: "pointer",
-          transition: "all 0.2s ease",
-          opacity: loading ? 0.6 : 1,
+          width: "100%", height: 28,
+          background: "transparent", border: "none", borderTop: "1px solid #F1F5F9",
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
+          fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700,
+          color: loading ? "#94A3B8" : cfg.color,
+          cursor: "pointer", letterSpacing: "0.01em",
+          transition: "opacity 0.15s",
+          paddingTop: 4,
         }}
-        onMouseEnter={e => e.currentTarget.style.boxShadow = `0 0 0 3px ${cfg.color}22`}
-        onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}
+        onMouseEnter={e => e.currentTarget.style.opacity = "0.75"}
+        onMouseLeave={e => e.currentTarget.style.opacity = "1"}
       >
-        {loading ? "Updating..." : (
-          <>
-            <span style={{ fontSize: 10 }}>{cfg.icon}</span>
-            {cfg.label}
-            <svg width="9" height="9" viewBox="0 0 10 10" fill={cfg.text} style={{ transition: "transform 0.2s", transform: open ? "rotate(180deg)" : "none" }}>
-              <path d="M1 3l4 4 4-4" stroke={cfg.text} strokeWidth="1.5" fill="none" strokeLinecap="round" />
-            </svg>
-          </>
-        )}
+        {loading ? "Updating…" : cfg.label}
+        <ChevronDown size={10} style={{ transition: "transform 0.2s", transform: open ? "rotate(180deg)" : "none", color: cfg.color }} />
       </button>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -6, scale: 0.97 }}
+            initial={{ opacity: 0, y: -4, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.97 }}
-            transition={{ duration: 0.14 }}
+            exit={{ opacity: 0, y: -4, scale: 0.97 }}
+            transition={{ duration: 0.13 }}
             style={{
-              position: "absolute", bottom: "calc(100% + 6px)", left: 0, right: 0,
-              background: "#fff", borderRadius: 12,
-              boxShadow: "0 16px 40px rgba(15,23,42,0.14)", border: "1px solid #EEF1F5",
+              position: "absolute", bottom: "calc(100% + 4px)", left: 0, right: 0,
+              background: "#fff", borderRadius: 10,
+              boxShadow: "0 12px 32px rgba(15,23,42,0.14)", border: "1px solid #EEF1F5",
               overflow: "hidden", zIndex: 200,
             }}
           >
@@ -114,19 +105,20 @@ const StatusDropdown = ({ productId, current, isSelected, onSelect }) => {
                 key={opt.value}
                 onClick={() => handleSelect(opt.value)}
                 style={{
-                  width: "100%", padding: "9px 12px", display: "flex", alignItems: "center", gap: 8,
+                  width: "100%", padding: "8px 12px",
+                  display: "flex", alignItems: "center", gap: 7,
                   fontFamily: "'Inter',sans-serif", fontSize: 12,
-                  fontWeight: current === opt.value ? 800 : 600,
-                  color: current === opt.value ? opt.text : "#374151",
-                  background: current === opt.value ? opt.pill : "transparent",
-                  border: "none", cursor: "pointer", textAlign: "left", transition: "background 0.12s",
+                  fontWeight: current === opt.value ? 800 : 500,
+                  color: current === opt.value ? opt.color : "#374151",
+                  background: "transparent", border: "none", cursor: "pointer",
+                  textAlign: "left", transition: "background 0.1s",
                 }}
-                onMouseEnter={e => { if (current !== opt.value) e.currentTarget.style.background = "#F8FAFC"; }}
-                onMouseLeave={e => { e.currentTarget.style.background = current === opt.value ? opt.pill : "transparent"; }}
+                onMouseEnter={e => e.currentTarget.style.background = "#F8FAFC"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}
               >
                 <span style={{ fontSize: 11 }}>{opt.icon}</span>
                 {opt.label}
-                {current === opt.value && <CheckCircle size={11} style={{ marginLeft: "auto", color: opt.color }} />}
+                {current === opt.value && <CheckCircle size={10} style={{ marginLeft: "auto", color: opt.color }} />}
               </button>
             ))}
           </motion.div>
@@ -169,7 +161,7 @@ const DeleteModal = ({ productName, onConfirm, onCancel }) => (
   </AnimatePresence>
 );
 
-/* ── Relative time helper ── */
+/* ── Relative time ── */
 function relativeTime(dateStr) {
   if (!dateStr) return null;
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -184,7 +176,7 @@ function relativeTime(dateStr) {
 }
 
 /* ── Main ProductCard ── */
-const ProductCard = ({ product, handleDelete, isSelected, onSelect }) => {
+const ProductCard = ({ product, handleDelete, isSelected, onSelect, onHover }) => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const isSold = product.availability === "sold";
@@ -215,6 +207,8 @@ const ProductCard = ({ product, handleDelete, isSelected, onSelect }) => {
         variants={itemVariant} layout
         className={`product-card group ${isSold ? "card-sold-state" : ""}`}
         onClick={handleCardClick}
+        onMouseEnter={() => onHover?.(product)}
+        onMouseLeave={() => onHover?.(null)}
         style={{ cursor: "pointer", position: "relative" }}
         whileHover={{ y: -5, boxShadow: "0 16px 40px rgba(15,23,42,0.10)" }}
         transition={{ duration: 0.22, ease: "easeOut" }}
@@ -225,59 +219,42 @@ const ProductCard = ({ product, handleDelete, isSelected, onSelect }) => {
             onClick={e => { e.stopPropagation(); onSelect(product.id); }}
             style={{
               position: "absolute", top: 8, right: 8, zIndex: 20,
-              width: 22, height: 22, borderRadius: 6,
+              width: 20, height: 20, borderRadius: 5,
               border: isSelected ? "none" : "2px solid rgba(255,255,255,0.7)",
-              background: isSelected ? "#F5B301" : "rgba(255,255,255,0.25)",
+              background: isSelected ? "#F5B301" : "rgba(255,255,255,0.20)",
               backdropFilter: "blur(4px)",
               display: "flex", alignItems: "center", justifyContent: "center",
-              transition: "all 0.15s ease", cursor: "pointer",
+              transition: "all 0.15s", cursor: "pointer",
             }}
           >
-            {isSelected && (
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6l3 3 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            )}
+            {isSelected && <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 5.5l2.5 2.5 4.5-4.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
           </div>
         )}
 
-        {/* 1. Image Section */}
+        {/* Image */}
         <div className="product-card-image-section" onClick={stopProp}>
           <div className={isSold ? "img-sold-overlay" : ""}>
-            <ProductCarousel
-              images={product.images} image={product.image} photo={product.photo}
-              isSold={isSold} name={product.name} id={product.id} updatedAt={product.updatedAt}
-            />
+            <ProductCarousel images={product.images} image={product.image} photo={product.photo}
+              isSold={isSold} name={product.name} id={product.id} updatedAt={product.updatedAt} />
           </div>
           <StatusBadge status={statusRaw} />
           {product.year && <div className="badge-verified">{product.year}</div>}
           {isSold && (
-            <div style={{
-              position: "absolute", bottom: 10, left: "50%", transform: "translateX(-50%)",
-              background: "rgba(15,23,42,0.72)", backdropFilter: "blur(4px)",
-              borderRadius: 999, padding: "4px 12px",
-              display: "flex", alignItems: "center", gap: 5, zIndex: 10,
-            }}>
+            <div style={{ position: "absolute", bottom: 10, left: "50%", transform: "translateX(-50%)", background: "rgba(15,23,42,0.72)", backdropFilter: "blur(4px)", borderRadius: 999, padding: "4px 12px", display: "flex", alignItems: "center", gap: 5, zIndex: 10 }}>
               <Archive size={10} style={{ color: "#94A3B8" }} />
               <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 800, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em" }}>Archived Sale</span>
             </div>
           )}
         </div>
 
-        {/* 2. Content */}
+        {/* Content */}
         <div className="product-card-content">
-          <h3 className={`product-card-name ${isSold ? "text-slate-400" : ""}`}>
-            {product.name}
-          </h3>
+          <h3 className={`product-card-name ${isSold ? "text-slate-400" : ""}`}>{product.name}</h3>
 
           <div className="product-card-specs">
-            {product.engine_hours && (
-              <span className="flex items-center gap-1"><Clock size={11} />{product.engine_hours} Hrs</span>
-            )}
+            {product.engine_hours && <span className="flex items-center gap-1"><Clock size={11} />{product.engine_hours} Hrs</span>}
             {product.engine_hours && product.location && <span className="separator">•</span>}
-            {product.location && (
-              <span className="flex items-center gap-1"><MapPin size={11} />{product.location.split(",")[0]}</span>
-            )}
+            {product.location && <span className="flex items-center gap-1"><MapPin size={11} />{product.location.split(",")[0]}</span>}
           </div>
 
           {/* Price + Ref */}
@@ -299,7 +276,7 @@ const ProductCard = ({ product, handleDelete, isSelected, onSelect }) => {
             </div>
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons + minimal status */}
           <div className="admin-card-buttons" onClick={stopProp}>
             <button onClick={() => navigate(`/admin/edit-product/${product.id}`)} className="admin-btn admin-btn-edit" style={{ display: "flex", alignItems: "center", gap: 5 }}>
               <Edit3 size={11} /> Edit
@@ -307,16 +284,13 @@ const ProductCard = ({ product, handleDelete, isSelected, onSelect }) => {
             <button onClick={() => setShowDeleteModal(true)} className="admin-btn admin-btn-delete" style={{ display: "flex", alignItems: "center", gap: 5 }}>
               <Trash2 size={11} /> Delete
             </button>
-            <StatusDropdown productId={product.id} current={statusRaw} />
+            <StatusSelector productId={product.id} current={statusRaw} />
           </div>
         </div>
       </motion.div>
 
       <style>{`
-        @keyframes badge-pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.4; transform: scale(0.75); }
-        }
+        @keyframes badge-pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(0.75); } }
       `}</style>
     </>
   );

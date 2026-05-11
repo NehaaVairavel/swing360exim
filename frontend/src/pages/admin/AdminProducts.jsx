@@ -4,12 +4,13 @@ import { socket } from "@/socket";
 import { Link } from "react-router-dom";
 import productService from "@/services/productService";
 import {
-  Search, Plus, Eye, Edit, Trash2, Image as ImageIcon,
-  LayoutGrid, List, SlidersHorizontal, X, CheckSquare,
+  Search, Plus, Trash2, LayoutGrid, List, SlidersHorizontal, X, CheckSquare,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useCurrency } from "@/context/CurrencyContext";
+import { useCurrency, CURRENCY_META } from "@/context/CurrencyContext";
 import ProductCard from "@/components/admin/ProductCard";
+import { cleanPrice } from "@/utils/priceFormatter";
+import { motion, AnimatePresence } from "framer-motion";
 import "@/styles/admin.css";
 import "@/styles/cards.css";
 
@@ -32,7 +33,8 @@ const AdminProducts = () => {
   const [activeStatus, setActiveStatus] = useState("All");
   const [viewMode, setViewMode] = useState("grid");
   const [selectedIds, setSelectedIds] = useState(new Set());
-  const { formatPrice } = useCurrency();
+  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const { formatPrice, currency, setCurrency, currencies, convertAll, rates } = useCurrency();
 
   useEffect(() => {
     socket.on("products_updated", () => {
@@ -215,22 +217,38 @@ const AdminProducts = () => {
           </select>
         </div>
 
+        {/* Currency segmented toggle */}
+        <div style={{ display: "flex", alignItems: "center", gap: 2, background: "#F1F3F7", borderRadius: 10, padding: 3 }}>
+          {["USD", "AED", "EUR", "INR"].map(code => (
+            <button
+              key={code}
+              onClick={() => {
+                const found = (currencies || []).find(c => c.code === code);
+                if (found) setCurrency(found);
+              }}
+              style={{
+                height: 28, padding: "0 10px", borderRadius: 7, border: "none",
+                fontFamily: "'Inter',sans-serif", fontSize: 11, fontWeight: 700,
+                background: currency?.code === code ? "#fff" : "transparent",
+                color: currency?.code === code ? "#111827" : "#94A3B8",
+                boxShadow: currency?.code === code ? "0 1px 4px rgba(15,23,42,0.08)" : "none",
+                cursor: "pointer", transition: "all 0.15s",
+              }}
+            >{code}</button>
+          ))}
+        </div>
+
+        {/* Vertical separator */}
+        <div className="w-px h-7" style={{ background: "#EAECEF" }} />
+
         {/* Push view toggle right */}
         <div style={{ marginLeft: "auto" }}>
           <div className="view-toggle">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`view-toggle-btn ${viewMode === "grid" ? "active" : ""}`}
-            >
-              <LayoutGrid size={15} />
-              <span className="hidden sm:inline">Grid</span>
+            <button onClick={() => setViewMode("grid")} className={`view-toggle-btn ${viewMode === "grid" ? "active" : ""}`}>
+              <LayoutGrid size={15} /><span className="hidden sm:inline">Grid</span>
             </button>
-            <button
-              onClick={() => setViewMode("table")}
-              className={`view-toggle-btn ${viewMode === "table" ? "active" : ""}`}
-            >
-              <List size={15} />
-              <span className="hidden sm:inline">Table</span>
+            <button onClick={() => setViewMode("table")} className={`view-toggle-btn ${viewMode === "table" ? "active" : ""}`}>
+              <List size={15} /><span className="hidden sm:inline">Table</span>
             </button>
           </div>
         </div>
@@ -330,10 +348,105 @@ const AdminProducts = () => {
               handleDelete={handleDelete}
               isSelected={selectedIds.has(product.id)}
               onSelect={toggleSelect}
+              onHover={setHoveredProduct}
             />
           ))}
         </div>
       )}
+
+      {/* ── Quick Preview Panel ── */}
+      <AnimatePresence>
+        {hoveredProduct && (
+          <motion.div
+            key={hoveredProduct.id}
+            initial={{ opacity: 0, x: 20, scale: 0.97 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.97 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: "fixed", right: 24, bottom: 24, zIndex: 1000,
+              width: 280, background: "#fff",
+              borderRadius: 20, border: "1px solid #EEF1F5",
+              boxShadow: "0 24px 64px rgba(15,23,42,0.18)",
+              overflow: "hidden",
+            }}
+            onMouseEnter={() => setHoveredProduct(hoveredProduct)}
+            onMouseLeave={() => setHoveredProduct(null)}
+          >
+            {/* Image */}
+            <div style={{ height: 150, background: "#F1F5F9", position: "relative", overflow: "hidden" }}>
+              {(hoveredProduct.images?.[0] || hoveredProduct.image) ? (
+                <img
+                  src={hoveredProduct.images?.[0] || hoveredProduct.image}
+                  alt=""
+                  style={{ width: "100%", height: "100%", objectFit: "cover",
+                    filter: hoveredProduct.availability === "sold" ? "grayscale(50%)" : "none" }}
+                />
+              ) : (
+                <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "#CBD5E1" }}>
+                  <span style={{ fontSize: 36 }}>📷</span>
+                </div>
+              )}
+              {/* Header badge */}
+              <div style={{
+                position: "absolute", top: 0, left: 0, right: 0,
+                background: "linear-gradient(to bottom, rgba(15,23,42,0.55), transparent)",
+                padding: "10px 12px",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+              }}>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "0.08em" }}>👁 Quick Preview</span>
+                <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.6)" }}>{hoveredProduct.reference_number || hoveredProduct.reference_no || "EXC-000"}</span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div style={{ padding: "12px 14px" }}>
+              <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, fontWeight: 700, color: "#94A3B8", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 3px" }}>
+                {hoveredProduct.brand} · {hoveredProduct.category}
+              </p>
+              <h4 style={{ fontFamily: "'Sora',sans-serif", fontSize: 14, fontWeight: 800, color: "#111827", margin: "0 0 6px", lineHeight: 1.2 }}>
+                {hoveredProduct.name}
+              </h4>
+
+              {/* Description preview */}
+              {hoveredProduct.full_description && (
+                <p style={{ fontFamily: "'Inter',sans-serif", fontSize: 11, color: "#64748B", lineHeight: 1.5, margin: "0 0 10px",
+                  display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                  {hoveredProduct.full_description}
+                </p>
+              )}
+
+              {/* Price */}
+              <div style={{ borderTop: "1px solid #F1F5F9", paddingTop: 8, marginBottom: 8 }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                  <span style={{ fontFamily: "'Sora',sans-serif", fontSize: 18, fontWeight: 800,
+                    color: hoveredProduct.availability === "sold" ? "#94A3B8" : "#F5B301",
+                    textDecoration: hoveredProduct.availability === "sold" ? "line-through" : "none" }}>
+                    {formatPrice(parseFloat(cleanPrice(hoveredProduct.price).replace(/[^0-9.]/g, "")) || 0)}
+                  </span>
+                  <span style={{ fontFamily: "'Inter',sans-serif", fontSize: 10, color: "#94A3B8", fontWeight: 600 }}>export</span>
+                </div>
+              </div>
+
+              {/* Currency conversions */}
+              {(() => {
+                const usdVal = parseFloat(cleanPrice(hoveredProduct.price).replace(/[^0-9.]/g, "")) || 0;
+                const convs = usdVal > 0 && typeof convertAll === "function" ? convertAll(usdVal).slice(0, 3) : [];
+                return convs.length > 0 ? (
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                    {convs.map(({ currency: c, symbol, flag, value }) => (
+                      <div key={c} style={{ background: "#F8FAFC", borderRadius: 7, padding: "3px 8px", border: "1px solid #E2E8F0" }}>
+                        <span style={{ fontSize: 9 }}>{flag}</span>
+                        <span style={{ fontFamily: "'Sora',sans-serif", fontSize: 11, fontWeight: 700, color: "#374151", marginLeft: 3 }}>{symbol}{value.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : null;
+              })()}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Table View ── */}
       {viewMode === "table" && filteredProducts.length > 0 && (
