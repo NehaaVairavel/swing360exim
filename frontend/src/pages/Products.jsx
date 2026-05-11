@@ -25,7 +25,7 @@ const staggerContainer = {
 const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-[#F3F4F6] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2">
+    <div className="border-b border-[#F3F4F6] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2" style={{ width: '100%', boxSizing: 'border-box' }}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-4 h-[54px] rounded-2xl transition-all duration-300 group
@@ -45,21 +45,20 @@ const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaul
         </div>
         <ChevronDown size={16} strokeWidth={2.5} className={`text-slate-500 transition-transform duration-500 ease-out ${isOpen ? 'rotate-180 text-[#F59E0B]' : ''}`} />
       </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="px-4 pb-4 pt-4">
-              {children}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <div 
+        className="overflow-hidden"
+        style={{
+          maxHeight: isOpen ? '800px' : '0px',
+          opacity: isOpen ? 1 : 0,
+          transition: 'max-height .35s ease, opacity .2s ease',
+          width: '100%',
+          boxSizing: 'border-box'
+        }}
+      >
+        <div className="px-4 pb-4 pt-4 w-full box-border">
+          {children}
+        </div>
+      </div>
     </div>
   );
 };
@@ -417,11 +416,18 @@ const Products = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[270px] shrink-0 lg:sticky lg:top-[110px] lg:h-[calc(100vh-140px)] lg:overflow-y-auto custom-scrollbar z-30 transition-[top] duration-200 ease-in-out"
+            className="w-full lg:w-[270px] shrink-0 lg:sticky lg:top-[90px] h-fit overflow-visible z-30 transition-all duration-200 ease-in-out self-start"
+            style={{
+              background: '#FFFFFF',
+              borderRadius: '28px',
+              border: '1px solid #EEF2F7',
+              boxShadow: scrolled ? '0 10px 30px rgba(15,23,42,0.05)' : '0 4px 10px rgba(15,23,42,0.02)',
+              paddingBottom: '120px'
+            }}
           >
-            <div className="products-sidebar flex flex-col overflow-hidden">
+            <div className="products-sidebar flex flex-col w-full box-border" style={{ width: '100%', boxSizing: 'border-box' }}>
               
-              <div className="px-5 py-4 border-b border-slate-100 mb-3 bg-slate-50/50">
+              <div className="px-5 py-3 border-b border-slate-100 mb-1 bg-slate-50/50 rounded-t-[28px]">
                 <div className="flex items-center justify-between mb-1">
                   <div className="text-[9px] font-bold text-slate-400 tracking-[3px] uppercase">FILTERS</div>
                   {(selectedCategories.length > 0 || selectedBrands.length > 0 || selectedLocations.length > 0 || engineHours < 15000 || minPrice > 0 || maxPrice < 1000000 || selectedCondition !== "All" || activeStatus !== "All") && (
@@ -592,7 +598,7 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <div className="p-4 border-t border-slate-50 bg-slate-50/50">
+              <div className="p-4 border-t border-slate-50 bg-slate-50/50 rounded-b-[28px]">
                 <button 
                   onClick={handleReset}
                   className="w-full h-[40px] bg-white border border-slate-200 text-heading rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm"
