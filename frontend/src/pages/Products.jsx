@@ -663,13 +663,11 @@ const Products = () => {
 
                 {/* Previously Sold Units */}
                 {activeStatus === "All" && availableProducts.length > 0 && soldProducts.length > 0 && (
-                  <div className="relative flex justify-center" style={{ marginTop: '70px', paddingTop: '50px', borderTop: '1px solid #edf1f5' }}>
-                    <div className="absolute top-[-36px] bg-[#F8FAFC] px-8 py-2 flex flex-col items-center">
-                      <h2 className="text-2xl md:text-3xl font-display font-black text-heading tracking-tight">
-                        Our <span className="text-gradient drop-shadow-sm">Sold Machinery</span> Fleet
-                      </h2>
-                      <p className="text-slate-500 font-semibold text-[13px] mt-1">Machines successfully exported to global buyers.</p>
-                    </div>
+                  <div className="pt-[30px] mt-[30px] border-t border-[#edf1f5] flex flex-col items-center text-center">
+                    <h2 className="text-2xl md:text-3xl font-display font-black text-heading tracking-tight mb-[8px]">
+                      Our <span className="text-gradient drop-shadow-sm">Sold Machinery</span> Fleet
+                    </h2>
+                    <p className="text-slate-500 font-semibold text-[13px] mb-[24px]">Machines successfully exported to global buyers.</p>
                   </div>
                 )}
 
@@ -680,7 +678,7 @@ const Products = () => {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                     className="grid gap-4 items-start auto-rows-min"
-                    style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}
+                    style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}
                   >
                     <AnimatePresence mode="popLayout">
                       {soldProducts.map((product) => (
