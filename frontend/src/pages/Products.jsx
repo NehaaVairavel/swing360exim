@@ -25,11 +25,11 @@ const staggerContainer = {
 const FilterAccordion = ({ title, badge, icon: Icon, children, count = 0, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-[#F3F4F6] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2" style={{ width: '100%', boxSizing: 'border-box' }}>
+    <div className="border-b border-[#EEF2F7] last:border-0 pb-[9px] mb-[9px] last:pb-0 last:mb-0 px-2" style={{ width: '100%', boxSizing: 'border-box' }}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between px-4 h-[54px] rounded-2xl transition-all duration-300 group
-          ${isOpen ? 'bg-[#FFF9F0] border-[1.5px] border-[#F59E0B] shadow-[0_8px_20px_rgba(245,158,11,0.12)]' : 'bg-white border-[1.5px] border-transparent hover:bg-[#F8FAFC] hover:border-slate-200 hover:shadow-sm'}`}
+        className={`w-full flex items-center justify-between px-[18px] h-[56px] rounded-[16px] transition-all duration-300 group
+          ${isOpen ? 'bg-white border-[1px] border-[#EEF2F7] shadow-sm' : 'bg-white border-[1px] border-transparent hover:bg-[#F8FAFC] hover:border-[#EEF2F7]'}`}
       >
         <div className="flex items-center gap-3">
           {Icon && <Icon size={18} className={`${isOpen ? 'text-[#F59E0B]' : 'text-slate-400 group-hover:text-[#F59E0B]'} transition-colors`} />}
@@ -128,6 +128,7 @@ const Products = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
   const [siteSettings, setSiteSettings] = useState(null);
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -345,7 +346,7 @@ const Products = () => {
       </section>
 
       {/* 2. PREMIUM SEARCH & FILTER TOOLBAR WRAPPER */}
-      <section className="sticky top-[80px] z-40 pt-2 pb-3 -mt-2 transition-all duration-300">
+      <section className={`${scrolled ? 'sticky top-[80px]' : 'relative'} z-40 pt-2 pb-3 -mt-2 transition-all duration-300`}>
         <div className="container-section max-w-[1700px] mx-auto px-4 md:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
@@ -409,32 +410,32 @@ const Products = () => {
 
 
       <div className="container-section max-w-[1750px] mx-auto pt-0 pb-0 mt-0 px-4 md:px-6 lg:px-5">
-        <div className="flex flex-col lg:flex-row gap-5 items-start mt-4">
+        <div className="flex flex-col lg:flex-row gap-[20px] items-start mt-4">
           
           <motion.aside 
             initial={{ opacity: 0, x: -15 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="w-full lg:w-[270px] shrink-0 lg:sticky lg:top-[90px] h-fit overflow-visible z-30 transition-all duration-200 ease-in-out self-start"
+            className="w-full lg:w-[260px] shrink-0 lg:sticky lg:top-[140px] h-fit overflow-visible z-30 transition-all duration-200 ease-in-out self-start"
             style={{
               background: '#FFFFFF',
               borderRadius: '28px',
               border: '1px solid #EEF2F7',
-              boxShadow: scrolled ? '0 10px 30px rgba(15,23,42,0.05)' : '0 4px 10px rgba(15,23,42,0.02)',
+              boxShadow: scrolled ? '0 8px 24px rgba(15,23,42,0.04)' : 'none',
               paddingBottom: '120px'
             }}
           >
             <div className="products-sidebar flex flex-col w-full box-border" style={{ width: '100%', boxSizing: 'border-box' }}>
               
-              <div className="px-5 py-3 border-b border-slate-100 mb-1 bg-slate-50/50 rounded-t-[28px]">
+              <div className="px-5 py-4 border-b border-[#EEF2F7] mb-2 bg-white rounded-t-[28px]">
                 <div className="flex items-center justify-between mb-1">
-                  <div className="text-[9px] font-bold text-slate-400 tracking-[3px] uppercase">FILTERS</div>
+                  <div className="text-[10px] font-bold text-slate-400 tracking-[3px] uppercase">FILTERS</div>
                   {(selectedCategories.length > 0 || selectedBrands.length > 0 || selectedLocations.length > 0 || engineHours < 15000 || minPrice > 0 || maxPrice < 1000000 || selectedCondition !== "All" || activeStatus !== "All") && (
-                    <button onClick={handleReset} className="text-[10px] font-bold text-primary hover:text-orange-700 transition-colors">Clear All</button>
+                    <button onClick={handleReset} className="text-[11px] font-bold text-orange-600 hover:text-orange-700 bg-orange-50 px-2.5 py-1 rounded-md transition-colors border border-orange-100">Clear All</button>
                   )}
                 </div>
-                <h2 className="text-[24px] font-display font-[700] text-heading leading-tight">Refine Search</h2>
+                <h2 className="text-[22px] font-display font-[700] text-heading leading-tight mt-1">Refine Search</h2>
               </div>
 
               {/* Active Filters Section */}
@@ -467,8 +468,8 @@ const Products = () => {
               )}
 
               <FilterAccordion title="Categories" badge="10" icon={LayoutGrid} count={selectedCategories.length} defaultOpen={true}>
-                <div className="flex flex-wrap gap-2.5 pt-1">
-                  {MASTER_CATEGORIES.filter(c => c !== "All").map(cat => {
+                <div className="grid grid-cols-2 gap-[8px] pt-1">
+                  {(showAllCategories ? MASTER_CATEGORIES.filter(c => c !== "All") : MASTER_CATEGORIES.filter(c => c !== "All").slice(0, 6)).map(cat => {
                     const isSelected = selectedCategories.includes(cat);
                     return (
                       <button 
@@ -477,13 +478,30 @@ const Products = () => {
                           const next = isSelected ? selectedCategories.filter(c => c !== cat) : [...selectedCategories, cat];
                           setSelectedCategories(next);
                         }}
-                        className={`h-[38px] px-[14px] flex items-center justify-center rounded-full font-manrope text-[13px] transition-all duration-200 border hover:-translate-y-[1px] ${isSelected ? 'bg-[linear-gradient(135deg,#FFB800,#FF8A00)] border-transparent text-white font-[600] shadow-md shadow-orange-500/20' : 'bg-white border-slate-200 text-slate-600 hover:bg-[#FFF7ED] hover:border-[#FDBA74]'}`}
+                        style={{ padding: '10px 14px', fontSize: '14px', borderRadius: '12px' }}
+                        className={`flex items-center justify-center font-manrope transition-all duration-200 border text-center leading-tight ${isSelected ? 'bg-[#FFF9F0] border-[#F59E0B] text-heading font-[700] shadow-sm' : 'bg-white border-[#EEF2F7] text-slate-600 hover:bg-[#F8FAFC] hover:border-[#cbd5e1]'}`}
                       >
                         {cat}
                       </button>
                     );
                   })}
                 </div>
+                {!showAllCategories && MASTER_CATEGORIES.filter(c => c !== "All").length > 6 && (
+                  <button 
+                    onClick={() => setShowAllCategories(true)}
+                    className="w-full mt-3 py-2 text-[13px] font-bold text-slate-500 hover:text-slate-800 transition-colors border border-dashed border-[#EEF2F7] rounded-[12px] hover:border-slate-300 hover:bg-slate-50"
+                  >
+                    +{MASTER_CATEGORIES.filter(c => c !== "All").length - 6} More Categories
+                  </button>
+                )}
+                {showAllCategories && (
+                  <button 
+                    onClick={() => setShowAllCategories(false)}
+                    className="w-full mt-3 py-2 text-[13px] font-bold text-slate-500 hover:text-slate-700 transition-colors"
+                  >
+                    Show Less
+                  </button>
+                )}
               </FilterAccordion>
 
               <FilterAccordion title="Brands" badge="8" icon={Tag} count={selectedBrands.length}>
@@ -598,14 +616,6 @@ const Products = () => {
                 </div>
               </FilterAccordion>
 
-              <div className="p-4 border-t border-slate-50 bg-slate-50/50 rounded-b-[28px]">
-                <button 
-                  onClick={handleReset}
-                  className="w-full h-[40px] bg-white border border-slate-200 text-heading rounded-xl font-bold text-[11px] uppercase tracking-widest hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm"
-                >
-                  Clear All Filters
-                </button>
-              </div>
             </div>
           </motion.aside>
 
@@ -640,7 +650,8 @@ const Products = () => {
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, margin: "-50px" }}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
+                  className="grid gap-4"
+                  style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))' }}
                 >
                   <AnimatePresence mode="popLayout">
                     {availableProducts.map((product) => (
@@ -667,7 +678,8 @@ const Products = () => {
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 opacity-80"
+                    className="grid gap-4 opacity-80"
+                    style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))' }}
                   >
                     <AnimatePresence mode="popLayout">
                       {soldProducts.map((product) => (
